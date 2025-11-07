@@ -1,0 +1,64 @@
+    
+  //   e.preventDefault();
+
+  //   try {
+  //     let result;
+  //     const updatedFields = {};
+
+  //     console.log("Form Data:", productData);
+
+  //     if (!isEditMode) {
+  //       // Create Mode
+  //       Object.keys(productData).forEach((key) => {
+  //         updatedFields[key] = productData[key];
+  //       });
+
+  //       console.log("Creating product:", productData);
+  //       result = await dispatch(createProduct(productData));
+  //     } else {
+  //       // Edit Mode
+  //       const excludedFields = [
+  //         "SmallCartoonStock",
+  //         "LargeCartoonStock",
+  //         "TotalStock",
+  //       ];
+
+  //       Object.keys(productData).forEach((key) => {
+  //         if (
+  //           !excludedFields.includes(key) &&
+  //           productData[key] !== initialData[key]
+  //         ) {
+  //           updatedFields[key] = productData[key];
+  //         }
+  //       });
+
+  //       console.log("Updating Stock Entry with Changes:", updatedFields);
+  //       result = await dispatch(
+  //         editProductdetailes(productData.id, updatedFields)
+  //       );
+  //     }
+
+  //     if (result?.success) {
+  //       toast.success(
+  //         `Product ${isEditMode ? "updated" : "created"} successfully!`
+  //       );
+
+  //       // if (!isEditMode) {
+  //       //   setProductData({
+  //       //     ProductName: "",
+  //       //     TotalStock: "",
+  //       //     LargeCartoonStock: "",
+  //       //     SmallCartoonStock: "",
+  //       //   });
+  //       // }
+
+  //       dispatch(asyncfetchproduct());
+  //       if (onSubmit) onSubmit(productData); // Close modal or notify parent
+  //     } else {
+  //       toast.warn(result?.message || "Something went wrong");
+  //     }
+  //   } catch (err) {
+  //     console.error("Stock Submit Error:", err);
+  //     toast.error("An error occurred while submitting the stock form.");
+  //   }
+  // };
