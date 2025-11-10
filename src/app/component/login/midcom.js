@@ -176,7 +176,7 @@ const Midcom = () => {
             <p>— Login Now!!!</p>
           </div>
         </div>
-        <div className="absolute lg:top-[29%] md:top-[29%] top-[18%]   lg:right-[23%] md:right-[22%] right-[14%] w-[35%] z-20">
+        <div className="xl:absoulte lg:absolute md:hidden hidden lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[35%] z-20">
           <Image src={Charchater} alt="Character" width={200} height={200} />
         </div>
       </div>

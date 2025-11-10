@@ -98,7 +98,7 @@ const ProductData = () => {
   const handleEnable = async (row) => {
     try {
       await dispatch(editProductdetailes(row.id, { Active: "TRUE" }));
-      toast.success("order status is updated.");
+      toast.success("Product status is updated.");
 
       // Update local state instantly
       setProducts((prev) =>

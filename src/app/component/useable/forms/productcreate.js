@@ -38,9 +38,6 @@ const ProductForm = ({ initialData = {}, isEditMode = false }) => {
 
   const [imagePreviews, setImagePreviews] = useState([]);
 
-toast("Default message");
-
-
   useEffect(() => {
     return () => {
       imagePreviews.forEach((url) => URL.revokeObjectURL(url));
