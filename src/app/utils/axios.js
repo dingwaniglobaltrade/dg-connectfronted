@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://Dg-connect-backned-env.eba-7rzcknvs.ap-south-1.elasticbeanstalk.com/api/v1",
+  baseURL: "https://dingwanifoods-backned-code.onrender.com/api/v1",
     // baseURL: "http://localhost:8080/api/v1/",
     withCredentials: true
 })
