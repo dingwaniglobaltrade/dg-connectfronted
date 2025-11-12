@@ -79,7 +79,7 @@ const Midcom = () => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col-reverse md:flex-row lg:flex-row">
+    <div className="h-screen w-screen flex flex-col-reverse md:flex-row lg:flex-row">
       {/* Left (Form) Section */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-4">
         <div className="text-[25px] font-bold mb-4">LOGIN</div>
@@ -170,13 +170,16 @@ const Midcom = () => {
           />
         </div>
         <div className="absolute flex top-[15%] lg:right-[30%] right-[10%] w-[80%] md:w-[60%] lg:w-[55%] lg:h-[70%] h-[60%] bg-[#9586f4] rounded-[20px] z-10 p-4">
-          <div className="text-white font-bold lg:text-3xl md:text-3xl text-sm mt-4 flex lg:gap-4 md:gap-4 gap-2 flex-col ">
+          <div className="xl:flex lg:flex hidden w-16 h-16 bg-white rounded-full items-center justify-center lg:mt-[320px] mt-[10px]  -ml-12">
+            <Image src={Spark} alt="spark icon" width={48} height={48} />
+          </div>
+          <div className="flex flex-col w-full h-full justify-start text-start items-start text-white font-bold text-[28px]">
             <p>Very good works are</p>
             <p>waiting for you</p>
             <p>— Login Now!!!</p>
           </div>
         </div>
-        <div className="xl:absoulte lg:absolute md:hidden hidden lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[35%] z-20">
+        <div className="xl:absolute lg:absolute  z-[50]  lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[35%]">
           <Image src={Charchater} alt="Character" width={200} height={200} />
         </div>
       </div>

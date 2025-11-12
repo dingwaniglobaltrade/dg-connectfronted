@@ -110,7 +110,8 @@ const CartProduct = () => {
       },
       theme: { color: "#3399cc" },
     };
-
+ console.log({options});
+ 
     if (!window.Razorpay) {
       alert("Razorpay SDK failed to load. Please refresh the page.");
       return;

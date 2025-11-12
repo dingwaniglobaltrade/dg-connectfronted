@@ -5,17 +5,25 @@ import Upernavbar from "@/app/component/navbar/upernavbar";
 import ProductDetailes from "@/app/component/Productmodless/productdetailes";
 import ProtectedRoute from "@/app/component/protectedroute";
 import { useDispatch } from "react-redux";
-import { use } from "react"; //only if params is a Promise
+import { use } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import Image from "next/image";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 import { fetchProductbyID } from "@/app/store/Actions/productAction";
 
+// Lazy load 3D viewer
 const ModelViewer = dynamic(
   () => import("@/app/component/Productmodless/ModelViewer.js"),
   { ssr: false }
 );
 
 const Page = ({ params }) => {
-  // If params is Promise (Next.js 15+):
+  // For Next.js 15+, use() is required if params is a Promise
   const { id } = use(params);
 
   const [productData, setProductData] = useState(null);
@@ -34,34 +42,74 @@ const Page = ({ params }) => {
     fetchData();
   }, [dispatch, id]);
 
-  console.log("Product Data:", productData);
+  const media = productData?.media || [];
+  const modelFile = media.find((m) => m.type === "GLB");
+  const imageFiles = media.filter((m) => m.type === "IMAGE");
+  console.log({ imageFiles });
 
   return (
     <ProtectedRoute>
-      <div className="w-full h-screen">
-        <div className="h-full flex flex-col">
-          <div className="w-full h-[12%] ">
-            <div className="mt-3">
-              <Upernavbar pagename="Product Detailes" />
-            </div>
+      <div className="w-full min-h-screen bg-gray-50">
+        <div className="flex flex-col h-full">
+          {/* Navbar */}
+          <div className="w-full h-[12%] mt-3">
+            <Upernavbar pagename="Product Details" />
           </div>
-          <div className="w-full flex lg:flex-row md:flex-col flex-col h-auto justify-center items-center">
+
+          {/* Main Section */}
+          <div className="w-full py-6 flex lg:flex-row md:flex-col flex-col h-full justify-center items-center">
+            {/* Swiper Section */}
             <div className="lg:w-[50%] md:w-full w-full lg:h-full h-auto">
-              {productData?.media?.length > 0 ? (
-                <>
-                  {productData.media.find((m) => m.type === "GLB") ? (
-                    <ModelViewer
-                      url={productData.media.find((m) => m.type === "GLB").url}
-                    />
-                  ) : (
-                    <p>No 3D model found</p>
+              {media.length > 0 ? (
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  // navigation
+                  pagination={{ clickable: true }}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  className="rounded-lg shadow-md bg-white "
+                >
+                  {/* 🌀 First Slide - 3D Model */}
+                  {modelFile && (
+                    <SwiperSlide key="model-viewer">
+                      <div className="w-full h-full flex justify-center items-center bg-gray-100">
+                        <ModelViewer url={modelFile.url} />
+                      </div>
+                    </SwiperSlide>
                   )}
-                </>
+
+                  {/* 🖼️ Image Slides */}
+                  {imageFiles.length > 0
+                    ? imageFiles.map((img, index) => (
+                        <SwiperSlide key={index}>
+                          <div className="w-full h-[400px] relative">
+                            <Image
+                              src={img.url}
+                              alt={`Product image ${index + 1}`}
+                              fill
+                              className="object-contain"
+                              priority={index === 0}
+                            />
+                          </div>
+                        </SwiperSlide>
+                      ))
+                    : !modelFile && (
+                        <SwiperSlide>
+                          <p className="text-center py-10 text-gray-600">
+                            No media found
+                          </p>
+                        </SwiperSlide>
+                      )}
+                </Swiper>
               ) : (
-                <p>No media found</p>
+                <p className="text-center text-gray-500 mt-5">
+                  No media available
+                </p>
               )}
             </div>
-            <div className="lg:w-[40%] w-full lg:h-full h-auto">
+
+            {/* Product Details Section */}
+            <div className="lg:w-[40%] w-full lg:h-full h-auto mt-6 lg:mt-0">
               <ProductDetailes product={productData} />
             </div>
           </div>

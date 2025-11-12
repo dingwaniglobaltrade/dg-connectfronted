@@ -51,15 +51,14 @@ const DaynamiceOrderDetailes = () => {
       {orderDetailes ? (
         <>
           <div className="flex flex-col gap-1">
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row flex-wrap gap-4">
               <h1 className="text-[19px] txt-black font-semibold">
                 Order ID : <span>{orderDetailes.id}</span>
               </h1>
               <div
-                className={`px-4 py-1 rounded-[10px] ${
-                  statusStyles[orderDetailes.orderStatus] ||
+                className={`px-4 py-1 rounded-[10px] ${statusStyles[orderDetailes.orderStatus] ||
                   "bg-gray-200 text-gray-800 border-[1px] border-gray-400"
-                }`}
+                  }`}
               >
                 {orderDetailes.orderStatus}
               </div>
@@ -117,12 +116,11 @@ const DaynamiceOrderDetailes = () => {
               <div className="flex justify-between ">
                 <h1 className="text-[18px] font-bold">Order Summary</h1>
                 <div
-                   className={`px-4 py-1 rounded-[10px] ${
-                  statusStyles[orderDetailes.orderStatus] ||
-                  "bg-gray-200 text-gray-800 border-[1px] border-gray-400"
-                }`}
-              >
-                {orderDetailes.orderStatus}
+                  className={`px-4 py-1 rounded-[10px] ${statusStyles[orderDetailes.orderStatus] ||
+                    "bg-gray-200 text-gray-800 border-[1px] border-gray-400"
+                    }`}
+                >
+                  {orderDetailes.orderStatus}
                 </div>
               </div>
 

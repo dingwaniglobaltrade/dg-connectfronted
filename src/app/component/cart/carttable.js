@@ -188,83 +188,84 @@ export default function CartPage() {
 
       {/* mobile responseive cart data card */}
       <div className="lg:hidden md:hidden mb-3">
-   <div className="flex flex-col gap-3">
-         {cartItems.map((item) => (
-          <div
-            key={item.id}
-            className="w-full h-auto p-4 bg-gray-100 rounded-[10px] flex flex-row gap-3"
-          >
-            <div className="w-[30%] h-full rounded-[10px]">
-              {item.Product.media && item.Product.media.length > 0 ? (
-                // Check the first media type
-                item.Product.media[0].url.endsWith(".glb") ? (
-                  <img
-                    src="/3d-placeholder.png" // a placeholder icon for 3D files
-                    alt={item.Product.ProductName}
-                    className="w-full h-full bg-gray-400 rounded-[10px]"
-                  />
+        <div className="flex flex-col gap-3">
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="w-full h-auto p-4 bg-gray-100 rounded-[10px] flex flex-row gap-3"
+            >
+              <div className="w-[30%] h-full rounded-[10px]">
+                {item.Product.media && item.Product.media.length > 0 ? (
+                  // Check the first media type
+                  item.Product.media[0].url.endsWith(".glb") ? (
+                    <img
+                      src="/3d-placeholder.png" // a placeholder icon for 3D files
+                      alt={item.Product.ProductName}
+                      className="w-full h-full bg-gray-400 rounded-[10px]"
+                    />
+                  ) : (
+                    <img
+                      src={item.Product.media[0].url}
+                      alt={item.Product.ProductName}
+                      className="w-full h-full bg-gray-400 rounded-[10px]"
+                    />
+                  )
                 ) : (
+                  // fallback if no media
                   <img
-                    src={item.Product.media[0].url}
+                    src="/default-product.png"
                     alt={item.Product.ProductName}
-                    className="w-full h-full bg-gray-400 rounded-[10px]"
+                    className="w-12 h-12 bg-gray-200 rounded-[10px]"
                   />
-                )
-              ) : (
-                // fallback if no media
-                <img
-                  src="/default-product.png"
-                  alt={item.Product.ProductName}
-                  className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                />
-              )}
-            </div>
+                )}
+              </div>
 
-            <div className="flex flex-col gap-1 w-full">
-              <div className="w-full text-[16px] font-semibold flex justify-between">
-                <div> {item.Product.ProductName} </div>
+              <div className="flex flex-col gap-1 w-full">
+                <div className="w-full text-[16px] font-semibold flex justify-between">
+                  <div> {item.Product.ProductName} </div>
+                  <div>
+                    <button
+                      type="button"
+                      className="mx-auto flex items-center justify-center cursor-pointer"
+                      onClick={() => handleRemove(item.ProductID)} // <-- wrapped arrow, pass id only
+                      aria-label={`Remove ${
+                        item?.Product?.ProductName ?? "item"
+                      }`}
+                    >
+                      <FaTrashCan />
+                    </button>
+                  </div>
+                </div>
                 <div>
+                  <span className="font-semibold">Price</span> :{""} ₹
+                  {item.Price}
+                </div>
+                <div className="flex flex-row gap-2">
                   <button
-                    type="button"
-                    className="mx-auto flex items-center justify-center cursor-pointer"
-                    onClick={() => handleRemove(item.ProductID)} // <-- wrapped arrow, pass id only
-                    aria-label={`Remove ${
-                      item?.Product?.ProductName ?? "item"
-                    }`}
+                    className="px-2 py-[2px] border rounded"
+                    onClick={() => decreaseQty(item.ProductID)}
                   >
-                    <FaTrashCan />
+                    -
+                  </button>
+                  <span>{item.Quantity}</span>
+                  <button
+                    className="px-2 py-[2px] border rounded"
+                    onClick={() => increaseQty(item.ProductID)}
+                  >
+                    +
                   </button>
                 </div>
-              </div>
-              <div>
-                <span className="font-semibold">Price</span> :{""} ₹{item.Price}
-              </div>
-              <div className="flex flex-row gap-2">
-                <button
-                  className="px-2 py-[2px] border rounded"
-                  onClick={() => decreaseQty(item.ProductID)}
-                >
-                  -
-                </button>
-                <span>{item.Quantity}</span>
-                <button
-                  className="px-2 py-[2px] border rounded"
-                  onClick={() => increaseQty(item.ProductID)}
-                >
-                  +
-                </button>
-              </div>
-              <div>
-                <span className="font-semibold">Subtotal </span>: ₹{" "}
-                {item.Price * item.Quantity}
+                <div>
+                  <span className="font-semibold">Subtotal </span>: ₹{" "}
+                  {item.Price * item.Quantity}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-   </div>
+          ))}
+        </div>
       </div>
 
-      <div className="text-[12px] flex justify-end">
+      <div className="text-[12px] flex justify-end mt-4">
         <button
           onClick={handleProducts}
           className="py-2 rounded-[4px] border-black border-[1px] px-6 font-semibold"

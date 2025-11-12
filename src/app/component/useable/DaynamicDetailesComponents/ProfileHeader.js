@@ -13,7 +13,7 @@ export default function ProfileHeader({
   useEffect(() => {
     // Reset preview when editing is cancelled
     if (!isEditing) {
-      setPreviewImage(userDetails.profileImage);
+      setPreviewImage(userDetails.profileImage || userDetails.shopImage);
     }
   }, [isEditing, userDetails.profileImage]);
 

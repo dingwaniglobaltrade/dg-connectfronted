@@ -167,6 +167,7 @@ const Main = () => {
     }),
     columnHelper.accessor("Date", { header: "Date" }),
     columnHelper.accessor("TotalkmTravel", { header: "Total KM Travel" }),
+    columnHelper.accessor("othersExpense", { header: "Other Expenses" }),
     columnHelper.accessor("StartImage", {
       header: "Start Image / Bill Image",
       cell: (info) => {

@@ -14,7 +14,7 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
 
   const [addExpenseData, setAddExpenseData] = useState({
     Date: "",
-    OtherExpense: "",
+    othersExpense: "",
     BillImage: "",
     Paymentproof: "",
   });
@@ -37,34 +37,48 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
     e.preventDefault();
 
     try {
+      const formData = new FormData();
+
+      // Append text fields
+      formData.append("Date", addExpenseData.Date);
+      formData.append("othersExpense", addExpenseData.othersExpense);
+
+      // Append file fields (Multer expects field names to match)
+      if (addExpenseData.BillImage) {
+        formData.append("BillImage", addExpenseData.BillImage);
+      }
+      if (addExpenseData.Paymentproof) {
+        formData.append("Paymentproof", addExpenseData.Paymentproof);
+      }
+
       let result;
-      const updatedFields = {};
-      console.log("Form Data:", addExpenseData);
 
-      if (!initialData) {
-        // Create Mode
-        Object.keys(addExpenseData).forEach((key) => {
-          updatedFields[key] = addExpenseData[key];
-        });
-
-        console.log("Creating Expense with Data:", updatedFields);
-        result = await dispatch(CreateExpense(updatedFields));
+      if (!initialData || Object.keys(initialData).length === 0) {
+        // Create mode
+        console.log("Creating Other Expense:", addExpenseData);
+        result = await dispatch(CreateExpense(formData));
       } else {
-        // Edit Mode - Only send changed fields
+        // Edit mode — only append changed fields
+        let hasChanges = false;
+
         Object.keys(addExpenseData).forEach((key) => {
-          if (addExpenseData[key] !== initialData[key]) {
-            updatedFields[key] = addExpenseData[key];
+          if (
+            addExpenseData[key] !== initialData[key] &&
+            addExpenseData[key] != null
+          ) {
+            hasChanges = true;
+            formData.append(key, addExpenseData[key]);
           }
         });
 
-        if (Object.keys(updatedFields).length === 0) {
+        if (!hasChanges) {
           toast.info("No changes detected.");
           return;
         }
 
-        console.log("Updating Expense with Changes:", updatedFields);
+        console.log("Updating Other Expense:", addExpenseData);
         result = await dispatch(
-          updatetheExpenseStatus(initialData.id, updatedFields)
+          updatetheExpenseStatus(initialData.id, formData)
         );
       }
 
@@ -74,9 +88,10 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
         );
 
         if (!initialData) {
+          // Reset the form
           setAddExpenseData({
             Date: "",
-            OtherExpense: "",
+            othersExpense: "",
             BillImage: "",
             Paymentproof: "",
           });
@@ -98,7 +113,7 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
         <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-4 text-[12px] mt-2">
           {/* Date */}
           <div>
-            <label className="text-texthearder font-semibold">Date</label>
+            <label className="text-texthearder font-semibold flex">Date</label>
             <input
               name="Date"
               type="date"
@@ -109,15 +124,15 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
             />
           </div>
 
-          {/* Other Expenses */}
+          {/* Other Expense */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Other Expenses
+            <label className="text-texthearder font-semibold flex">
+              Other Expense
             </label>
             <input
               type="text"
-              name="OtherExpense"
-              value={addExpenseData.OtherExpense || ""}
+              name="othersExpense"
+              value={addExpenseData.othersExpense || ""}
               onChange={handleChange}
               className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
             />
@@ -125,10 +140,12 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
 
           {/* Bill Image */}
           <div>
-            <label className="text-texthearder font-semibold">Bill Image</label>
+            <label className="text-texthearder font-semibold flex">
+              Bill Image
+            </label>
             <input
               type="file"
-              name="Bill Image"
+              name="BillImage"
               required
               onChange={(e) =>
                 setAddExpenseData((prev) => ({
@@ -140,12 +157,14 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
             />
           </div>
 
-          {/* Payment Proof Image */}
+          {/* Payment Proof */}
           <div>
-            <label className="text-texthearder font-semibold">Payment Proof</label>
+            <label className="text-texthearder font-semibold flex">
+              Payment Proof
+            </label>
             <input
               type="file"
-              name="Payment Proof"
+              name="Paymentproof"
               onChange={(e) =>
                 setAddExpenseData((prev) => ({
                   ...prev,

@@ -7,9 +7,9 @@ import ProtectedRoute from "@/app/component/protectedroute";
 const ProtectedDashboard = () => {
   return (
     <ProtectedRoute>
-      <div className="h-screen w-full">
+      <div className="h-[100vh] w-full ">
         {/* Desktop View */}
-        <div className="hidden sm:flex md:flex w-full">
+        <div className="lg:flex md:hidden sm:hidden hidden">
           <SideNavbar />
           <div className="flex flex-col w-full">
             <Upernavbar pagename="Dashboard" />
@@ -18,7 +18,7 @@ const ProtectedDashboard = () => {
         </div>
 
         {/* Mobile View */}
-        <div className="flex flex-col md:hidden sm:hidden w-full">
+        <div className="lg:hidden md:flex sm:flex flex flex-col w-full">
           <SideNavbar />
           <MainDashboard />
         </div>

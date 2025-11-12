@@ -29,8 +29,8 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
         stateName: "",
       },
     ],
-    routeID: "",
-    assignedSalespersons: "",
+    routeID: [],
+    assignedSalespersons: [],
   });
 
   const [routes, setRoutes] = useState([]);
@@ -294,18 +294,27 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
           {/* Salesperson */}
           <div>
             <label className="text-texthearder font-semibold">
-              Assign Salesperson
+              Assign Salespersons
             </label>
             <select
+              multiple
               name="assignedSalespersons"
-              value={distributorFormData.assignedSalespersons || ""}
-              onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              value={distributorFormData.assignedSalespersons}
+              onChange={(e) => {
+                const selected = Array.from(
+                  e.target.selectedOptions,
+                  (option) => option.value
+                );
+                setDistributorFormData((prev) => ({
+                  ...prev,
+                  assignedSalespersons: selected,
+                }));
+              }}
+              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200 h-28"
             >
-              <option value="">Select Salesperson</option>
-              {salespersons.map((Salepserson) => (
-                <option key={Salepserson.id} value={Salepserson.id}>
-                  {Salepserson.name}
+              {salespersons.map((salesperson) => (
+                <option key={salesperson.id} value={salesperson.id}>
+                  {salesperson.name}
                 </option>
               ))}
             </select>
@@ -313,15 +322,25 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
 
           {/* Route */}
           <div>
-            <label className="text-texthearder font-semibold">Route</label>
+            <label className="text-texthearder font-semibold">
+              Select Routes
+            </label>
             <select
+              multiple
               name="routeID"
-              value={distributorFormData.routeID || ""}
-              onChange={handleChange}
-              required
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              value={distributorFormData.routeID}
+              onChange={(e) => {
+                const selected = Array.from(
+                  e.target.selectedOptions,
+                  (option) => option.value
+                );
+                setDistributorFormData((prev) => ({
+                  ...prev,
+                  routeID: selected,
+                }));
+              }}
+              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200 h-28"
             >
-              <option value="">Select Route</option>
               {routes.map((route) => (
                 <option key={route.id} value={route.id}>
                   {route.routeName}

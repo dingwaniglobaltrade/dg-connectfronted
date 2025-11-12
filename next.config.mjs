@@ -15,10 +15,29 @@
 // next.config.js
 
 // next.config.js
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {};
+
+// export default nextConfig;
+
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8080", // backend port
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "your-production-backend-domain.com", // e.g. render.com backend
+      },
+    ],
+  },
+};
 
 export default nextConfig;
-
-
 // next.config.js

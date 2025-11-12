@@ -32,7 +32,7 @@ const main = () => {
   }, [dispatch]);
 
   return (
-    <div className="h-[90%] lg:w-full md:w-full sm:w-screen bg-[#f8f9fa] overflow-hidden">
+    <div className="h-[90%] lg:w-full md:w-screen sm:w-screen bg-[#f8f9fa] overflow-hidden">
       <div className="flex flex-col items-center gap-2 h-full">
         <div className="bg-[#ffff] lg:flex hidden flex-wrap w-[97%] gap-2 justify-evenly mt-4 rounded-[16px] items-center py-4 sticky">
           <Blocks

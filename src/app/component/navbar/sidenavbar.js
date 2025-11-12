@@ -12,7 +12,8 @@ import SidenavItem from "./SidenavItem";
 import { iconMap } from "@/app/utils/constants/iconMap";
 import NotificationDrawer from "../notification/notiicationcom";
 
-import LogoImage from "@/icons/Logo.svg";
+import LogoImage from "@/icons/dgtlogo.svg";
+//import LogoImage from "@/icons/Logo.svg";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
 
@@ -191,7 +192,7 @@ const Sidenavbar = () => {
   return (
     <>
       {/* 📱 Mobile Header (below md) */}
-      <div className="2xl:hidden xl:hidden lg:hidden md:flex  flex p-3 bg-white shadow-md flex justify-between items-center w-full">
+      <div className="2xl:hidden xl:hidden lg:hidden md:flex flex p-3 bg-white shadow-md justify-between items-center w-full">
         <Image src={LogoImage} alt="Logo" className="h-8 w-auto" />
 
         <div className="flex justify-center gap-4 items-center">
@@ -228,10 +229,10 @@ const Sidenavbar = () => {
       </div>
 
       {/* 💻 Desktop & Tablet Sidebar (md and up) */}
-      <div className="hidden 2xl:flex xl:flex lg:flex md:hidden flex-col w-[18%] bg-white shadow-sm py-4 h-screen overflow-y-auto">
+      <div className="2xl:flex xl:flex lg:flex md:hidden hidden flex-col w-[18%] bg-white shadow-sm py-4 h-screen overflow-y-auto">
         <div className="px-4 flex justify-center mb-4">
           <Link href="/">
-            <Image src={LogoImage} alt="Logo" />
+            <Image src={LogoImage} alt="Logo" className="" />
           </Link>
         </div>
 
@@ -262,7 +263,7 @@ const Sidenavbar = () => {
         </div>
       </div>
 
-      {/* 📲 Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu */}
       {showMobileMenu && (
         <div className="fixed inset-0 z-[999]">
           {/* Backdrop */}
@@ -275,7 +276,7 @@ const Sidenavbar = () => {
           <div className="fixed top-0 left-0 h-full w-[85%] max-w-[300px] bg-white shadow-lg p-4 overflow-y-auto transition-all duration-300 ease-in-out">
             {/* Header */}
             <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-              <div className="w-[120px]">
+              <div className="w-[120px] ">
                 <Image src={LogoImage} alt="Logo" className="w-full h-auto" />
               </div>
               <button onClick={handleCloseMenu} className="text-2xl text-black">

@@ -16,7 +16,7 @@ const Addordercreate = () => {
     { ProductID: "", quantity: "", Price: 0, CartoonType: "large" },
   ]);
   const [totalPrice, setTotalPrice] = useState(0); // New state for total amount
-  const [ PaymentStatus, setPaymentStatus] = useState("");
+  const [PaymentMode, setPaymentMode] = useState("");
 
   const dispatch = useDispatch();
 
@@ -130,7 +130,7 @@ const Addordercreate = () => {
       Subtotal: totalPrice,
       Discount: 0,
       Shippingcost: 0,
-       PaymentStatus,
+      PaymentMode,
     };
 
     console.log({
@@ -152,7 +152,7 @@ const Addordercreate = () => {
 
   // --- Step 1 ---
   const renderStep1 = () => (
-    <div className="text-[12px]">
+    <div className="text-[12px] text-start">
       <label className="font-semibold">Retailer Firm Name</label>
       <select
         className="w-full py-1.5 rounded px-2 mt-1 text-black border border-gray-300"
@@ -196,7 +196,7 @@ const Addordercreate = () => {
 
   // --- Step 2 ---
   const renderStep2 = () => (
-    <div className="text-[12px]">
+    <div className="text-[12px] text-start">
       <div className="flex justify-between items-center">
         <h2 className="text-[16px] font-semibold mb-4">Select Items</h2>
         <div>
@@ -277,13 +277,13 @@ const Addordercreate = () => {
       </div>
 
       <div className="flex flex-col mb-4">
-        <label className="text-[16px] font-semibold" htmlFor=" PaymentStatus">
+        <label className="text-[16px] font-semibold" htmlFor="PaymentMode">
           Payment Mode
         </label>
         <select
-          id=" PaymentStatus"
-          name=" PaymentStatus"
-          value={ PaymentStatus} // Bind state here
+          id="PaymentMode"
+          name="PaymentMode"
+          value={PaymentMode} // Bind state here
           onChange={(e) => setPaymentMode(e.target.value)} // Update state on change
           className="border border-gray-300 px-2 py-2 rounded-[5px]"
         >

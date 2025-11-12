@@ -26,7 +26,7 @@ const Model = ({ url }) => {
       });
   }, [url]);
 
-  const gltf = useGLTF(url); // ✅ must come AFTER url is defined
+  const gltf = useGLTF(url); // must come AFTER url is defined
 
   useEffect(() => {
     if (gltf && ref.current) {
@@ -65,9 +65,8 @@ const Model = ({ url }) => {
 // useGLTF.preload(url);
 
 const ModelViewer = ({ url }) => {
+  console.log({ url });
 
-  console.log({url});
-  
   if (!url) return <p>No 3D model available</p>;
 
   return (
