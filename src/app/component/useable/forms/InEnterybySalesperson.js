@@ -1,100 +1,110 @@
 "use client";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import CameraCapture from "@/app/component/salesperson/CameraCapture";
-import LocationFetcher from "@/app/component/salesperson/LocationFetcher";
-import { InEnteryOFSalespersom } from "@/app/store/Actions/attendanceAction";
+import React, { useRef, useState } from "react";
 
-const InEnterybySalesperson = () => {
-  const dispatch = useDispatch();
+const CameraCapture = ({ onCapture }) => {
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [hasCamera, setHasCamera] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
 
-  const [InEnteryDataForm, setInEnteryDataForm] = useState({
-    InTimeImage: "",
-    InTimeLatitude: "",
-    InTimeLongitude: "",
-  });
-
-  const [liveAddress, setLiveAddress] = useState("");
-
-  // Handle lat/lng update
-  const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
-    setInEnteryDataForm((prev) => ({
-      ...prev,
-      InTimeLatitude,
-      InTimeLongitude,
-    }));
-  };
-
-  // Handle human-readable address update
-  const handleAddress = (address) => {
-    setLiveAddress(address);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const startCamera = async () => {
     try {
-      const result = await dispatch(InEnteryOFSalespersom(InEnteryDataForm));
+      const constraints = {
+        video: {
+          facingMode: { ideal: "environment" }, // Rear camera on phones
+          width: { ideal: 1280 },               // Safe defaults
+          height: { ideal: 720 },
+          aspectRatio: { ideal: 1.777 },        // Fixes iOS white screen
+        },
+        audio: false,
+      };
 
-      if (result?.success) {
-        toast.success("Attendance submitted successfully!");
-      } else {
-        toast.warn(result?.message || "Something went wrong");
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+
+        // Required for iOS + modal overlays
+        videoRef.current.setAttribute("playsinline", true);
+        await videoRef.current.play();
       }
-    } catch (error) {
-      console.error("Error submitting attendance:", error);
-      toast.error("An error occurred while submitting attendance.");
+
+      setHasCamera(true);
+    } catch (err) {
+      console.log("Camera error: ", err);
+      alert("Camera not available on this device or permission denied.");
     }
   };
 
+  const capturePhoto = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas) return;
+
+    // Ensure canvas matches video stream resolution
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const img = canvas.toDataURL("image/jpeg");
+
+    setCapturedImage(img);
+    onCapture(img);
+
+    // Stop camera after capture
+    const stream = video.srcObject;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+
+    setHasCamera(false);
+  };
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-          <div className="flex lg;flex-row md:flex-row flex-col text-[12px] items-center lg:justify-evenly md:justify-evenly justify-start pb-5 mb-2">
-            {/* Location */}
-            <div className="flex flex-row gap-2">
-              <div className="flex flex-col">
-                <label className="text-texthearder font-semibold">
-                  In Location
-                </label>
-                <input
-                  type="text"
-                  name="livelocation"
-                  value={liveAddress}
-                  readOnly
-                  className="py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
-                />
-              </div>
-              <LocationFetcher
-                onLocation={handleLocation}
-                onAddress={handleAddress}
-              />
-            </div>
+    <div className="flex flex-col items-start mt-1">
 
-            {/* Camera */}
-            <div>
-              <label className="text-texthearder font-semibold mt-5">
-                Capture Image
-              </label>
-              <CameraCapture
-                onCapture={(img) =>
-                  setInEnteryDataForm((prev) => ({ ...prev, InTimeImage: img }))
-                }
-              />
-            </div>
+      {!hasCamera ? (
+        <button
+          type="button"
+          onClick={startCamera}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Open Camera
+        </button>
+      ) : (
+        <>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-64 h-48 border rounded bg-black"
+          />
 
-             <div className="flex items-end mt-4">
-            <button
-              type="submit"
-              className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
-            >
-              Add Attendance
-            </button>
-          </div>
-          </div>
-      </form>
+          <button
+            type="button"
+            onClick={capturePhoto}
+            className="bg-green-600 text-white px-4 py-2 mt-2 rounded"
+          >
+            Capture
+          </button>
+
+          <canvas ref={canvasRef} className="hidden"></canvas>
+        </>
+      )}
+
+      {capturedImage && (
+        <img
+          src={capturedImage}
+          alt="Captured"
+          className="w-64 h-48 mt-2 border rounded"
+        />
+      )}
     </div>
   );
 };
 
-export default InEnterybySalesperson;
+export default CameraCapture;

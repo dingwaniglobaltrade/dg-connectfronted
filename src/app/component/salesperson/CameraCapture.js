@@ -7,23 +7,34 @@ const CameraCapture = ({ onCapture }) => {
   const [hasCamera, setHasCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+const startCamera = async () => {
+  try {
+    const constraints = {
+      video: {
+        facingMode: { ideal: "environment" },  // rear camera preferred
+        width: { ideal: 1920 },                // Full HD fallback
+        height: { ideal: 1080 },
+        aspectRatio: 1.777,                    // 16:9 ratio safer for phones
+      },
+      audio: false,
+    };
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-        // Needed for Chrome & mobile browsers
-        await videoRef.current.play();
-      }
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
 
-      setHasCamera(true);
-    } catch (err) {
-      console.error("Camera error:", err);
-      alert("Unable to access camera");
+      // Required for iOS Safari
+      await videoRef.current.play();
     }
-  };
+
+    setHasCamera(true);
+  } catch (err) {
+    console.error("Camera error:", err);
+    alert("Unable to access camera");
+  }
+};
+
 
   const capturePhoto = () => {
     const video = videoRef.current;
@@ -61,13 +72,13 @@ const CameraCapture = ({ onCapture }) => {
         </button>
       ) : (
         <>
-          <video
-            ref={videoRef}
-            className="w-64 h-48 border rounded"
-            autoPlay
-            playsInline
-            muted
-          />
+        <video
+  ref={videoRef}
+  autoPlay
+  playsInline
+  muted
+  className="w-64 h-48 border rounded"
+/>
           <button
             type="button"
             onClick={capturePhoto}
