@@ -7,34 +7,27 @@ const CameraCapture = ({ onCapture }) => {
   const [hasCamera, setHasCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-  const startCamera = async () => {
-    try {
-      const constraints = {
-        video: {
-          facingMode: { ideal: "environment" }, // Rear camera on phones
-          width: { ideal: 1280 },               // Safe defaults
-          height: { ideal: 720 },
-          aspectRatio: { ideal: 1.777 },        // Fixes iOS white screen
-        },
-        audio: false,
-      };
+const startCamera = async () => {
+  try {
+    setHasCamera(true);
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    // Wait for the video element to appear on screen
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" } // for front camera
+    });
 
-        // Required for iOS + modal overlays
-        videoRef.current.setAttribute("playsinline", true);
-        await videoRef.current.play();
-      }
-
-      setHasCamera(true);
-    } catch (err) {
-      console.log("Camera error: ", err);
-      alert("Camera not available on this device or permission denied.");
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      await videoRef.current.play();
     }
-  };
+  } catch (err) {
+    console.error("Camera error:", err);
+    alert("Unable to access camera");
+  }
+};
+
 
   const capturePhoto = () => {
     const video = videoRef.current;
@@ -76,13 +69,14 @@ const CameraCapture = ({ onCapture }) => {
         </button>
       ) : (
         <>
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-64 h-48 border rounded bg-black"
-          />
+      <video
+  ref={videoRef}
+  autoPlay
+  playsInline
+  muted
+  className="w-64 h-48 border rounded"
+  style={{ objectFit: "cover", backgroundColor: "black" }}
+/>
 
           <button
             type="button"
