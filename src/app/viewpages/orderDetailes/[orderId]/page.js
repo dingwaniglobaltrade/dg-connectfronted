@@ -13,13 +13,13 @@ const page = () => {
         <div className="lg:flex md:hidden sm:hidden hidden">
           <SideNavbar />
           <div className="w-full flex flex-col">
-            <Upernavbar pagename="Order Detailes" />
+            <Upernavbar pagename="Order Details" />
             <OrderDetailes />
           </div>
         </div>
         <div className="lg:hidden md:flex sm:flex flex flex-col w-full">
           <SideNavbar />
-          <Upernavbar pagename="Order Detailes" />
+          <Upernavbar pagename="Order Details" />
           <OrderDetailes />
         </div>
       </div>

@@ -6,21 +6,21 @@ import DynamicDetailes from "@/app/component/useable/DaynamicDetailesComponents/
 
 const Page = () => {
   return (
-   <ProtectedRoute>
-     <div className="h-[100vh] w-full ">
-      <div className='lg:flex md:hidden sm:hidden hidden'>
+    <ProtectedRoute>
+      <div className="h-[100vh] w-full ">
+        <div className="lg:flex md:hidden sm:hidden hidden">
           <SideNavbar />
-   <div className='w-full flex flex-col'>
-         <Upernavbar pagename="Detailes" />
+          <div className="w-full flex flex-col">
+            <Upernavbar pagename="Details" />
+            <DynamicDetailes />
+          </div>
+        </div>
+        <div className="lg:hidden md:flex sm:flex flex flex-col w-full">
+          <SideNavbar />
+          <Upernavbar pagename="Details" />
           <DynamicDetailes />
-   </div>
+        </div>
       </div>
-      <div className='lg:hidden md:flex sm:flex flex flex-col w-full' >
-          <SideNavbar />
-       <Upernavbar pagename="Detailes" />
- <DynamicDetailes />
-      </div>
-    </div>
     </ProtectedRoute>
   );
 };

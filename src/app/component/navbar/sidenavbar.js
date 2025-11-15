@@ -243,11 +243,12 @@ const Sidenavbar = () => {
               let targetLink = item.altLinks?.[userType] || item.link;
               if (item.dynamic) targetLink = `${item.link}/${userType}/${id}`;
 
+              // FIXED ACTIVE CHECK
               const isActive =
                 !item.isLogout &&
-                (item.link === "/"
+                (targetLink === "/"
                   ? pathname === "/"
-                  : pathname.startsWith(item.link));
+                  : pathname.startsWith(targetLink));
 
               return (
                 <SidenavItem

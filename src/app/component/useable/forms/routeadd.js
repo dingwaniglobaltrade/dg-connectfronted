@@ -46,9 +46,9 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
         });
 
         // 2. Dispatch update only with changed fields
-        result = await dispatch(editExistingRoutes(route.routeId, updatedFields));
-        
-      
+        result = await dispatch(
+          editExistingRoutes(route.routeId, updatedFields)
+        );
       } else {
         console.log({ route });
         // Creating new product
@@ -75,7 +75,6 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
     }
   };
 
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-1 grid-cols-1">
@@ -100,7 +99,7 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
           type="submit"
           className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
         >
-          {initialData ? "Update Product" : "Create Product"}
+          {initialData ? "Update Route" : "Create Route"}
         </button>
       </div>
     </form>

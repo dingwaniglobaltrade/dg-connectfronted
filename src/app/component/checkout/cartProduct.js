@@ -46,7 +46,11 @@ const CartProduct = () => {
     setShowModal(false);
     const orderData = buildOrderData("cod");
     const result = await dispatch(createOrder(orderData));
-    if (result.success) alert("✅ COD Order placed successfully!");
+    if (result.success) {
+      dispatch(removeCart());
+        router.push("/viewpages/orderSucess")
+    }
+      
     else alert("❌ Failed: " + result.message);
   };
 

@@ -129,10 +129,10 @@ const DaynamiceOrderDetailes = () => {
                   <div>Subtotal</div>
                   <div>₹ {orderDetailes.Subtotal}</div>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <div>Discount</div>
                   <div>₹ {orderDetailes.Discount}</div>
-                </div>
+                </div> */}
                 <div className="flex justify-between">
                   <div>Shipping</div>
                   <div>₹ {orderDetailes.Shippingcost}</div>

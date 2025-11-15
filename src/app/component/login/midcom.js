@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Background from "@/icons/loginpagebg.png";
 import Spark from "@/icons/spark.svg";
-import Charchater from "@/icons/charcater.png";
+import Charchater from "@/icons/charachter.png";
 import PasswordIcon from "@/icons/form/passwordinput.svg";
 import ProfileIcon from "@/icons/form/profileinput.svg";
 import UserRoleIcon from "@/icons/form/userRole.svg";
@@ -16,7 +16,7 @@ const Midcom = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [error, setError] = useState("");
-  const [isRedirecting, setIsRedirecting] = useState(false); // 👈 new
+  const [isRedirecting, setIsRedirecting] = useState(false); // new
 
   const [formData, setFormData] = useState({
     email: "",
@@ -43,7 +43,7 @@ const Midcom = () => {
 
       if (result.success) {
         toast.success("Login Successful");
-        setIsRedirecting(true); // 👈 show loading screen
+        setIsRedirecting(true); // show loading screen
 
         const role = formData.userType.toLowerCase();
         let redirectPath = "/";
@@ -179,8 +179,8 @@ const Midcom = () => {
             <p>— Login Now!!!</p>
           </div>
         </div>
-        <div className="xl:absolute lg:absolute  z-[50]  lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[35%]">
-          <Image src={Charchater} alt="Character" width={200} height={200} />
+        <div className="xl:absolute lg:absolute  z-[50]  lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[40%]">
+          <Image src={Charchater} alt="Character" width={500} height={500} />
         </div>
       </div>
     </div>

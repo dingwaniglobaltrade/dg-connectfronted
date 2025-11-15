@@ -98,7 +98,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false }) => {
       } else {
         result = await dispatch(editProductdetailes(initialData.id, formData));
       }
-console.log({result:result.success});
+      console.log({ result: result.success });
 
       // ----- COMMON RESULT HANDLING -----
       if (result?.success) {
@@ -300,7 +300,7 @@ console.log({result:result.success});
         <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 text-[12px] mt-4">
           <div>
             <label className="text-texthearder font-semibold">
-              Large Cartoon Price
+              Large Carton Price
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
@@ -313,7 +313,7 @@ console.log({result:result.success});
 
           <div>
             <label className="text-texthearder font-semibold">
-              Large Cartoon Quintity
+              Carton Size (Quantity)
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
@@ -326,7 +326,7 @@ console.log({result:result.success});
 
           <div>
             <label className="text-texthearder font-semibold">
-              Large Cartoon Stock
+              Carton Stock
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
@@ -425,7 +425,7 @@ console.log({result:result.success});
           </div>
           <div>
             <label className="text-texthearder font-semibold">
-              Net Quintiy (In Grams)
+              Net Quantity (In Grams)
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
@@ -462,7 +462,7 @@ console.log({result:result.success});
           </div>
           <div>
             <label className="text-texthearder font-semibold">
-              Unit Per Box
+              Unit Per Pack
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
@@ -474,7 +474,7 @@ console.log({result:result.success});
           </div>
           <div>
             <label className="text-texthearder font-semibold">
-              Weight Per pieace
+              Weight Per piece
             </label>
             <input
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"

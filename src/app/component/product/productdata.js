@@ -245,7 +245,7 @@ const ProductData = () => {
       cell: (info) => `₹ ${info.getValue()}`,
     }),
     columnHelper.accessor("LargeCartoonPrice", {
-      header: "Cartoon Price",
+      header: "Carton Price",
       enableSorting: true,
       cell: (info) => `₹ ${info.getValue()}`,
     }),

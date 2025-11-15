@@ -25,7 +25,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, onCOD, onOnlinePay }) => {
             className="bg-green-500 text-white py-2 rounded hover:bg-green-600"
             onClick={onCOD}
           >
-            Cash on Delivery
+           Request Order
           </button>
 
           <button
@@ -34,7 +34,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, onCOD, onOnlinePay }) => {
           >
             Pay Online
           </button>
-            <button
+          <button
             className="bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
             onClick={onOnlinePay}
           >

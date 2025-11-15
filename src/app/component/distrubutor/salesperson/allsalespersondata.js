@@ -122,11 +122,6 @@ const Main = () => {
                         },
                       ]
                     : []),
-                  {
-                    label: "Edit",
-                    action: () => handleEdit(row.original),
-                    danger: false,
-                  },
                 ]}
               />
             )}

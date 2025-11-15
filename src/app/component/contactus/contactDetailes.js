@@ -48,7 +48,7 @@ const contactDetailes = () => {
               target="_blank"
               className="text-primary underline ml-1 text-[15px] font-semibold"
             >
-              info@dingwanifoods.com
+              connect@dglobaltrade.com
             </a>
           </h3>
           <div className="flex flex-row gap-4">

@@ -7,24 +7,46 @@ const CameraCapture = ({ onCapture }) => {
   const [hasCamera, setHasCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-  // Start Camera
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+
+        // 🔥 Needed for Chrome & mobile browsers
+        await videoRef.current.play();
+      }
+
       setHasCamera(true);
     } catch (err) {
-      console.error("Error accessing camera:", err);
+      console.error("Camera error:", err);
+      alert("Unable to access camera");
     }
   };
 
-  // Capture image
   const capturePhoto = () => {
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, 300, 200);
-    const imageData = canvasRef.current.toDataURL("image/png"); // base64 string
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas) return;
+
+    // 🔥 Canvas size must match video size
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+    const imageData = canvas.toDataURL("image/jpeg");
+
     setCapturedImage(imageData);
-    onCapture(imageData); // send image back to parent form
+    onCapture(imageData);
+
+    // Stop camera
+    const stream = video.srcObject;
+    stream.getTracks().forEach((track) => track.stop());
+    setHasCamera(false);
   };
 
   return (
@@ -39,7 +61,7 @@ const CameraCapture = ({ onCapture }) => {
         </button>
       ) : (
         <>
-          <video ref={videoRef} autoPlay className="w-64 h-48 border rounded" />
+          <video ref={videoRef} className="w-64 h-48 border rounded" />
           <button
             type="button"
             onClick={capturePhoto}
@@ -47,11 +69,16 @@ const CameraCapture = ({ onCapture }) => {
           >
             Capture
           </button>
-          <canvas ref={canvasRef} width="300" height="200" className="hidden" />
+          <canvas ref={canvasRef} className="hidden" />
         </>
       )}
+
       {capturedImage && (
-        <img src={capturedImage} alt="Captured" className="w-64 h-48 mt-2 border" />
+        <img
+          src={capturedImage}
+          alt="Captured"
+          className="w-64 h-48 mt-2 border"
+        />
       )}
     </div>
   );
