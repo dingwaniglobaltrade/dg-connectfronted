@@ -7,34 +7,34 @@ const CameraCapture = ({ onCapture }) => {
   const [hasCamera, setHasCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-const startCamera = async () => {
-  try {
-    const constraints = {
-      video: {
-        facingMode: { ideal: "environment" },  // rear camera preferred
-        width: { ideal: 1920 },                // Full HD fallback
-        height: { ideal: 1080 },
-        aspectRatio: 1.777,                    // 16:9 ratio safer for phones
-      },
-      audio: false,
-    };
+  const startCamera = async () => {
+    try {
+      const constraints = {
+        video: {
+          facingMode: { ideal: "environment" }, // Rear camera on phones
+          width: { ideal: 1280 },               // Safe defaults
+          height: { ideal: 720 },
+          aspectRatio: { ideal: 1.777 },        // Fixes iOS white screen
+        },
+        audio: false,
+      };
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
 
-      // Required for iOS Safari
-      await videoRef.current.play();
+        // Required for iOS + modal overlays
+        videoRef.current.setAttribute("playsinline", true);
+        await videoRef.current.play();
+      }
+
+      setHasCamera(true);
+    } catch (err) {
+      console.log("Camera error: ", err);
+      alert("Camera not available on this device or permission denied.");
     }
-
-    setHasCamera(true);
-  } catch (err) {
-    console.error("Camera error:", err);
-    alert("Unable to access camera");
-  }
-};
-
+  };
 
   const capturePhoto = () => {
     const video = videoRef.current;
@@ -42,26 +42,30 @@ const startCamera = async () => {
 
     if (!video || !canvas) return;
 
-    // Canvas size must match video size
+    // Ensure canvas matches video stream resolution
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    const context = canvas.getContext("2d");
-    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const imageData = canvas.toDataURL("image/jpeg");
+    const img = canvas.toDataURL("image/jpeg");
 
-    setCapturedImage(imageData);
-    onCapture(imageData);
+    setCapturedImage(img);
+    onCapture(img);
 
-    // Stop camera
+    // Stop camera after capture
     const stream = video.srcObject;
-    stream.getTracks().forEach((track) => track.stop());
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+
     setHasCamera(false);
   };
 
   return (
     <div className="flex flex-col items-start mt-1">
+
       {!hasCamera ? (
         <button
           type="button"
@@ -72,13 +76,14 @@ const startCamera = async () => {
         </button>
       ) : (
         <>
-        <video
-  ref={videoRef}
-  autoPlay
-  playsInline
-  muted
-  className="w-64 h-48 border rounded"
-/>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-64 h-48 border rounded bg-black"
+          />
+
           <button
             type="button"
             onClick={capturePhoto}
@@ -86,7 +91,8 @@ const startCamera = async () => {
           >
             Capture
           </button>
-          <canvas ref={canvasRef} className="hidden" />
+
+          <canvas ref={canvasRef} className="hidden"></canvas>
         </>
       )}
 
@@ -94,7 +100,7 @@ const startCamera = async () => {
         <img
           src={capturedImage}
           alt="Captured"
-          className="w-64 h-48 mt-2 border"
+          className="w-64 h-48 mt-2 border rounded"
         />
       )}
     </div>
