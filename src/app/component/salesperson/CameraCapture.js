@@ -14,7 +14,7 @@ const CameraCapture = ({ onCapture }) => {
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
 
-        // 🔥 Needed for Chrome & mobile browsers
+        // Needed for Chrome & mobile browsers
         await videoRef.current.play();
       }
 
@@ -31,7 +31,7 @@ const CameraCapture = ({ onCapture }) => {
 
     if (!video || !canvas) return;
 
-    // 🔥 Canvas size must match video size
+    // Canvas size must match video size
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
@@ -61,7 +61,13 @@ const CameraCapture = ({ onCapture }) => {
         </button>
       ) : (
         <>
-          <video ref={videoRef} className="w-64 h-48 border rounded" />
+          <video
+            ref={videoRef}
+            className="w-64 h-48 border rounded"
+            autoPlay
+            playsInline
+            muted
+          />
           <button
             type="button"
             onClick={capturePhoto}
