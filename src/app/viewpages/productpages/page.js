@@ -7,7 +7,7 @@ import ProtectedRoute from "@/app/component/protectedroute";
 const page = () => {
   return (
   <ProtectedRoute>
-     <div className="h-[100vh] w-full ">
+     <div className="h-[100vh] w-full">
       <div className='lg:flex md:hidden sm:hidden hidden'>
           <SideNavbar />
    <div className='w-full flex flex-col'>

@@ -7,27 +7,39 @@ const CameraCapture = ({ onCapture }) => {
   const [hasCamera, setHasCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
-const startCamera = async () => {
-  try {
-    setHasCamera(true);
+  const startCamera = async () => {
+    try {
+      setHasCamera(true);
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-    // Wait for the video element to appear on screen
-    await new Promise((resolve) => setTimeout(resolve, 300));
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+      });
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" } // for front camera
-    });
-
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+    } catch (err) {
+      console.error("Camera error:", err);
+      alert("Unable to access camera");
     }
-  } catch (err) {
-    console.error("Camera error:", err);
-    alert("Unable to access camera");
-  }
-};
+  };
 
+  // Convert base64 to blob
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ab], { type: mimeString });
+  };
 
   const capturePhoto = () => {
     const video = videoRef.current;
@@ -35,7 +47,6 @@ const startCamera = async () => {
 
     if (!video || !canvas) return;
 
-    // Ensure canvas matches video stream resolution
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
@@ -43,11 +54,15 @@ const startCamera = async () => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const img = canvas.toDataURL("image/jpeg");
-
     setCapturedImage(img);
-    onCapture(img);
 
-    // Stop camera after capture
+    // Convert to file and send to backend
+    const blob = dataURItoBlob(img);
+    const file = new File([blob], "intime.jpg", { type: "image/jpeg" });
+
+    onCapture(file);
+
+    // Stop camera
     const stream = video.srcObject;
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
@@ -58,7 +73,6 @@ const startCamera = async () => {
 
   return (
     <div className="flex flex-col items-start mt-1">
-
       {!hasCamera ? (
         <button
           type="button"
@@ -69,14 +83,14 @@ const startCamera = async () => {
         </button>
       ) : (
         <>
-      <video
-  ref={videoRef}
-  autoPlay
-  playsInline
-  muted
-  className="w-64 h-48 border rounded"
-  style={{ objectFit: "cover", backgroundColor: "black" }}
-/>
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-64 h-48 border rounded"
+            style={{ objectFit: "cover", backgroundColor: "black" }}
+          />
 
           <button
             type="button"

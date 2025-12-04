@@ -98,6 +98,15 @@ const Main = () => {
       header: "Route",
       cell: (info) => info.getValue(),
     }),
+    columnHelper.accessor("distributor", {
+      header: "Assigned Distributor",
+     cell: (info) => {
+    const distributor = info.getValue();
+    if (!distributor) return "—";
+
+    return distributor.name || "—";
+  },
+    }),
     columnHelper.accessor("retailerCount", {
       header: "Retailers",
       cell: (info) => info.getValue(),

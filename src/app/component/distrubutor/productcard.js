@@ -71,8 +71,8 @@ console.log({UserType});
   // console.log("cartItems:", cartItems);
 
   return (
-    <div className="lg:h-[90%] md:h-[90%] h-[100vh] w-full bg-[#f8f9fa] lg:px-5 md:px-5 px-2 py-4">
-      <div className="lg:h-[98%] md:[98%] h-[90%] lg:px-4 md:px-6 px-2 py-4 bg-white rounded-md overflow-y-auto">
+    <div className="lg:h-[90vh] md:h-[92vh] h-[90vh] w-full bg-[#f8f9fa] lg:px-5 md:px-5 px-2 py-4">
+      <div className="lg:h-[98%] bg-white md:[100%] h-[96%] lg:px-4 md:px-6 px-2 py-4 rounded-md overflow-y-auto">
         <div className="flex flex-wrap gap-5 lg:justify-start ms:justify-start justify-center">
           {products.map((product, index) => {
             const isInCart = cartItems.some(

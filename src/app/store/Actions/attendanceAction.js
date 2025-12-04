@@ -101,6 +101,8 @@ export const CreateAttendaneAction =
 //create In Attendance
 export const InEnteryOFSalespersom =
   (InEnteryDataForm) => async (dispatch, getState) => {
+    console.log({InEnteryDataForm});
+    
     try {
       const token = getToken();
       const config = {

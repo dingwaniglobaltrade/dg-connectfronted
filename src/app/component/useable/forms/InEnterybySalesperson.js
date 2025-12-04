@@ -35,7 +35,8 @@ const InEnterybySalesperson = () => {
     e.preventDefault();
     try {
       const result = await dispatch(InEnteryOFSalespersom(InEnteryDataForm));
-
+  console.log({InEnteryDataForm});
+  
       if (result?.success) {
         toast.success("Attendance submitted successfully!");
       } else {
@@ -76,11 +77,19 @@ const InEnterybySalesperson = () => {
               <label className="text-texthearder font-semibold mt-5">
                 Capture Image
               </label>
-              <CameraCapture
-                onCapture={(img) =>
-                  setInEnteryDataForm((prev) => ({ ...prev, InTimeImage: img }))
-                }
-              />
+             <CameraCapture
+  onCapture={async (img) => {
+    const file = await base64ToFile(img, "attendance.jpg");
+
+    const imageUrl = await uploadImageToBackend(file);
+
+    setInEnteryDataForm((prev) => ({ 
+      ...prev, 
+      InTimeImage: imageUrl 
+    }));
+  }}
+/>
+
             </div>
 
              <div className="flex items-end mt-4">

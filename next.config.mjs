@@ -33,7 +33,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "your-production-backend-domain.com", // e.g. render.com backend
+       hostname: "dingwanifood-app.s3.ap-south-1.amazonaws.com",// e.g. render.com backend
       },
     ],
   },
