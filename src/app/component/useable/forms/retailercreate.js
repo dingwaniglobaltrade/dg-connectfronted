@@ -146,14 +146,11 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
     }
   }, [initialData, userRole, assignedRoute]);
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRetailerFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  setRetailerFormData((prev) => ({
-    ...prev,
-    [name]: name === "gstn" && value === "" ? null : value,
-  }));
-};
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -273,8 +270,15 @@ const handleChange = (e) => {
               <input
                 type="text"
                 name="gstn"
-                value={retailerFormData.gstn || ""}
-                onChange={handleChange}
+                value={
+                  retailerFormData.gstn === null ? "" : retailerFormData.gstn
+                }
+                onChange={(e) =>
+                  setRetailerFormData((prev) => ({
+                    ...prev,
+                    gstn: e.target.value === "" ? null : e.target.value, // <-- MAIN FIX
+                  }))
+                }
                 className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
             </div>
