@@ -146,56 +146,50 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
     }
   }, [initialData, userRole, assignedRoute]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRetailerFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
 
-
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  try {
-    const cleanedData = { ...retailerFormData };
-
-    // Convert empty strings → null
-    Object.keys(cleanedData).forEach((key) => {
-      if (cleanedData[key] === "") {
-        cleanedData[key] = null;
-      }
-    });
-
-    const formData = new FormData();
-
-    Object.keys(cleanedData).forEach((key) => {
-      if (cleanedData[key] !== undefined) {
-        formData.append(key, cleanedData[key]);
-      }
-    });
-
-    let result;
-    if (!initialData) {
-      result = await dispatch(createRetailer(formData));
-    } else {
-      result = await dispatch(
-        editRetailerdetailes(retailerFormData.id, formData)
-      );
-    }
-
-    if (result?.success) {
-      toast.success(
-        `Retailer ${initialData ? "updated" : "created"} successfully!`
-      );
-    } else {
-      toast.warn(result?.message || "Something went wrong");
-    }
-  } catch (err) {
-    console.error("Retailer Submit Error:", err);
-    toast.error("An error occurred while submitting the form.");
-  }
+  setRetailerFormData((prev) => ({
+    ...prev,
+    [name]: name === "gstn" && value === "" ? null : value,
+  }));
 };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
 
+      // Append all fields to FormData
+      Object.keys(retailerFormData).forEach((key) => {
+        if (
+          retailerFormData[key] !== null &&
+          retailerFormData[key] !== undefined
+        ) {
+          formData.append(key, retailerFormData[key]);
+        }
+      });
+
+      let result;
+      if (!initialData) {
+        result = await dispatch(createRetailer(formData));
+      } else {
+        result = await dispatch(
+          editRetailerdetailes(retailerFormData.id, formData)
+        );
+      }
+
+      if (result?.success) {
+        toast.success(
+          `Retailer ${initialData ? "updated" : "created"} successfully!`
+        );
+      } else {
+        toast.warn(result?.message || "Something went wrong");
+      }
+    } catch (err) {
+      console.error("Retailer Submit Error:", err);
+      toast.error("An error occurred while submitting the form.");
+    }
+  };
 
   return (
     <div>
