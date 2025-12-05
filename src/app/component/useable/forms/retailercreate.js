@@ -151,42 +151,51 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
     setRetailerFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
 
-      // Append all fields to FormData
-      Object.keys(retailerFormData).forEach((key) => {
-        if (
-          retailerFormData[key] !== null &&
-          retailerFormData[key] !== undefined
-        ) {
-          formData.append(key, retailerFormData[key]);
-        }
-      });
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      let result;
-      if (!initialData) {
-        result = await dispatch(createRetailer(formData));
-      } else {
-        result = await dispatch(
-          editRetailerdetailes(retailerFormData.id, formData)
-        );
+  try {
+    const cleanedData = { ...retailerFormData };
+
+    // Convert empty strings → null
+    Object.keys(cleanedData).forEach((key) => {
+      if (cleanedData[key] === "") {
+        cleanedData[key] = null;
       }
+    });
 
-      if (result?.success) {
-        toast.success(
-          `Retailer ${initialData ? "updated" : "created"} successfully!`
-        );
-      } else {
-        toast.warn(result?.message || "Something went wrong");
+    const formData = new FormData();
+
+    Object.keys(cleanedData).forEach((key) => {
+      if (cleanedData[key] !== undefined) {
+        formData.append(key, cleanedData[key]);
       }
-    } catch (err) {
-      console.error("Retailer Submit Error:", err);
-      toast.error("An error occurred while submitting the form.");
+    });
+
+    let result;
+    if (!initialData) {
+      result = await dispatch(createRetailer(formData));
+    } else {
+      result = await dispatch(
+        editRetailerdetailes(retailerFormData.id, formData)
+      );
     }
-  };
+
+    if (result?.success) {
+      toast.success(
+        `Retailer ${initialData ? "updated" : "created"} successfully!`
+      );
+    } else {
+      toast.warn(result?.message || "Something went wrong");
+    }
+  } catch (err) {
+    console.error("Retailer Submit Error:", err);
+    toast.error("An error occurred while submitting the form.");
+  }
+};
+
 
   return (
     <div>
