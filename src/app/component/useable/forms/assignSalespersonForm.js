@@ -6,7 +6,7 @@ import {
   asyncfetchroute,
   AssignRoutetoSalesperson,
 } from "@/app/store/Actions/routeAction";
-import { AssignSalespersonToDistributor } from "@/app/store/Actions/distributorAction"
+import { AssignSalespersonToDistributor } from "@/app/store/Actions/distributorAction";
 import closeIcon from "@/icons/form/close.svg";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -77,7 +77,7 @@ const AssignModal = ({ distributor, onClose, mode }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="rounded-[16px] bg-white w-full max-w-md py-5 shadow-lg">
+      <div className="rounded-[16px] bg-white w-full max-w-md py-5 shadow-lg overflow-y-auto">
         <div className="w-full bg-primary rounded-t-xl flex px-4 items-center justify-between">
           <h2 className="text-[15px] font-semibold text-white py-3">
             {mode === "salesperson" ? "Assign Salesperson" : "Assign Route"}
@@ -91,20 +91,23 @@ const AssignModal = ({ distributor, onClose, mode }) => {
         </div>
 
         <div className="px-4 mt-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  value={item.id}
-                  checked={selectedIds.includes(item.id)}
-                  onChange={() => handleCheckboxChange(item.id)}
-                  className="w-4 h-4"
-                />
-                <span>{item.name || item.routeName}</span>
-              </div>
-            ))}
-            <div className="flex justify-end gap-3">
+          <form onSubmit={handleSubmit} className="space-y-4 p-4 rounded">
+            <div className="max-h-[300px] min-h-[100px] overflow-y-auto flex flex-col gap-3">
+              {items.map((item) => (
+                <div key={item.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    value={item.id}
+                    checked={selectedIds.includes(item.id)}
+                    onChange={() => handleCheckboxChange(item.id)}
+                    className="w-4 h-4"
+                  />
+                  <span>{item.name || item.routeName}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-3 sticky bottom-0 py-2">
               <button
                 type="button"
                 onClick={onClose}

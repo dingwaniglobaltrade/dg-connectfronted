@@ -174,9 +174,11 @@ const Midcom = () => {
             <Image src={Spark} alt="spark icon" width={48} height={48} />
           </div>
           <div className="flex flex-col w-full h-full justify-start text-start items-start text-white font-bold text-[28px]">
-            <p>Very good works are</p>
-            <p>waiting for you</p>
-            <p>— Login Now!!!</p>
+            <p>Dingwani Connects</p>
+            <p>Together With </p>
+            <p>Every Trade</p>
+            <p> Partner.</p>
+            {/* <p>— Login Now!!!</p> */}
           </div>
         </div>
         <div className="xl:absolute lg:absolute  z-[50]  lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[40%]">
