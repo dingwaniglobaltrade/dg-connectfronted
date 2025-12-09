@@ -21,7 +21,6 @@ const CartProduct = () => {
 
   if (!cartData) return <p>No cart data found. Please go back to cart.</p>;
 
-  console.log({ cartData });
 
   // Prepare base orderData
   const buildOrderData = (PaymentMode) => ({
@@ -64,12 +63,12 @@ const CartProduct = () => {
     if (!result.success)
       return alert("Failed to create order: " + result.message);
 
-    console.log(result.data.result.order);
+ 
 
     // const result = await dispatch()
     const { orderID, orderAmount } = result.data.result;
-    console.log({ orderID });
-    console.log({ orderAmount });
+    // console.log({ orderID });
+    // console.log({ orderAmount });
 
     // Step 2: Create Razorpay order to get providerOrderId
     const rpResult = await dispatch(createRazorpayOrder(orderID, orderAmount));
@@ -78,9 +77,9 @@ const CartProduct = () => {
       return alert("Failed to create Razorpay order: " + rpResult.message);
 
     const providerOrderId = rpResult.payload.result.id;
-    console.log({ providerOrderId });
+   
     const receipt = rpResult.payload.result.receipt;
-    console.log({ receipt });
+ 
 
     // Step 3: Open Razorpay Checkout
     const options = {
@@ -91,7 +90,7 @@ const CartProduct = () => {
       description: `Order #${orderID}`,
       order_id: providerOrderId,
       handler: async function (response) {
-        console.log({ response });
+        // console.log({ response });
         setLoading(true); // 👈 SHOW LOADER WHILE VERIFYING PAYME
         const paymentData = {
           razorpay_order_id: response.razorpay_order_id,
@@ -100,7 +99,7 @@ const CartProduct = () => {
           orderId: receipt,
         };
 
-        console.log({ paymentData });
+        // console.log({ paymentData });
 
         const verifyResult = await dispatch(verifyPayment(paymentData));
 
@@ -114,7 +113,6 @@ const CartProduct = () => {
       },
       theme: { color: "#3399cc" },
     };
- console.log({options});
  
     if (!window.Razorpay) {
       alert("Razorpay SDK failed to load. Please refresh the page.");

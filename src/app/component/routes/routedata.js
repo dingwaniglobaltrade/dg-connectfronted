@@ -76,8 +76,6 @@ const Main = () => {
 
   const handledelete = async (row) => {
     try {
-      console.log({row: row});
-      
       const result = await dispatch(deleteRouteAction(row.routeId));
       if (result?.success) {
         const updatedData = routeData.filter((route) => route.id !== row.id);

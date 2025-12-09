@@ -11,7 +11,6 @@ import Image from "next/image";
 
 const DaynamiceOrderDetailes = () => {
   const { orderId: id } = useParams();
-  console.log("order id from params", id);
   const dispatch = useDispatch();
   const [orderDetailes, setOrderDetailes] = useState(null);
 
@@ -23,17 +22,15 @@ const DaynamiceOrderDetailes = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       if (id) {
-        console.log({ id });
 
         const result = await dispatch(FetchOrderDetailesByID(id));
-        console.log({ result });
         setOrderDetailes(result.data);
       }
     };
     fetchOrders();
   }, [id, dispatch]);
 
-  console.log({ orderDetailes });
+
 
   // Define status styles
   const statusStyles = {

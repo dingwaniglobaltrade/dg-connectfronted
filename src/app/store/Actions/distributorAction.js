@@ -20,8 +20,6 @@ export const fetchAllDistributor =
   async (dispatch, getState) => {
     try {
       const token = getToken();
-      console.log({ page });
-
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -30,8 +28,6 @@ export const fetchAllDistributor =
       };
 
       const { data } = await axios.get("/distributor/all-distributors", config);
-      console.log({data: data.distributors});
-      
       dispatch(fetchDistributors(data.distributors));
       return data;
     } catch (error) {
@@ -51,14 +47,11 @@ export const createDistributor =
           Authorization: `Bearer ${token}`, // attach token in headers
         },
       };
-      console.log({ data: formData });
-
       const { data } = await axios.post(
         "/distributor/create",
         formData,
         config
       );
-      console.log("Distributor Created Successfully", data);
       dispatch(createnewDistributor(data));
       return { success: true, payload: data };
     } catch (error) {
@@ -76,7 +69,6 @@ export const createDistributor =
 
 //fetch the retailer by the id
 export const fetchDistributorbyID = (id) => async (dispatch, getState) => {
-  console.log({ id });
   try {
     const token = getToken(); // get token from localStorage
 
@@ -89,7 +81,6 @@ export const fetchDistributorbyID = (id) => async (dispatch, getState) => {
       `/distributor/distributor-details/${id}`,
       config
     );
-    console.log(data);
 
     dispatch(fetchDistributors(data));
     return { payload: data };
@@ -102,8 +93,6 @@ export const fetchDistributorbyID = (id) => async (dispatch, getState) => {
 //edit products detailes
 export const editDistributordetailes =
   (id, updatedFields) => async (dispatch, getState) => {
-    console.log(updatedFields);
-
     try {
       const token = getToken(); // get token from localStorage
       const config = {
@@ -117,8 +106,6 @@ export const editDistributordetailes =
         updatedFields,
         config
       );
-      console.log({ data });
-
       dispatch(editDistributor(data.distributor));
       return { success: true, payload: data.distributor };
     } catch (error) {
@@ -134,7 +121,6 @@ export const editDistributordetailes =
 
 //delete product detailes
 export const deleteDistributor = (id) => async (dispatch, getState) => {
-  console.log(id);
 
   try {
     const token = getToken(); // get token from localStorage

@@ -27,8 +27,6 @@ export const asyncfetchExpenses =
         },
         params: { page, limit },
       };
-      console.log(token);
-
       const { data } = await axios.get("/expense/fetch-all-expenses", config);
       dispatch(fetchExpenses(data.data));
       return data;
@@ -51,8 +49,6 @@ export const fetchExpenseByID = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`, // attach token in headers
       },
     };
-    console.log(token);
-
     const { data } = await axios.get(`/expense/expense-detiles/${id}`, config);
     dispatch(fetchExpenses(data.data));
     return data;
@@ -75,14 +71,11 @@ export const CreateExpense = (addExpenseData) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`, // attach token in headers
       },
     };
-    console.log({ data: addExpenseData });
-
     const { data } = await axios.post(
       "/expense/create-expense",
       addExpenseData,
       config
     );
-    console.log("Expense Created Successfully", data);
     dispatch(createnewExpenses(data));
     return { success: true, payload: data };
   } catch (error) {

@@ -10,8 +10,6 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 const ProductForm = ({ initialData = {}, isEditMode = false }) => {
-  console.log({ initialData });
-  console.log(isEditMode);
 
   const dispatch = useDispatch();
 
@@ -98,7 +96,6 @@ const ProductForm = ({ initialData = {}, isEditMode = false }) => {
       } else {
         result = await dispatch(editProductdetailes(initialData.id, formData));
       }
-      console.log({ result: result.success });
 
       // ----- COMMON RESULT HANDLING -----
       if (result?.success) {

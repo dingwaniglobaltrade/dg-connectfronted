@@ -76,7 +76,6 @@ const Main = () => {
     fetchAttendance(userId, currentPage);
   }, [dispatch, currentUser, currentPage]);
 
-  console.log({ salespernAttendance });
 
   const columns = [
  
@@ -122,10 +121,8 @@ const Main = () => {
       cell: ({ row }) => {
         const inTime = new Date(row.original.InTime);
 
-        console.log({ inTime });
 
         const outTime = new Date(row.original.OutTime);
-        console.log({ outTime });
 
         if (!row.original.InTime || !row.original.OutTime) {
           return "-"; // no data

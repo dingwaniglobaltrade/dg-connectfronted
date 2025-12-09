@@ -28,8 +28,8 @@ const Main = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const [searchQuery, setSearchQuery] = useState(""); // 🔍 Search
-  const [activeFilter, setActiveFilter] = useState("all"); // 🎛️ Filter
+  const [searchQuery, setSearchQuery] = useState(""); // Search
+  const [activeFilter, setActiveFilter] = useState("all"); // Filter
 
   const dropdownRefs = useRef({});
   const isMobile = useIsMobile();

@@ -49,8 +49,6 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false }) => {
     }
   }, [initialData]);
 
-  console.log({ initialData });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -80,7 +78,7 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false }) => {
 
       if (!initialData) {
         // Create Mode
-        console.log("Creating Attendance with:", formattedForm);
+        console.log("Creating Attendance with:");
         result = await dispatch(
           CreateAttendaneAction({
             id: salespersonForm.SalespersonID,
@@ -89,8 +87,7 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false }) => {
         );
       } else {
         // Edit Mode
-        console.log("Editing Attendance with:", formattedForm);
-        console.log({formattedFormss:formattedForm.id});
+        console.log("Editing Attendance with:");
         
         result = await dispatch(
           editattendancedetailes(formattedForm.id, formattedForm)

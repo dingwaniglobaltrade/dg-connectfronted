@@ -131,13 +131,13 @@ const Addordercreate = () => {
       PaymentMode,
     };
 
-    console.log({
-      CustomerID: selectedDistributor.id,
-      BillingAdress: fullAddress,
-      ShippingAdress: fullAddress,
-      products,
-      totalPrice,
-    });
+    // console.log({
+    //   CustomerID: selectedDistributor.id,
+    //   BillingAdress: fullAddress,
+    //   ShippingAdress: fullAddress,
+    //   products,
+    //   totalPrice,
+    // });
 
     const result = await dispatch(
       createCustomerOrder({ id: selectedDistributor.id, orderData })

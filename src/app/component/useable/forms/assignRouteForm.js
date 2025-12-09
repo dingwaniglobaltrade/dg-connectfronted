@@ -11,7 +11,6 @@ const AssignRouteForm = ({ staff, onClose }) => {
   const [routes, setRoutes] = useState([]);
   const [selectedRouteId, setSelectedRouteId] = useState("");
   const dispatch = useDispatch();
-  console.log({ staff: staff.id });
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -19,7 +18,6 @@ const AssignRouteForm = ({ staff, onClose }) => {
         const result = await dispatch(asyncfetchroute());
         if (result?.routes) {
           setRoutes(result.routes);
-          console.log({ "fetched Routes  ": result.routes });
         }
       } catch (error) {
         console.error("Error fetching routes:", error);
@@ -29,21 +27,17 @@ const AssignRouteForm = ({ staff, onClose }) => {
     fetchRoutes();
   }, [dispatch]);
 
-  console.log({ routes });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedRouteId) {
       toast.error("Please select a route");
       return;
     }
-    console.log({ selectedRouteId });
 
     try {
       const result = await dispatch(
         AssignRoutetoSalesperson(staff.id, selectedRouteId)
       );
-      console.log("Result from assign route:", result);
 
       if (result?.success) {
         toast.success("Route assigned successfully");

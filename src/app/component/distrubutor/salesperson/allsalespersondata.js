@@ -59,8 +59,6 @@ const Main = () => {
     setShowAssignRouteModal(true);
   };
 
-  console.log(Staff);
-
   const columns = [
     columnHelper.accessor("name", {
       header: "Name",
@@ -106,7 +104,6 @@ const Main = () => {
               className="w-5 h-5 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log(row.original.id);
                 setOpenDropdownId((prev) => (prev === rowId ? null : rowId));
               }}
             />

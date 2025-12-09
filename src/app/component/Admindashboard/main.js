@@ -19,7 +19,6 @@ const main = () => {
     const fetchorders = async () => {
       try {
         const result = await dispatch(asyncfetchOrders({ page: 1, limit: 10 }));
-        console.log({ result });
 
         if (result?.totalOrders) {
           setTotalorders(result.totalOrders);

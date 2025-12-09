@@ -52,7 +52,6 @@ const Main = () => {
         );
         if (result && result.data) {
           setExpenses(result.data);
-          console.log({ result: result.data });
 
           setTotalPages(result.totalPages);
         }
@@ -294,7 +293,7 @@ const Main = () => {
               label: "Edit",
               action: () => {
                 // You can open your edit modal or navigate to edit page
-                console.log("Edit expense:", row.original.id);
+                // console.log("Edit expense:", row.original.id);
                 // Example: open modal or redirect
                 // setEditExpenseData(row.original);
                 // setIsEditModalOpen(true);

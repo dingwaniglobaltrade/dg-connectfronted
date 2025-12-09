@@ -62,12 +62,12 @@ export default function ClientWrapper({ children }) {
     const socket = initSocket(token);
 
     const handleConnect = () => {
-      console.log("✅ Socket connected:", socket.id);
+      console.log("✅ Socket connected:");
       socket.emit("join", userId);
     };
 
     const handleNotification = (data) => {
-      console.log("📨 New notification received:", data);
+      console.log("📨 New notification received:");
       if (data?.user_id === userId) {
         setNotifications((prev) => [...prev, data]);
         dispatch({ type: "ADD_NOTIFICATION", payload: data });

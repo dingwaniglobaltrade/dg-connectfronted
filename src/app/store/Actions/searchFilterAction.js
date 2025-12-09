@@ -34,7 +34,6 @@ export const asyncSearchFilter =
 
       // Ensure the URL is correct (add full API base if needed)
       const { data } = await axios.get("/centralize/search&filter", config);
-  console.log({data});
   
       // Dispatch to store
       dispatch(fetchdata(data));

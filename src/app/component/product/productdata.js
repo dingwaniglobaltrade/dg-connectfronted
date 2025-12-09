@@ -40,7 +40,7 @@ const ProductData = () => {
         if (result && result.products) {
           setProducts(result.products);
         }
-        console.log("Fetched product data:", result);
+        console.log("Fetched product data:");
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -90,7 +90,7 @@ const ProductData = () => {
   };
 
   const handleEdit = (row) => {
-    console.log("Edit row:", row);
+    console.log("Edit row:");
     setSelectedProduct(row);
     setOpenEditModal(true);
   };
@@ -129,7 +129,6 @@ const ProductData = () => {
 
   const handledelete = async (row) => {
     try {
-      console.log(row.id);
 
       const result = await dispatch(deleteProduct(row.id));
 
@@ -138,7 +137,7 @@ const ProductData = () => {
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product.id !== row.id)
         );
-        console.log("Product deleted successfully:", row.id);
+        console.log("Product deleted successfully:");
       } else {
         console.error("Failed to delete product:", result?.message);
       }
@@ -172,8 +171,6 @@ const ProductData = () => {
     tableData.length > 0
       ? tableData // from search API
       : filteredData;
-
-  console.log({ tableData });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -313,7 +310,6 @@ const ProductData = () => {
               className="w-5 h-5 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log(row.original.id);
                 setOpenDropdownId((prev) => (prev === rowId ? null : rowId));
               }}
             />

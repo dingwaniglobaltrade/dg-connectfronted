@@ -11,6 +11,7 @@ import UserRoleIcon from "@/icons/form/userRole.svg";
 import { useDispatch } from "react-redux";
 import { asyncfetchlogin } from "@/app/store/Actions/loginAction";
 import { toast } from "react-toastify";
+import LogoImage from "@/icons/dgtlogo.svg";
 
 const Midcom = () => {
   const router = useRouter();
@@ -81,7 +82,8 @@ const Midcom = () => {
   return (
     <div className="h-screen w-screen flex flex-col-reverse md:flex-row lg:flex-row">
       {/* Left (Form) Section */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-4">
+      <div className="w-full lg:w-1/2 p-4 flex flex-col justify-center items-center ">
+        {/* <Image className="w-20 h-20" src={LogoImage} alt="Logo Image"/> */}
         <div className="text-[25px] font-bold mb-4">LOGIN</div>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-6 text-sm mt-2 text-[13px]">
@@ -173,12 +175,14 @@ const Midcom = () => {
           <div className="xl:flex lg:flex hidden w-16 h-16 bg-white rounded-full items-center justify-center lg:mt-[320px] mt-[10px]  -ml-12">
             <Image src={Spark} alt="spark icon" width={48} height={48} />
           </div>
-          <div className="flex flex-col w-full h-full justify-start text-start items-start text-white font-bold text-[28px]">
+          <div className="2xl:flex xl:flex lg:flex md:hidden hidden flex-col w-full h-full justify-start justify-start items-start text-white font-bold text-[28px]">
             <p>Dingwani Connects</p>
             <p>Together With </p>
             <p>Every Trade</p>
             <p> Partner.</p>
-            {/* <p>— Login Now!!!</p> */}
+          </div>
+          <div className="2xl:hidden xl:hidden lg:hidden md:flex flex justify-center items-center text-center w-full h-full text-white font-bold text-[22px]">
+            Dingwani Connects Together With Every Trade Partner.
           </div>
         </div>
         <div className="xl:absolute lg:absolute  z-[50]  lg:top-[29%] md:top-[29%] top-[18%] lg:right-[23%] md:right-[22%] right-[14%] w-[40%]">

@@ -52,7 +52,6 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated details:", editableData);
     // Dispatch action to save updates
   };
 
@@ -262,10 +261,10 @@ const ProfilePage = () => {
         </form>
       )}
 
-        {admin.userType === "salesperson" && (
+      {admin.userType === "salesperson" && (
         <form onSubmit={handleSubmit} className="space-y-3 px-10 text-[13px]">
           <div className="grid md:grid-cols-2 gap-4">
-             <div>
+            <div>
               <label className="block text-[13px] font-medium">Full Name</label>
               <input
                 type="text"
@@ -276,7 +275,9 @@ const ProfilePage = () => {
               />
             </div>
             <div>
-              <label className="block text-[13px] font-medium">Assigned Route</label>
+              <label className="block text-[13px] font-medium">
+                Assigned Route
+              </label>
               <input
                 type="text"
                 value={admin.gstn || "NA"}
@@ -288,7 +289,9 @@ const ProfilePage = () => {
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[13px] font-medium">Assigned Distributor Name</label>
+              <label className="block text-[13px] font-medium">
+                Assigned Distributor Name
+              </label>
               <input
                 type="text"
                 name="fullName"

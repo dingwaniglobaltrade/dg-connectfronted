@@ -18,7 +18,6 @@ const FormData = () => {
 
   const admin = loginState?.admin;
   const userType = loginState?.admin?.userType;
-  console.log({ admin });
 
   // single state
   const [formValues, setFormValues] = useState({
@@ -126,7 +125,7 @@ const handleSubmit = async (e) => {
 
     // Call distributor-specific action
     result = await dispatch(editDistributordetailes(id, payload));
-    console.log({result});
+    // console.log({result});
     
      if(result?.success){
     toast.success("Your Detailes Updated Sucessfully")

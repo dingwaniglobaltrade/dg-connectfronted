@@ -64,7 +64,7 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false }) => {
 
       if (!initialData || Object.keys(initialData).length === 0) {
         // Create Mode
-        console.log("Creating Expense with FormData:", addExpenseData);
+        console.log("Creating Expense with FormData:");
         result = await dispatch(CreateExpense(formData));
       } else {
         // Edit Mode - only append changed fields
@@ -85,7 +85,8 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false }) => {
           return;
         }
 
-        console.log("Updating Expense with FormData:", addExpenseData);
+        console.log("Updating Expense with FormData:"
+        );
         result = await dispatch(
           updatetheExpenseStatus(initialData.id, formData)
         );

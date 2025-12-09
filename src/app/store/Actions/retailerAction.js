@@ -26,7 +26,6 @@ export const asyncfetchretailer =
         },
         params: { page, limit },
       };
-      console.log(token);
 
       const { data } = await axios.get("/retailer/all-retailers", config);
       // console.log("Fetched products:", data.products);
@@ -49,14 +48,13 @@ export const createRetailer =
           Authorization: `Bearer ${token}`, // attach token in headers
         },
       };
-      console.log({ data: retailerFormData });
 
       const { data } = await axios.post(
         "/retailer/create",
         retailerFormData,
         config
       );
-      console.log("Retailer Created Successfully", data);
+
       dispatch(createnewRetailer(data));
       return { success: true, payload: data };
     } catch (error) {
@@ -72,7 +70,6 @@ export const createRetailer =
 
 //fetch the retailer by the id
 export const fetchRetailerbyID = (id) => async (dispatch, getState) => {
-  console.log({ id });
 
   try {
     const token = getToken(); // get token from localStorage
@@ -87,7 +84,6 @@ export const fetchRetailerbyID = (id) => async (dispatch, getState) => {
       `/retailer/reatiler-details/${id}`,
       config
     );
-    console.log({ data });
 
     dispatch(fetchRetailer(data.retailers));
     return data;
@@ -129,7 +125,6 @@ export const editRetailerdetailes =
 
 //delete product detailes
 export const deleteRetailerAction = (id) => async (dispatch, getState) => {
-  console.log(id);
 
   try {
     const token = getToken(); // get token from localStorage

@@ -14,7 +14,6 @@ const Model = ({ url }) => {
       return;
     }
 
-    console.log("Trying to load 3D model from URL:", url);
 
     fetch(url)
       .then((res) => {
@@ -30,7 +29,7 @@ const Model = ({ url }) => {
 
   useEffect(() => {
     if (gltf && ref.current) {
-      console.log("GLTF loaded successfully from:", url);
+      console.log("GLTF loaded successfully from:");
 
       const box = new Box3().setFromObject(ref.current);
       const size = new Vector3();
@@ -65,7 +64,6 @@ const Model = ({ url }) => {
 // useGLTF.preload(url);
 
 const ModelViewer = ({ url }) => {
-  console.log({ url });
 
   if (!url) return <p>No 3D model available</p>;
 

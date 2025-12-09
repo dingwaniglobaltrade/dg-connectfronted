@@ -28,7 +28,6 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
     }
   }, [initialData, isEditMode]);
 
-  console.log(initialData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,8 +64,6 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
           `Staff Detailes updated successfully!`
         );
       } else {
-        console.log(addStaffFormData);
-
         result = await dispatch(createNewStaff(addStaffFormData));
         setAddStaffFormData({
           name: "",

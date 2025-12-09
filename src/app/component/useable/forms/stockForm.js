@@ -59,16 +59,11 @@ const StockForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
     }));
   };
 
-  console.log(stockData);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const { productId, ...stockFields } = stockData; // Destructure productId
-      console.log({ productId });
-      console.log({ stockFields });
-
       // Send productId and rest of the form separately
       await dispatch(updateStockProduct(productId, stockFields));
 

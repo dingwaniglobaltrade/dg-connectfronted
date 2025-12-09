@@ -19,7 +19,6 @@ export const fetchAttendanceAction =
   ({ date, page = 1, limit = 10 }) =>
   async (dispatch, getState) => {
     try {
-      console.log({ date, page, limit }); // keep console.log inside
 
       const token = getToken(); // get token from localStorage
       const config = {
@@ -33,7 +32,6 @@ export const fetchAttendanceAction =
         `/attendance/fetch-all-attendance`,
         config
       );
-       console.log({data:data.data});
        
       dispatch(fetchAttendance(data.data));
       return data;
@@ -55,14 +53,12 @@ export const fetchsalespersonwiseattendance =
         },
         params: { id, page, limit },
       };
-      console.log({ id });
 
       // 👇 attach page & limit as query params
       const { data } = await axios.get(
         `/attendance/fetchSaleman-attendance`,
         config
       );
-      console.log({ data });
 
       // update redux state if needed
       dispatch(salesmanwiseattendance(data.data));
@@ -101,8 +97,7 @@ export const CreateAttendaneAction =
 //create In Attendance
 export const InEnteryOFSalespersom =
   (InEnteryDataForm) => async (dispatch, getState) => {
-    console.log({InEnteryDataForm});
-    
+
     try {
       const token = getToken();
       const config = {

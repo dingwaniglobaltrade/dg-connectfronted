@@ -60,7 +60,6 @@ const SearchBtn = ({
   const FormComponent = formComponents[modalType];
 
   const handleFormSubmit = (data) => {
-    console.log("Form Data Submitted:", data);
     setIsOpen(false);
   };
 

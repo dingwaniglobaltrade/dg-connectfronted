@@ -19,7 +19,6 @@ const getToken = () => {
 export const asyncfetchroutewiseSalesperson =
   ({ page, limit }) =>
   async (dispatch, getState) => {
-    console.log("Dispatching with page:", page, "limit:", limit);
 
     try {
       const token = getToken(); // get token from localStorage
@@ -47,7 +46,7 @@ export const asyncfetchroute = () => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get("/Route/fetchAll", config);
-    console.log("Fetched Route:", data.routes);
+
     dispatch(fetchRoute(data.routes));
     return data;
   } catch (error) {
@@ -57,7 +56,7 @@ export const asyncfetchroute = () => async (dispatch, getState) => {
 };
 
 export const createRoute = (routeData) => async (dispatch, getState) => {
-  console.log(routeData);
+
   try {
     const token = getToken();
     const config = {
@@ -67,7 +66,6 @@ export const createRoute = (routeData) => async (dispatch, getState) => {
     };
 
     const { data } = await axios.post("/Route/create-route", routeData, config);
-    console.log("Route Created Successfully", data);
 
     dispatch(createnewRoute(data));
     return { success: true, payload: data };
@@ -114,7 +112,6 @@ export const editExistingRoutes =
 
 //delete route
 export const deleteRouteAction = (id) => async (dispatch, getState) => {
-  console.log(id);
 
   try {
     const token = getToken(); // get token from localStorage
@@ -190,7 +187,6 @@ export const asyncfetchDistributorWiseRoutes =
         "/Route/distributor-assigned-routes",
         config
       );
-      console.log("Fetched Route:", routes.data);
       dispatch(fetchRoute(routes.data));
       return routes.data;
     } catch (error) {

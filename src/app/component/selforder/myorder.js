@@ -63,7 +63,6 @@ const Main = () => {
   // ---------- HANDLE SEARCHFILTER RESULT ----------
   const handleDataFetched = (result) => {
     setTableData(result.data);
-    console.log({ datas: result.data });
 
     setTotalPages(result.pages);
     setCurrentPage(result.page);

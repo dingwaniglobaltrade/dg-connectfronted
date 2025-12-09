@@ -8,7 +8,6 @@ export default function NotificationPopup({ id, message, onClose }) {
   const [visible, setVisible] = useState(true);
   const dispatch = useDispatch();
 
-  console.log({ id });
 
   // Optional: auto-hide after 5 seconds
   // useEffect(() => {
@@ -25,7 +24,7 @@ export default function NotificationPopup({ id, message, onClose }) {
 
     // Call parent callback
     if (onClose) onClose(unreadIds);
-    console.log({ unreadIds });
+   // console.log({ unreadIds });
 
     // Dispatch Redux action to mark notification as read
     if (unreadIds) {

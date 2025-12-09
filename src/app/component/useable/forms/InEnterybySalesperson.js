@@ -18,7 +18,7 @@ const InEnterybySalesperson = () => {
   const [liveAddress, setLiveAddress] = useState("");
 
   // Handle lat/lng update
-  const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
+const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
     setInEnteryDataForm((prev) => ({
       ...prev,
       InTimeLatitude,
@@ -35,8 +35,7 @@ const InEnterybySalesperson = () => {
     e.preventDefault();
     try {
       const result = await dispatch(InEnteryOFSalespersom(InEnteryDataForm));
-  console.log({InEnteryDataForm});
-  
+
       if (result?.success) {
         toast.success("Attendance submitted successfully!");
       } else {
@@ -51,48 +50,49 @@ const InEnterybySalesperson = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-          <div className="flex lg;flex-row md:flex-row flex-col text-[12px] items-center lg:justify-evenly md:justify-evenly justify-start pb-5 mb-2">
-            {/* Location */}
-            <div className="flex flex-row gap-2">
-              <div className="flex flex-col">
-                <label className="text-texthearder font-semibold">
-                  In Location
-                </label>
-                <input
-                  type="text"
-                  name="livelocation"
-                  value={liveAddress}
-                  readOnly
-                  className="py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
-                />
-              </div>
-              <LocationFetcher
-                onLocation={handleLocation}
-                onAddress={handleAddress}
+        <div className="flex lg;flex-row md:flex-row flex-col text-[12px] items-center lg:justify-evenly md:justify-evenly justify-start pb-5 mb-2">
+          {/* Location */}
+          <div className="flex flex-row gap-2">
+            <div className="flex flex-col">
+              <label className="text-texthearder font-semibold">
+                In Location
+              </label>
+              <input
+                type="text"
+                name="livelocation"
+                value={liveAddress}
+                readOnly
+                className="py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
             </div>
+            <LocationFetcher
+              onLocation={handleLocation}
+              onAddress={handleAddress}
+            />
+          </div>
 
-            {/* Camera */}
-            <div>
-              <label className="text-texthearder font-semibold mt-5">
-                Capture Image
-              </label>
-             <CameraCapture
-  onCapture={async (img) => {
-    const file = await base64ToFile(img, "attendance.jpg");
+          {/* Camera */}
+          <div>
+            <label className="text-texthearder font-semibold mt-5">
+              Capture Image
+            </label>
+            <CameraCapture
+              onCapture={async (img) => {
+                const file = await base64ToFile(img, "attendance.jpg");
+                console.log({ file });
 
-    const imageUrl = await uploadImageToBackend(file);
+                const imageUrl = await uploadImageToBackend(file);
+                console.log({ imageUrl });
 
-    setInEnteryDataForm((prev) => ({ 
-      ...prev, 
-      InTimeImage: imageUrl 
-    }));
-  }}
-/>
+                setInEnteryDataForm((prev) => ({
+                  ...prev,
+                  InTimeImage: imageUrl,
+                }));
+              }}
+            />
+          </div>
 
-            </div>
-
-             <div className="flex items-end mt-4">
+          <div className="flex items-end mt-4">
             <button
               type="submit"
               className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
@@ -100,7 +100,7 @@ const InEnterybySalesperson = () => {
               Add Attendance
             </button>
           </div>
-          </div>
+        </div>
       </form>
     </div>
   );

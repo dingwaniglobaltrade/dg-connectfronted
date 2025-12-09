@@ -45,9 +45,7 @@ const Upernavbar = ({ pagename }) => {
 
   // 3. Auto-fetch user if token exists
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log({token});
-    
+    const token = localStorage.getItem("token");  
     if (token && !admin) {
       dispatch(fetchCurrentUser());
     }

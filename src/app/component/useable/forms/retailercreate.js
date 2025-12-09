@@ -59,7 +59,6 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
   const handleAddress = (address) => {
     setLiveAddress(address);
   };
-  console.log("userRole", userRole);
   // Fetch routes only if admin or subadmin
 
   const loadDistributors = async (pageNum = 1) => {
@@ -69,7 +68,6 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
       const result = await dispatch(
         fetchAllDistributor({ page: pageNum, limit })
       );
-      console.log({ result: result.distributors });
 
       if (result?.distributors?.length > 0) {
         setDistributor((prev) => {

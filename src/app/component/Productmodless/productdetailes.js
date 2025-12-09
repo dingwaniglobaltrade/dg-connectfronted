@@ -56,7 +56,7 @@ const ProductDetails = ({ product }) => {
 
     try {
       const result = await dispatch(AddCartItems(CartData));
-      console.log("Cart response:", result);
+      // console.log("Cart response:");
     } catch (error) {
       console.error("Error adding to cart:", error);
     }

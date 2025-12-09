@@ -81,7 +81,7 @@ const DashboardHalf = ({ lable, link }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!attendaceDate) return;
-      console.log({ attendaceDate });
+    //  console.log({ attendaceDate });
 
       try {
         const result = await dispatch(
@@ -91,7 +91,6 @@ const DashboardHalf = ({ lable, link }) => {
             limit: pageSize,
           })
         );
-        console.log({ result });
 
         if (result?.data) {
           setattendance(result.data);
@@ -112,7 +111,7 @@ const DashboardHalf = ({ lable, link }) => {
         if (result && result.products) {
           setProducts(result.products);
         }
-        console.log("Fetched product data:", result);
+       
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -120,10 +119,6 @@ const DashboardHalf = ({ lable, link }) => {
     fetchData();
   }, [dispatch]);
 
-  console.log({ orders });
-  console.log({ attendance });
-
-  console.log({ product });
 
   const columns1 = [
     columnHelper.accessor("ProductName", {

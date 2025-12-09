@@ -38,10 +38,8 @@ export const fetchProductbyID = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`, // attach token in headers
       },
     };
-    console.log(token);
 
     const { data } = await axios.get(`/product/getproductByID/${id}`, config);
-    console.log({data});
 
     dispatch(fetchProducts(data));
     return data;
@@ -60,8 +58,6 @@ export const createProduct = (formData) => async (dispatch, getState) => {
         "Content-Type": "multipart/form-data",
       },
     };
-    console.log({ formData });
-
     const { data } = await axios.post("/product/create", formData, config);
 
     dispatch(createnewProduct(data));
@@ -88,8 +84,6 @@ export const updateStockProduct =
           Authorization: `Bearer ${token}`, // attach token in headers
         },
       };
-      console.log(productId);
-      console.log(stockFields);
 
       const result = await axios.put(
         `/product/updateInvetory/${productId}`,
@@ -143,7 +137,7 @@ export const editProductdetailes =
 
 //delete product detailes
 export const deleteProduct = (id) => async (dispatch, getState) => {
-  console.log(id);
+
   try {
     const token = getToken(); // get token from localStorage
     const config = {

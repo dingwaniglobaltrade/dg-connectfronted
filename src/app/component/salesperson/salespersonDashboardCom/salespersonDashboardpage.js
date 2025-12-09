@@ -31,8 +31,6 @@ const SalespersonDashboardPage = () => {
 
   const distributor = admin?.Distributor;
   const route = admin?.salespersonRoute;
-console.log({distributor});
-
   let parsedAddressArray = [];
 
   // Only parse if address exists and is a string

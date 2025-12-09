@@ -32,13 +32,10 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ route });
-
     try {
       let result;
       if (initialData) {
         const updatedFields = {};
-        console.log({ routes: route });
         Object.keys(route).forEach((key) => {
           if (route[key] !== initialData[key]) {
             updatedFields[key] = route[key];
@@ -50,7 +47,6 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
           editExistingRoutes(route.routeId, updatedFields)
         );
       } else {
-        console.log({ route });
         // Creating new product
         result = await dispatch(createRoute(route));
       }

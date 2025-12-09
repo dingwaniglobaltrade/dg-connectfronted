@@ -70,7 +70,6 @@ const Main = () => {
   // ---------- HANDLE SEARCHFILTER RESULT ----------
   const handleDataFetched = (result) => {
     setTableData(result.data);
-    console.log({ datas: result.data });
 
     setTotalPages(result.pages);
     setCurrentPage(result.page);
@@ -151,6 +150,24 @@ const Main = () => {
       count: tableData.filter((item) => item.orderStatus === "Return").length,
       value: "Return",
     },
+    ...(userRole === "admin" || userRole === "subadmin"
+      ? [
+          {
+            label: "Retailer Orders",
+            count: tableData.filter((item) => item.RetailerCustomer !== null)
+              .length,
+            value: "retailerOrders",
+          },
+
+          // Distributor Orders
+          {
+            label: "Distributor Orders",
+            count: tableData.filter((item) => item.DistributorCustomer !== null)
+              .length,
+            value: "distributorOrders",
+          },
+        ]
+      : []),
   ];
 
   const filters = [
@@ -250,7 +267,7 @@ const Main = () => {
     }
   };
 
-  // ✅ Centralized color mapping for statuses
+  // Centralized color mapping for statuses
   const getStatusStyles = (status) => {
     switch (status) {
       case "Accepted":
@@ -370,7 +387,6 @@ const Main = () => {
     }),
     columnHelper.accessor("icon", {
       header: "Action",
-
       cell: ({ row }) => {
         if (
           userRole !== "admin" &&
@@ -433,7 +449,6 @@ const Main = () => {
 
         const options = getOptions();
         if (!options) return <span className="text-gray-400 italic">N/A</span>;
-
         return (
           <div
             key={rowId}
@@ -567,7 +582,7 @@ const Main = () => {
                 {(userRole === "admin" || userRole === "subadmin") && (
                   <Searchbtn
                     btntext="Add Distributor Order"
-                    onClick={() => console.log("Distributor order flow")}
+                    // onClick={() => console.log("Distributor order flow")}
                   />
                 )}
                 {(userRole === "distributor" ||
@@ -575,7 +590,7 @@ const Main = () => {
                   userRole === "other") && (
                   <Searchbtn
                     btntext="Add Retailer Order"
-                    onClick={() => console.log("Retailer order flow")}
+                    // onClick={() => console.log("Retailer order flow")}
                   />
                 )}
               </div>
@@ -590,6 +605,12 @@ const Main = () => {
               data={
                 activeFilter === "all"
                   ? tableData
+                  : activeFilter === "retailerOrders"
+                  ? tableData.filter((item) => item.RetailerCustomer !== null)
+                  : activeFilter === "distributorOrders"
+                  ? tableData.filter(
+                      (item) => item.DistributorCustomer !== null
+                    )
                   : tableData.filter(
                       (item) => item.orderStatus === activeFilter
                     )

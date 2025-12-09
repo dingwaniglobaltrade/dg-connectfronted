@@ -24,10 +24,8 @@ export const fetchAllStaffData = () => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`, // attach token in headers
       },
     };
-    console.log(token);
-
     const { data } = await axios.get("/portal/fetch-all-users", config);
-    console.log("Fetched Staff:", data.data);
+
     dispatch(fetchstaff(data.data));
     return data;
   } catch (error) {
@@ -88,8 +86,6 @@ export const createNewStaff =
 export const editStaff =
   (row, editedStaffData) => async (dispatch, getState) => {
     const token = getToken(); // get token from localStorage
-    console.log("Editing Row:", row);
-    console.log("Edited Data:", editedStaffData);
 
     const config = {
       headers: {
@@ -116,10 +112,8 @@ export const editStaff =
         // toast.error("Invalid user type selected");
         return { success: false };
       }
-      console.log([response]);
-      
+ 
       const data = response.data;
-      console.log({data});
       
       if (response?.success) {
         dispatch(updateStaff(data.data));
@@ -138,7 +132,6 @@ export const editStaff =
 //delete the staff data
 export const deleteStaffData = (row) => async (dispatch, getState) => {
   const token = getToken(); // get token from localStorage
-  console.log(row);
 
   const config = {
     headers: {

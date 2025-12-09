@@ -26,7 +26,6 @@ export default function CartPage() {
         const result = await dispatch(fetchCartData(id));
         if (result?.data) {
           setCartItems(result.data.cartItems || []); // extract only array
-          console.log({ result: result.data.cartItems });
 
           setCartTotal(result.data || []);
         }

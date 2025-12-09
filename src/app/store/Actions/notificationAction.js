@@ -22,7 +22,7 @@ export const fetchunreadNotification = (id) => async (dispatch) => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
 
     const { data } = await axios.get(`/notification/unread`, config);
-    console.log({ data });
+
     dispatch(setNotifications(data)); // stores in list
   } catch (error) {
     console.error("Error fetching notifications:", error.message);
@@ -41,7 +41,6 @@ export const fetchnotificationbyID = (id) => async (dispatch) => {
       `/notification/fetch-all-notification-userwise/${id}`,
       config
     );
-    console.log({ data });
 
     dispatch(allNotifications(data)); // keep unread status intact
   } catch (error) {
@@ -52,7 +51,6 @@ export const fetchnotificationbyID = (id) => async (dispatch) => {
 
 // ✅ Mark a specific notification as read
 export const notificationupdateread = (unreadIds) => async (dispatch) => {
-  console.log({ unreadIds });
 
   try {
     const token = getToken();

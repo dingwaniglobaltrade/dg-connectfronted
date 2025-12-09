@@ -96,8 +96,6 @@ export default function DaynamicDetailesPage() {
       if (userType === "retailer") {
         await dispatch(editRetailerdetailes(id, formData));
       } else if (userType === "distributor") {
-        console.log([formData]);
-
         await dispatch(editDistributordetailes(id, formData));
       } else if (userType === "salesperson") {
         await dispatch(updateSalespersonDetailes(id, formData));
@@ -109,7 +107,6 @@ export default function DaynamicDetailesPage() {
     }
   };
 
-  console.log({ userDetails });
 
   if (!userDetails) return <p className="p-4">Loading...</p>;
 

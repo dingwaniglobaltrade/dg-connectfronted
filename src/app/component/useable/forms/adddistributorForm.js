@@ -48,7 +48,6 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
     const fetchRoutes = async () => {
       try {
         const result = await dispatch(asyncfetchroute());
-        console.log({ result });
 
         if (result?.routes) {
           setRoutes(result.routes);
@@ -89,7 +88,6 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
     }
   }, [initialData]);
 
-  console.log({ initialData });
 
   const handleChange = (e) => {
     const { name, value } = e.target;

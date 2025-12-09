@@ -44,10 +44,7 @@ const Main = () => {
       try {
         const result = await dispatch(asyncfetchDistributorWiseRoutes());
         if (result) {
-          console.log({ result });
-
-          setRoutedata(result.routes); // 👈 force into array
-          console.log("Distributor data:", result.routes);
+          setRoutedata(result.routes); 
         }
       } catch (error) {
         console.error("Error fetching Route data:", error);
@@ -55,8 +52,6 @@ const Main = () => {
     };
     fetchData();
   }, [dispatch, id]);
-
-  console.log({ routeData });
 
   const columns = [
     columnHelper.accessor("routeName", {

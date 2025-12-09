@@ -14,9 +14,7 @@ const productcard = () => {
   const loginState = useSelector((state) => state.login);
   const UserId = loginState?.admin?.id; // or from localStorage
   const UserType = loginState?.admin?.userType;
-  console.log({UserId});
-  
-console.log({UserType});
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +23,7 @@ console.log({UserType});
         if (result && result.products) {
           setProducts(result.products);
         }
-        console.log("Fetched product data:", result);
+
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -38,7 +36,6 @@ console.log({UserType});
       alert("Please login first");
       return;
     }
-    console.log({ product });
 
     // pick correct price based on role
     const selectedPrice =
@@ -54,11 +51,11 @@ console.log({UserType});
       Price: selectedPrice,
     };
 
-    console.log({ CartData });
+
 
     try {
       const result = await dispatch(AddCartItems(CartData));
-      console.log("Cart response:", result);
+      console.log("Cart response:");
     } catch (error) {
       console.error("Error adding to cart:", error);
     }

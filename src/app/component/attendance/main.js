@@ -121,7 +121,6 @@ const main = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!attendaceDate) return;
-      console.log({ attendaceDate });
 
       try {
         const result = await dispatch(
@@ -131,7 +130,6 @@ const main = () => {
             limit: pageSize,
           })
         );
-        console.log({ result });
 
         if (result?.data) {
           setFetchedAtte(result.data);

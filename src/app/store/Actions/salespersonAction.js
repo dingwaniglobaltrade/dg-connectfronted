@@ -38,7 +38,6 @@ export const fetchAllSalespersons = () => async (dispatch, getState) => {
 //fetch salesperosn wise detailes
 export const fetchSalespersonsDetailesbyID =
   (id) => async (dispatch, getState) => {
-    console.log({ id });
 
     try {
       const token = getToken(); // get token from localStorage
@@ -51,7 +50,7 @@ export const fetchSalespersonsDetailesbyID =
         `/salesperson/salesperson-details/${id}`,
         config
       );
-      console.log("Fetched Staff:", data.salesperson);
+   
       dispatch(fetchSalepseronsbyID(data.salesperson));
       return data;
     } catch (error) {
@@ -74,7 +73,7 @@ export const fetchAllSalespersonsbyDistributor =
         "/salesperson/assigned-salespersons",
         config
       );
-      console.log("Fetched Staff:", data.salesperson);
+   
       dispatch(fetchSalesperons(data.salesperson));
       return data;
     } catch (error) {

@@ -39,7 +39,6 @@ const Addordercreate = () => {
 
     try {
       const result = await dispatch(asyncfetchretailer(page));
-      console.log({ result });
 
       if (result && result.retailers.length > 0) {
         setRetailers((prev) => {
@@ -133,13 +132,13 @@ const Addordercreate = () => {
       PaymentMode,
     };
 
-    console.log({
-      CustomerID: selectedRetailers.id,
-      BillingAdress: selectedRetailers.address,
-      ShippingAdress: selectedRetailers.address,
-      products,
-      totalPrice,
-    });
+    // console.log({
+    //   CustomerID: selectedRetailers.id,
+    //   BillingAdress: selectedRetailers.address,
+    //   ShippingAdress: selectedRetailers.address,
+    //   products,
+    //   totalPrice,
+    // });
 
     const result = await dispatch(
       createCustomerOrder({ id: selectedRetailers.id, orderData })
