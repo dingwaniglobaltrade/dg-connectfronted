@@ -9,7 +9,7 @@ import {
 } from "@/app/store/Actions/expenseAction";
 import { toast } from "react-toastify";
 
-const AddExpenseForm = ({ initialData = {}, isEditMode = false }) => {
+const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
 
   const [addExpenseData, setAddExpenseData] = useState({
@@ -85,8 +85,7 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false }) => {
           return;
         }
 
-        console.log("Updating Expense with FormData:"
-        );
+        console.log("Updating Expense with FormData:");
         result = await dispatch(
           updatetheExpenseStatus(initialData.id, formData)
         );
@@ -96,7 +95,7 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false }) => {
         toast.success(
           `Expense ${initialData ? "updated" : "created"} successfully!`
         );
-
+        if (onSubmit) onSubmit();
         if (!initialData) {
           // Reset form
           setAddExpenseData({

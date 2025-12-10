@@ -5,13 +5,16 @@ import { useDispatch } from "react-redux";
 import { asyncfetchroute } from "@/app/store/Actions/routeAction";
 import { fetchAllSalespersons } from "@/app/store/Actions/salespersonAction";
 import {
-  fetchAllDistributor,
   createDistributor,
   editDistributordetailes,
 } from "@/app/store/Actions/distributorAction";
 import { toast } from "react-toastify";
 
-const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
+const DistributorForm = ({
+  initialData = null,
+  isEditMode = false,
+  onSubmit,
+}) => {
   const dispatch = useDispatch();
 
   const [distributorFormData, setDistributorFormData] = useState({
@@ -35,8 +38,9 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
 
   const [routes, setRoutes] = useState([]);
   const [salespersons, setSalespersons] = useState([]);
-  const [profilePreview, setProfilePreview] = useState(""); // for image preview
+  const [profilePreview, setProfilePreview] = useState("");
 
+  // Load profile preview for edit mode
   useEffect(() => {
     if (initialData?.profileImage) {
       setProfilePreview(initialData.profileImage);
@@ -45,104 +49,89 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
 
   // Fetch routes
   useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const result = await dispatch(asyncfetchroute());
-
-        if (result?.routes) {
-          setRoutes(result.routes);
-        }
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-      }
-    };
-    fetchRoutes();
+    dispatch(asyncfetchroute()).then((res) => {
+      if (res?.routes) setRoutes(res.routes);
+    });
   }, [dispatch]);
 
-  //fetch all salespersons
+  // Fetch salespersons
   useEffect(() => {
-    const fetchSalespersons = async () => {
-      try {
-        const result = await dispatch(fetchAllSalespersons());
-        if (result?.salesperson) {
-          setSalespersons(result.salesperson);
-        }
-      } catch (error) {
-        console.log("Error fetching Salepsersons", error);
-      }
-    };
-    fetchSalespersons();
+    dispatch(fetchAllSalespersons()).then((res) => {
+      if (res?.salesperson) setSalespersons(res.salesperson);
+    });
   }, [dispatch]);
 
-  // Set form data if editing
+  // Pre-fill form in edit mode
   useEffect(() => {
-    if (initialData) {
-      const sanitized = {
-        ...initialData,
-        address:
-          initialData.address && initialData.address.length > 0
-            ? initialData.address
-            : [{ complectAddress: "", pincode: "", city: "", stateName: "" }],
-      };
-      setDistributorFormData((prev) => ({ ...prev, ...sanitized }));
-    }
+    if (!initialData) return;
+
+    setDistributorFormData({
+      ...distributorFormData,
+      ...initialData,
+      address:
+        initialData.address?.length > 0
+          ? initialData.address
+          : [
+              {
+                complectAddress: "",
+                pincode: "",
+                city: "",
+                stateName: "",
+              },
+            ],
+      routeID: initialData.routeID || [],
+      assignedSalespersons: initialData.assignedSalespersons || [],
+    });
   }, [initialData]);
 
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDistributorFormData((prev) => ({ ...prev, [name]: value }));
+    setDistributorFormData({
+      ...distributorFormData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleAddressChange = (field, value) => {
-    const updatedAddress = [...(distributorFormData.address || [{}])];
-    updatedAddress[0] = {
-      ...updatedAddress[0],
-      [field]: value,
-    };
+    const updated = [...distributorFormData.address];
+    updated[0][field] = value;
+
     setDistributorFormData({
       ...distributorFormData,
-      address: updatedAddress,
+      address: updated,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
 
-      Object.keys(distributorFormData).forEach((key) => {
-        const value = distributorFormData[key];
+    const formData = new FormData();
 
-        if (key === "profileImage" && value instanceof File) {
-          // Send file as file
-          formData.append("profileImage", value);
-        } else if (Array.isArray(value) || typeof value === "object") {
-          // Send objects/arrays as JSON string
-          formData.append(key, JSON.stringify(value));
-        } else if (value !== null && value !== undefined) {
-          // Send normal fields
-          formData.append(key, value);
-        }
-      });
+    Object.keys(distributorFormData).forEach((key) => {
+      const value = distributorFormData[key];
 
-      let result;
-      if (!initialData) {
-        result = await dispatch(createDistributor(formData));
+      if (key === "profileImage" && value instanceof File) {
+        formData.append("profileImage", value);
+      } else if (Array.isArray(value) || typeof value === "object") {
+        formData.append(key, JSON.stringify(value));
       } else {
-        result = await dispatch(
-          editDistributordetailes(distributorFormData.id, formData)
-        );
+        formData.append(key, value);
       }
+    });
 
-      if (result?.success) {
-        toast.success(
-          `Distributor ${initialData ? "updated" : "created"} successfully!`
-        );
-      }
-    } catch (err) {
-      console.error("Distributor Submit Error:", err);
-      toast.error("An error occurred while submitting the form.");
+    let result;
+    if (!initialData) {
+      result = await dispatch(createDistributor(formData));
+    } else {
+      result = await dispatch(
+        editDistributordetailes(initialData.id, formData)
+      );
+    }
+
+    if (result?.success) {
+      toast.success(
+        `Distributor ${initialData ? "Updated" : "Created"} Successfully`
+      );
+      if (onSubmit) onSubmit();
     }
   };
 
@@ -152,192 +141,176 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
         <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-4 text-[12px] mt-2">
           {/* Shop Name */}
           <div>
-            <label className="text-texthearder font-semibold">Firm Name</label>
+            <label className="font-semibold">Firm Name</label>
             <input
               type="text"
               name="firmName"
-              value={distributorFormData.firmName || ""}
+              value={distributorFormData.firmName}
               onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
-          {/* Shop Image */}
+          {/* Profile Image */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Profile Image
-            </label>
+            <label className="font-semibold">Profile Image</label>
+
             {profilePreview && (
               <img
                 src={profilePreview}
-                alt="Profile"
-                className="w-20 h-20 mb-2 object-cover rounded"
+                className="w-20 h-20 rounded object-cover mb-2"
               />
             )}
+
             <input
               type="file"
               name="profileImage"
               onChange={(e) => {
                 const file = e.target.files[0];
-                setDistributorFormData((prev) => ({
-                  ...prev,
+                setDistributorFormData({
+                  ...distributorFormData,
                   profileImage: file,
-                }));
-                if (file) {
-                  setProfilePreview(URL.createObjectURL(file));
-                }
+                });
+                if (file) setProfilePreview(URL.createObjectURL(file));
               }}
-              className="w-full py-1 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1 rounded px-2 mt-1 border"
             />
           </div>
 
-          {/* Name */}
+          {/* Contact Person */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Concern Person Name
-            </label>
+            <label className="font-semibold">Concern Person Name</label>
             <input
               type="text"
               name="name"
-              value={distributorFormData.name || ""}
+              value={distributorFormData.name}
               onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-texthearder font-semibold">Email</label>
+            <label className="font-semibold">Email</label>
             <input
               type="email"
               name="email"
-              value={distributorFormData.email || ""}
+              value={distributorFormData.email}
               onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           {/* Mobile */}
           <div>
-            <label className="text-texthearder font-semibold">Mobile</label>
+            <label className="font-semibold">Mobile</label>
             <input
               type="text"
               name="mobile"
-              value={distributorFormData.mobile || ""}
+              value={distributorFormData.mobile}
               onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           {/* GSTN */}
           <div>
-            <label className="text-texthearder font-semibold">GSTN</label>
+            <label className="font-semibold">GSTN</label>
             <input
               type="text"
               name="gstn"
-              value={distributorFormData.gstn || ""}
+              value={distributorFormData.gstn}
               onChange={handleChange}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           {/* Address */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Firm Address
-            </label>
+            <label className="font-semibold">Firm Address</label>
             <input
               type="text"
-              name="complectAddress"
-              value={distributorFormData.address[0].complectAddress || ""}
+              value={distributorFormData.address[0].complectAddress}
               onChange={(e) =>
                 handleAddressChange("complectAddress", e.target.value)
               }
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           <div>
-            <label className="text-texthearder font-semibold">Pincode</label>
+            <label className="font-semibold">Pincode</label>
             <input
-              type="Number"
-              name="pincode"
-              value={distributorFormData.address[0].pincode || ""}
+              type="number"
+              value={distributorFormData.address[0].pincode}
               onChange={(e) => handleAddressChange("pincode", e.target.value)}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           <div>
-            <label className="text-texthearder font-semibold">City</label>
+            <label className="font-semibold">City</label>
             <input
               type="text"
-              name="city"
-              value={distributorFormData.address[0].city || ""}
+              value={distributorFormData.address[0].city}
               onChange={(e) => handleAddressChange("city", e.target.value)}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
 
           <div>
-            <label className="text-texthearder font-semibold">State Name</label>
+            <label className="font-semibold">State Name</label>
             <input
               type="text"
-              name="stateName"
-              value={distributorFormData.address?.[0]?.stateName || ""}
+              value={distributorFormData.address[0].stateName}
               onChange={(e) => handleAddressChange("stateName", e.target.value)}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
+              className="w-full py-1.5 rounded px-2 mt-1 border"
             />
           </div>
-          {/* Salesperson */}
+
+          {/* Salespersons */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Assign Salespersons
-            </label>
+            <label className="font-semibold">Assign Salespersons</label>
             <select
               multiple
-              name="assignedSalespersons"
               value={distributorFormData.assignedSalespersons}
               onChange={(e) => {
                 const selected = Array.from(
                   e.target.selectedOptions,
-                  (option) => option.value
+                  (o) => o.value
                 );
-                setDistributorFormData((prev) => ({
-                  ...prev,
+                setDistributorFormData({
+                  ...distributorFormData,
                   assignedSalespersons: selected,
-                }));
+                });
               }}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200 h-28"
+              className="w-full py-1.5 rounded px-2 mt-1 border h-28"
             >
-              {salespersons.map((salesperson) => (
-                <option key={salesperson.id} value={salesperson.id}>
-                  {salesperson.name}
+              {salespersons.map((sp) => (
+                <option key={sp.id} value={sp.id}>
+                  {sp.name}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Route */}
+          {/* Routes */}
           <div>
-            <label className="text-texthearder font-semibold">
-              Select Routes
-            </label>
+            <label className="font-semibold">Select Routes</label>
             <select
               multiple
-              name="routeID"
               value={distributorFormData.routeID}
               onChange={(e) => {
                 const selected = Array.from(
                   e.target.selectedOptions,
-                  (option) => option.value
+                  (o) => o.value
                 );
-                setDistributorFormData((prev) => ({
-                  ...prev,
+                setDistributorFormData({
+                  ...distributorFormData,
                   routeID: selected,
-                }));
+                });
               }}
-              className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200 h-28"
+              className="w-full py-1.5 rounded px-2 mt-1 border h-28"
             >
               {routes.map((route) => (
                 <option key={route.id} value={route.id}>
@@ -362,4 +335,4 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
   );
 };
 
-export default RetailerForm;
+export default DistributorForm;

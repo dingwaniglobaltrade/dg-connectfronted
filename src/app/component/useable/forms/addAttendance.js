@@ -8,7 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-const AttendanceForm = ({ initialData = {}, isEditMode = false }) => {
+const AttendanceForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const [salespersons, setSalespersons] = useState([]);
   const dispatch = useDispatch();
 
@@ -88,16 +88,17 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false }) => {
       } else {
         // Edit Mode
         console.log("Editing Attendance with:");
-        
+
         result = await dispatch(
           editattendancedetailes(formattedForm.id, formattedForm)
-        );  
+        );
       }
 
       if (result?.success) {
         toast.success(
           `Attendance ${initialData ? "updated" : "submitted"} successfully!`
         );
+        if (onSubmit) onSubmit();
 
         if (!initialData) {
           setSalespersonForm({

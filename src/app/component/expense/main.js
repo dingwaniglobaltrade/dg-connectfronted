@@ -40,7 +40,9 @@ const Main = () => {
   //show the updaloded image
   const [modalImage, setModalImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   // ---------------- FETCH DATA ----------------
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,6 +63,20 @@ const Main = () => {
     };
     fetchData();
   }, [dispatch, currentPage, pageSize]);
+
+  const refreshExpenses = () => {
+    dispatch(
+      asyncfetchExpenses({
+        page: currentPage,
+        limit: pageSize,
+      })
+    ).then((result) => {
+      if (result && result.data) {
+        setExpenses(result.data);
+        setTotalPages(result.totalPages);
+      }
+    });
+  };
 
   // ---------------- FILTER BUTTONS ----------------
   const filterOptions = [
@@ -282,22 +298,13 @@ const Main = () => {
           const isOpen = openDropdownId === rowId;
           const status = row.original.expenseStatus;
 
-          // Only show action if expense is Pending
           if (status !== "Pending") {
             return <span className="text-gray-400 italic">N/A</span>;
           }
-
-          // Options for salesperson: only Edit
           const options = [
             {
               label: "Edit",
-              action: () => {
-                // You can open your edit modal or navigate to edit page
-                // console.log("Edit expense:", row.original.id);
-                // Example: open modal or redirect
-                // setEditExpenseData(row.original);
-                // setIsEditModalOpen(true);
-              },
+              action: () => {},
             },
           ];
 
@@ -343,7 +350,7 @@ const Main = () => {
                   setTableData([]); // reset search results
                 }}
                 className="border rounded px-1 py-1 focus:outline-none text-[14px]"
-            >
+              >
                 {filterOptions.map((option) => {
                   // calculate count dynamically
                   const count =
@@ -365,7 +372,7 @@ const Main = () => {
             {/* Search + Add buttons */}
             <div className="flex flex-wrap gap-2 items-center">
               <SearchFilter
-                model="Expense" // 👈 backend model key
+                model="Expense" //backend model key
                 filterOptions={[
                   "All",
                   "Pending",
@@ -386,8 +393,16 @@ const Main = () => {
               </button>
               {userRole === "salesperson" && (
                 <>
-                  <Searchbtn display={"hidden"} btntext={"Add Expense"} />
-                  <Searchbtn display={"hidden"} btntext={"Add Claim"} />
+                  <Searchbtn
+                    display={"hidden"}
+                    btntext={"Add Expense"}
+                    onSuccess={refreshExpenses}
+                  />
+                  <Searchbtn
+                    display={"hidden"}
+                    btntext={"Add Claim"}
+                    onSuccess={refreshExpenses}
+                  />
                 </>
               )}
             </div>

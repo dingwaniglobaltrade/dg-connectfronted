@@ -23,6 +23,8 @@ const sidenavitems = [
     link: "/",
     altLinks: {
       salesperson: "/salespersonpages",
+      distributor: "/viewpages/productpages",
+      salesperson: "/viewpages/productpages",
     },
     iconKey: "dashboard",
     roles: ["admin", "subadmin", "salesperson"],
@@ -231,9 +233,7 @@ const Sidenavbar = () => {
       {/* 💻 Desktop & Tablet Sidebar (md and up) */}
       <div className="2xl:flex xl:flex lg:flex md:hidden hidden flex-col w-[18%] bg-white shadow-sm py-4 h-screen overflow-y-auto">
         <div className="px-4 flex justify-center mb-4">
-          <Link href="/">
             <Image src={LogoImage} alt="Logo" className="" />
-          </Link>
         </div>
 
         <div className="flex flex-col gap-3 px-2">

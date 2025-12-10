@@ -58,6 +58,20 @@ const Main = () => {
     fetchStaff();
   }, [dispatch]);
 
+   // Function to refresh staff list
+  const refreshStaff = async () => {
+    try {
+      const result = await dispatch(fetchAllStaffData());
+      if (result && result.data) {
+        setstaff(result.data);
+      }
+      console.log("Staff data refreshed:", result?.data);
+    } catch (error) {
+      console.error("Error refreshing staff data:", error);
+    }
+  };
+
+
   const handleEdit = (row) => {
     setSelectedStaff(row);
     setOpenEditModal(true);
@@ -185,6 +199,7 @@ const Main = () => {
                 initialData={selectedStaff}
                 isEditMode={true}
                 display="flex"
+                onSuccess={refreshStaff}
               />
             )}
           </div>

@@ -9,8 +9,7 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-const ProductForm = ({ initialData = {}, isEditMode = false }) => {
-
+const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
 
   const [productFormData, setProductFormData] = useState({
@@ -99,6 +98,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false }) => {
 
       // ----- COMMON RESULT HANDLING -----
       if (result?.success) {
+        if (onSubmit) onSubmit();
         toast.success(
           `Product ${initialData ? "updated" : "created"} successfully!`
         );

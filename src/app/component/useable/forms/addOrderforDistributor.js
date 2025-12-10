@@ -5,8 +5,7 @@ import { createCustomerOrder } from "@/app/store/Actions/orderAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-
-const Addordercreate = () => {
+const Addordercreate = ({ onSubmit }) => {
   const [distributor, setDistributor] = useState([]);
   const [allproducts, setAllProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -17,7 +16,7 @@ const Addordercreate = () => {
     { ProductID: "", quantity: "", Price: 0, CartoonType: "large" },
   ]);
   const [totalPrice, setTotalPrice] = useState(0); // New state for total amount
-  const [PaymentMode, setPaymentMode] = useState("");  
+  const [PaymentMode, setPaymentMode] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -144,6 +143,7 @@ const Addordercreate = () => {
     );
 
     if (result?.success) {
+      if (onSubmit) onSubmit();
       toast.success(`Order created successfully!`);
     }
   };
@@ -274,7 +274,7 @@ const Addordercreate = () => {
         </div>
       </div>
 
-   <div className="flex flex-col mb-4">
+      <div className="flex flex-col mb-4">
         <label className="text-[16px] font-semibold" htmlFor="PaymentMode">
           Payment Mode
         </label>

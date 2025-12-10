@@ -9,7 +9,11 @@ import {
 } from "@/app/store/Actions/expenseAction";
 import { toast } from "react-toastify";
 
-const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
+const OtherExpenseForm = ({
+  initialData = {},
+  isEditMode = false,
+  onSubmit,
+}) => {
   const dispatch = useDispatch();
 
   const [addExpenseData, setAddExpenseData] = useState({
@@ -86,7 +90,7 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
         toast.success(
           `Expense ${initialData ? "updated" : "created"} successfully!`
         );
-
+           if (onSubmit) onSubmit();
         if (!initialData) {
           // Reset the form
           setAddExpenseData({
@@ -103,7 +107,6 @@ const OtherExpenseForm = ({ initialData = {}, isEditMode = false }) => {
       }
     } catch (err) {
       console.error("Expense Submit Error:", err);
-      toast.error("An error occurred while submitting the form.");
     }
   };
 

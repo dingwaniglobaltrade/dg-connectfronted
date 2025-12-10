@@ -8,7 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-const RouteForm = ({ initialData = {}, isEditMode = false }) => {
+const RouteForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   // console.log({ isEditMode });
   const [route, setRoute] = useState({
     routeName: "",
@@ -52,6 +52,7 @@ const RouteForm = ({ initialData = {}, isEditMode = false }) => {
       }
 
       if (result.success) {
+        if (onSubmit) onSubmit();
         toast.success(
           `Route ${initialData ? "updated" : "created"} successfully!`
         );

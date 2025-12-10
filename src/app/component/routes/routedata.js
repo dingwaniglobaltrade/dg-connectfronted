@@ -69,6 +69,26 @@ const Main = () => {
     fetchData();
   }, [dispatch, currentPage]);
 
+const refreshRoutes = async () => {
+  try {
+    const result = await dispatch(
+      asyncfetchroutewiseSalesperson({
+        page: currentPage,
+        limit: pageSize,
+      })
+    );
+
+    if (result) {
+      setRoutedata(result.routes || []);
+      setFilteredData(result.routes || []);
+      setTotalPages(result.totalPages || 1);
+      settotalCount(result.totalRecords || 0);
+    }
+  } catch (error) {
+    console.error("Error refreshing route list:", error);
+  }
+};
+
   const handleEdit = (row) => {
     setSelectedRoute(row);
     setOpenEditModal(true);
@@ -91,19 +111,18 @@ const Main = () => {
 
   // Columns definition
   const columns = [
-
     columnHelper.accessor("routeName", {
       header: "Route",
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("distributor", {
       header: "Assigned Distributor",
-     cell: (info) => {
-    const distributor = info.getValue();
-    if (!distributor) return "—";
+      cell: (info) => {
+        const distributor = info.getValue();
+        if (!distributor) return "—";
 
-    return distributor.name || "—";
-  },
+        return distributor.name || "—";
+      },
     }),
     columnHelper.accessor("retailerCount", {
       header: "Retailers",
@@ -143,7 +162,11 @@ const Main = () => {
               <DropdownMenu
                 options={[
                   { label: "Edit", action: () => handleEdit(row.original) },
-                  { label: "Delete", action: () => handledelete(row.original), danger: true },
+                  {
+                    label: "Delete",
+                    action: () => handledelete(row.original),
+                    danger: true,
+                  },
                 ]}
               />
             )}
@@ -186,6 +209,7 @@ const Main = () => {
                 initialData={openEditModal ? selectedRoute : null}
                 isEditMode={openEditModal}
                 display="flex"
+                onSuccess={refreshRoutes}
               />
             </div>
           </div>

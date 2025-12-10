@@ -39,6 +39,7 @@ const SearchBtn = ({
   initialData = null,
   isEditMode,
   formType,
+  onSuccess,
 }) => {
   const [modalType, setModalType] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +80,10 @@ const SearchBtn = ({
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={btntext}>
         {FormComponent ? (
           <FormComponent
-            onSubmit={handleFormSubmit}
+            onSubmit={(data) => {
+              handleFormSubmit(data);
+              if (onSuccess) onSuccess(); // <-- Notify parent after form submission
+            }}
             initialData={initialData}
             isEditMode={isEditMode}
           />

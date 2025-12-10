@@ -33,6 +33,18 @@ const ProductData = () => {
   const dropdownRefs = useRef({});
   const searchRef = useRef();
 
+  const refreshProducts = async () => {
+    try {
+      const result = await dispatch(asyncfetchproduct());
+      if (result && result.products) {
+        setProducts(result.products);
+      }
+      console.log("Refreshed product data:", result?.products);
+    } catch (error) {
+      console.error("Error refreshing product data:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -129,7 +141,6 @@ const ProductData = () => {
 
   const handledelete = async (row) => {
     try {
-
       const result = await dispatch(deleteProduct(row.id));
 
       if (result?.success) {
@@ -187,7 +198,6 @@ const ProductData = () => {
   }, []);
 
   const columns = [
-  
     columnHelper.accessor("ProductName", {
       header: "Product",
       enableSorting: true,
@@ -354,6 +364,7 @@ const ProductData = () => {
                 <Searchbtn
                   btntext="Add Product"
                   initialData={selectedProduct}
+                  onSuccess={refreshProducts}
                   isEditMode={true}
                   display="flex"
                   formType="product"

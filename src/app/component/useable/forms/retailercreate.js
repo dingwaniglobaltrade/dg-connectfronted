@@ -11,7 +11,7 @@ import { fetchAllDistributor } from "@/app/store/Actions/distributorAction";
 import { toast } from "react-toastify";
 import LocationFetcher from "@/app/component/salesperson/LocationFetcher";
 
-const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
+const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.admin); //Assuming you store user in redux
 
@@ -174,6 +174,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
       }
 
       if (result?.success) {
+        if (onSubmit) onSubmit();
         toast.success(
           `Retailer ${initialData ? "updated" : "created"} successfully!`
         );
@@ -339,7 +340,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false }) => {
                 >
                   <option value="">Select Route</option>
                   {routes.map((route) => (
-                    <option key={route.id} value={route.id}>
+                    <option key={route.routeId} value={route.routeId}>
                       {route.routeName}
                     </option>
                   ))}

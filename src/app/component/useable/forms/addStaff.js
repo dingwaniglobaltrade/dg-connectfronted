@@ -4,8 +4,7 @@ import { useDispatch } from "react-redux";
 import { createNewStaff, editStaff } from "@/app/store/Actions/staffAction";
 import { toast } from "react-toastify";
 
-const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
-
+const AddStaffForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
 
   const [addStaffFormData, setAddStaffFormData] = useState({
@@ -27,7 +26,6 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
       });
     }
   }, [initialData, isEditMode]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,9 +58,7 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
         const row = initialData;
 
         result = await dispatch(editStaff(row, updatedFields));
-        toast.success(
-          `Staff Detailes updated successfully!`
-        );
+        toast.success(`Staff Detailes updated successfully!`);
       } else {
         result = await dispatch(createNewStaff(addStaffFormData));
         setAddStaffFormData({
@@ -75,6 +71,7 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false }) => {
       }
 
       if (result?.success) {
+        if (onSubmit) onSubmit();
         toast.success(
           `Staff ${initialData ? "updated" : "created"} successfully!`
         );

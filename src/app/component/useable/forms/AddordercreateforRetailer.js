@@ -5,7 +5,7 @@ import { createCustomerOrder } from "@/app/store/Actions/orderAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
-const Addordercreate = () => {
+const Addordercreate = ({ onSubmit }) => {
   const [retailers, setRetailers] = useState([]);
   const [allproducts, setAllProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -132,19 +132,12 @@ const Addordercreate = () => {
       PaymentMode,
     };
 
-    // console.log({
-    //   CustomerID: selectedRetailers.id,
-    //   BillingAdress: selectedRetailers.address,
-    //   ShippingAdress: selectedRetailers.address,
-    //   products,
-    //   totalPrice,
-    // });
-
     const result = await dispatch(
       createCustomerOrder({ id: selectedRetailers.id, orderData })
     );
 
     if (result?.success) {
+      if (onSubmit) onSubmit();
       toast.success(`Order created successfully!`);
     }
   };

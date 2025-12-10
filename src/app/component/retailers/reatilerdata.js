@@ -40,6 +40,24 @@ const Main = () => {
   const userRole = user?.userType;
 
   // ---------------- FETCH DATA ----------------
+
+  const refreshRetailers = async () => {
+  try {
+    const result = await dispatch(
+      asyncfetchretailer({ page: currentPage, limit: pageSize })
+    );
+
+    if (result) {
+      setRetailersData(result.retailers || []);
+      setTotalPages(result.totalPages || 1);
+      setTotalCount(result.count || 0);
+    }
+  } catch (error) {
+    console.error("Error refreshing retailer list:", error);
+  }
+};
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -253,6 +271,7 @@ const Main = () => {
                 isEditMode={!!selectedRetailer}
                 display="flex"
                 onClick={() => setShowRetailerModal(true)}
+                onSuccess={refreshRetailers}
               />
             </div>
           </div>

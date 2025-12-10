@@ -81,6 +81,18 @@ const Main = () => {
     fetchData();
   }, [dispatch, currentPage, pageSize]);
 
+  const refreshDistributor = async () => {
+    const result = await dispatch(
+      fetchAllDistributor({ page: currentPage, pageSize })
+    );
+
+    if (result) {
+      setDistributordata(result.distributors);
+      setTotalPages(result.totalPages);
+      settotalCount(result.count);
+    }
+  };
+
   const handleEdit = (row) => {
     setSelectedRetailer(row);
     setOpenEditModal(true);
@@ -264,6 +276,7 @@ const Main = () => {
                   initialData={selectedRetailer}
                   isEditMode={true}
                   display="flex"
+                  onSuccess={refreshDistributor}
                 />
               )}
             </div>

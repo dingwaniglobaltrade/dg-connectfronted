@@ -67,6 +67,27 @@ const Main = () => {
     }
   }, [dispatch, currentPage, pageSize, isFiltering]);
 
+
+  const refreshOrders = async () => {
+  try {
+    const result = await dispatch(
+      asyncfetchOrders({
+        page: currentPage,
+        limit: pageSize,
+      })
+    );
+
+    if (result) {
+      setTableData(result.data || []);
+      setTotalPages(result.totalPages || 1);
+      setTotalCount(result.totalOrders || 0);
+    }
+  } catch (error) {
+    console.error("Error refreshing order list:", error);
+  }
+};
+
+
   // ---------- HANDLE SEARCHFILTER RESULT ----------
   const handleDataFetched = (result) => {
     setTableData(result.data);
@@ -186,6 +207,7 @@ const Main = () => {
   const handleAccpect = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Accepted" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -200,6 +222,7 @@ const Main = () => {
   const handleShipped = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Shipped" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -214,6 +237,7 @@ const Main = () => {
   const handleTrack = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Track" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -228,6 +252,7 @@ const Main = () => {
   const handleDelivered = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Delivered" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -242,6 +267,7 @@ const Main = () => {
   const handleReject = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Cancelled" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -256,6 +282,7 @@ const Main = () => {
   const handleReturn = async (row) => {
     try {
       await dispatch(UpdateOrderStatus(row.id, { orderStatus: "Return" }));
+      await refreshOrders();
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
@@ -582,6 +609,7 @@ const Main = () => {
                 {(userRole === "admin" || userRole === "subadmin") && (
                   <Searchbtn
                     btntext="Add Distributor Order"
+                    onSuccess={refreshOrders}
                     // onClick={() => console.log("Distributor order flow")}
                   />
                 )}
@@ -590,6 +618,7 @@ const Main = () => {
                   userRole === "other") && (
                   <Searchbtn
                     btntext="Add Retailer Order"
+                    onSuccess={refreshOrders}
                     // onClick={() => console.log("Retailer order flow")}
                   />
                 )}

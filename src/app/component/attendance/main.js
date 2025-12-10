@@ -143,21 +143,6 @@ const main = () => {
     fetchData(attendaceDate, currentPage);
   }, [attendaceDate, currentPage]);
 
-  const toggleAllRows = (checked) => {
-    const newSelection = {};
-    fetchedAtte.forEach((row) => {
-      newSelection[row.id] = checked;
-    });
-    setSelectedRowIds(newSelection);
-  };
-
-  const toggleRow = (id, checked) => {
-    setSelectedRowIds((prev) => ({
-      ...prev,
-      [id]: checked,
-    }));
-  };
-
   const handleEdit = (row) => {
     setSelectedAttendance(row);
     setOpenEditModal(true);
@@ -192,7 +177,7 @@ const main = () => {
       header: "Login Time",
       cell: (info) => formatDate(info.getValue(), true), // true = include time
     }),
-   columnHelper.accessor("OutTime", {
+    columnHelper.accessor("OutTime", {
       header: "Logout Time",
       cell: (info) => formatDate(info.getValue(), true), // true = include time
     }),
@@ -276,6 +261,36 @@ const main = () => {
     }),
   ];
 
+  const refreshAttendance = async () => {
+    if (selected) {
+      const result = await dispatch(
+        fetchsalespersonwiseattendance({
+          id: selected.id,
+          page: currentPage + 1,
+          limit: pageSize,
+        })
+      );
+
+      if (result) {
+        setSalespersonwise(result.data);
+        setTotalPages(result.totalPages);
+      }
+    } else if (attendaceDate) {
+      const result = await dispatch(
+        fetchAttendanceAction({
+          date: attendaceDate,
+          page: currentPage + 1,
+          limit: pageSize,
+        })
+      );
+
+      if (result) {
+        setFetchedAtte(result.data);
+        setTotalPages(result.totalPages);
+      }
+    }
+  };
+
   return (
     <div className="h-[90%] w-full lg:px-7 md:px-5 px-2 py-4 bg-[#f8f9fa]">
       <div className="lg:px-6 md:px-6 px-2 h-full bg-white flex flex-col rounded-[10px]">
@@ -313,6 +328,7 @@ const main = () => {
                 initialData={selectedAttendance}
                 isEditMode={true}
                 display="flex"
+                onSuccess={refreshAttendance}
               />
             )}
           </div>

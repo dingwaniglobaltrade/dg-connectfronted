@@ -5,9 +5,7 @@ import Table from "@/app/component/useable/table";
 import { createColumnHelper } from "@tanstack/react-table";
 import useIsMobile from "@/app/customhooks/mobileview";
 import SearchFilter from "@/app/component/useable/searchfiled"; // import search
-import {
-  asyncfetchproduct,
-} from "@/app/store/Actions/productAction";
+import { asyncfetchproduct } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
 
 const columnHelper = createColumnHelper();
@@ -39,6 +37,18 @@ const InventoryManagement = () => {
     };
     fetchData();
   }, [dispatch]);
+
+  const refreshInventory = async () => {
+    try {
+      const result = await dispatch(asyncfetchproduct());
+      if (result && result.products) {
+        setProducts(result.products);
+      }
+      console.log("Inventory refreshed:", result?.products);
+    } catch (error) {
+      console.error("Error refreshing inventory:", error);
+    }
+  };
 
   const filterButtons = [
     { label: "All Products", count: products.length, value: "all" },
@@ -76,8 +86,7 @@ const InventoryManagement = () => {
   };
 
   // ✅ final data = search result OR filter result
-  const finalData =
-    tableData.length > 0 ? tableData : filteredData;
+  const finalData = tableData.length > 0 ? tableData : filteredData;
 
   const toggleAllRows = (checked) => {
     const newSelection = {};
@@ -113,7 +122,6 @@ const InventoryManagement = () => {
   }, []);
 
   const columns = [
-
     columnHelper.accessor("ProductName", {
       header: "Product",
       enableSorting: true,
@@ -196,6 +204,7 @@ const InventoryManagement = () => {
                 ref={searchRef}
                 model="Product"
                 filterOptions={[]} // can add filter options later
+
                 onDataFetched={handleDataFetched}
               />
               {openEditModal && (
@@ -205,6 +214,7 @@ const InventoryManagement = () => {
                   isEditMode={true}
                   display="flex"
                   formType="stock"
+                  onSuccess={refreshInventory}
                 />
               )}
             </div>
