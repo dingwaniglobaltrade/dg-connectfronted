@@ -98,6 +98,7 @@ const refreshRoutes = async () => {
     try {
       const result = await dispatch(deleteRouteAction(row.routeId));
       if (result?.success) {
+        await refreshRoutes();
         const updatedData = routeData.filter((route) => route.id !== row.id);
         setRoutedata(updatedData);
         setFilteredData(updatedData);

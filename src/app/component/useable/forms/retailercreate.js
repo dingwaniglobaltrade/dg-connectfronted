@@ -209,6 +209,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
                 type="text"
                 name="shopName"
                 value={retailerFormData.shopName || ""}
+                required
                 onChange={handleChange}
                 className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
@@ -249,6 +250,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
                 name="email"
                 value={retailerFormData.email || ""}
                 onChange={handleChange}
+                required
                 className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
             </div>
@@ -260,6 +262,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
                 name="mobile"
                 value={retailerFormData.mobile || ""}
                 onChange={handleChange}
+                required
                 className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
             </div>

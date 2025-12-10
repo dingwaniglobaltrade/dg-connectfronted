@@ -86,6 +86,7 @@ const Main = () => {
     try {
       const result = await dispatch(deleteStaffData(row));
       if (result?.success) {
+        await refreshStaff();
         setstaff((prev) => prev.filter((staff) => staff.id !== row.id));
       } else {
         console.error("Failed to delete staff:", result?.message);

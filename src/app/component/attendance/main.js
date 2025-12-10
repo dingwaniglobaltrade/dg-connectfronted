@@ -152,6 +152,7 @@ const main = () => {
     try {
       const result = await dispatch(deleteSalespersonAttendance(row.id));
       if (result?.success) {
+        await refreshStaff();
         setFetchedAtte((prev) => prev.filter((a) => a.id !== row.id));
       }
     } catch (error) {

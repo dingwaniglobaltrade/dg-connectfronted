@@ -131,6 +131,7 @@ const Main = () => {
     try {
       const result = await dispatch(deleteRetailerAction(row.id));
       if (result?.success) {
+        await refreshRetailers();
         setRetailersData((prev) =>
           prev.filter((retailer) => retailer.id !== row.id)
         );

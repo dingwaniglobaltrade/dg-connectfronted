@@ -148,6 +148,7 @@ const ProductData = () => {
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product.id !== row.id)
         );
+        await refreshProducts();
         console.log("Product deleted successfully:");
       } else {
         console.error("Failed to delete product:", result?.message);

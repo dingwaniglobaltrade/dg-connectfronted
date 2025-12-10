@@ -149,6 +149,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="ProductName"
+              required
               value={productFormData.ProductName || ""}
               onChange={handleChange}
             />
@@ -161,6 +162,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="file"
               name="ProductImage"
+              required
               multiple
               accept="image/*,.glb"
               onChange={(e) => {
@@ -236,6 +238,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               name="Active"
               value={productFormData.Active || ""}
+              required
               onChange={handleChange}
             >
               <option value="">Select Status</option>
@@ -265,6 +268,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px] resize-none"
               type="text"
               name="ProductDescription"
+              required
               value={productFormData.ProductDescription || ""}
               onChange={handleChange}
             />
@@ -303,6 +307,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="LargeCartoonPrice"
+              required
               value={productFormData.LargeCartoonPrice || ""}
               onChange={handleChange}
             />
@@ -316,6 +321,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="LargeCartoonQuintity"
+              required
               value={productFormData.LargeCartoonQuintity || ""}
               onChange={handleChange}
             />
@@ -329,6 +335,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="LargeCartoonStock"
+              required
               value={productFormData.LargeCartoonStock || ""}
               onChange={handleChange}
             />
@@ -344,6 +351,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="RetailerPrice"
+              required
               value={productFormData.RetailerPrice || ""}
               onChange={handleChange}
             />
@@ -356,6 +364,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               className="w-full py-1.5 rounded px-2 mt-1 text-black border-grey-200 border-[1px]"
               type="text"
               name="RetaileStock"
+              required
               value={productFormData.RetaileStock || ""}
               onChange={handleChange}
             />
@@ -397,6 +406,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               type="text"
               name="ProductPrice"
               value={productFormData.ProductPrice || ""}
+              required
               onChange={handleChange}
             />
           </div>
@@ -417,6 +427,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               type="text"
               name="Flavour"
               value={productFormData.Flavour || ""}
+              required
               onChange={handleChange}
             />
           </div>
@@ -442,6 +453,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               type="text"
               name="shelfLife"
               value={productFormData.shelfLife || ""}
+              required
               onChange={handleChange}
             />
           </div>
@@ -454,6 +466,7 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               type="text"
               name="productCode"
               value={productFormData.productCode || ""}
+              required
               onChange={handleChange}
             />
           </div>

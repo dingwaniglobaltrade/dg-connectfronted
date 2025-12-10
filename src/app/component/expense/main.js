@@ -129,6 +129,7 @@ const Main = () => {
         updatetheExpenseStatus(row.id, { expenseStatus: "Accepted" })
       );
       toast.success("Expense Accepted");
+      await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
           exp.id === row.id ? { ...exp, expenseStatus: "Accepted" } : exp
@@ -145,6 +146,7 @@ const Main = () => {
         updatetheExpenseStatus(row.id, { expenseStatus: "Reject" })
       );
       toast.success("Expense Rejected");
+      await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
           exp.id === row.id ? { ...exp, expenseStatus: "Reject" } : exp
@@ -161,6 +163,7 @@ const Main = () => {
         updatetheExpenseStatus(row.id, { expenseStatus: "Approved" })
       );
       toast.success("Expense Approved");
+      await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
           exp.id === row.id ? { ...exp, expenseStatus: "Approved" } : exp

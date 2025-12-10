@@ -103,6 +103,7 @@ const Main = () => {
       const result = await dispatch(deleteDistributor(row.id));
 
       if (result?.success) {
+        await refreshDistributor();
         setDistributordata((prevDistributor) =>
           prevDistributor.filter((distributor) => distributor.id !== row.id)
         );

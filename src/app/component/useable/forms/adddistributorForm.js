@@ -145,6 +145,7 @@ const DistributorForm = ({
             <input
               type="text"
               name="firmName"
+              required
               value={distributorFormData.firmName}
               onChange={handleChange}
               className="w-full py-1.5 rounded px-2 mt-1 border"
@@ -165,6 +166,7 @@ const DistributorForm = ({
             <input
               type="file"
               name="profileImage"
+              required
               onChange={(e) => {
                 const file = e.target.files[0];
                 setDistributorFormData({
@@ -183,6 +185,7 @@ const DistributorForm = ({
             <input
               type="text"
               name="name"
+              required
               value={distributorFormData.name}
               onChange={handleChange}
               className="w-full py-1.5 rounded px-2 mt-1 border"
@@ -196,6 +199,7 @@ const DistributorForm = ({
               type="email"
               name="email"
               value={distributorFormData.email}
+              required
               onChange={handleChange}
               className="w-full py-1.5 rounded px-2 mt-1 border"
             />
@@ -207,6 +211,7 @@ const DistributorForm = ({
             <input
               type="text"
               name="mobile"
+              required
               value={distributorFormData.mobile}
               onChange={handleChange}
               className="w-full py-1.5 rounded px-2 mt-1 border"
@@ -252,6 +257,7 @@ const DistributorForm = ({
             <label className="font-semibold">City</label>
             <input
               type="text"
+              required
               value={distributorFormData.address[0].city}
               onChange={(e) => handleAddressChange("city", e.target.value)}
               className="w-full py-1.5 rounded px-2 mt-1 border"
@@ -263,6 +269,7 @@ const DistributorForm = ({
             <input
               type="text"
               value={distributorFormData.address[0].stateName}
+              required
               onChange={(e) => handleAddressChange("stateName", e.target.value)}
               className="w-full py-1.5 rounded px-2 mt-1 border"
             />
