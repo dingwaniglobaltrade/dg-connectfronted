@@ -55,12 +55,12 @@ const CameraCapture = ({ onCapture }) => {
 
     const img = canvas.toDataURL("image/jpeg");
     setCapturedImage(img);
- //console.log({img}); (working)
+
  
     // Convert to file and send to backend
     const blob = dataURItoBlob(img);
     const file = new File([blob], "intime.jpg", { type: "image/jpeg" });
-  // console.log({file}); (working)
+
   
     onCapture(file);
 

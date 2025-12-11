@@ -13,13 +13,13 @@ const Page = () => {
       <div className='lg:flex md:hidden sm:hidden hidden'>
           <SideNavbar />
    <div className='w-full flex flex-col'>
-         <Upernavbar pagename="Detailes" />
+         <Upernavbar pagename="Details" />
           <DynamicDetailes />
    </div>
       </div>
       <div className='lg:hidden md:flex sm:flex flex flex-col w-full' >
           <SideNavbar />
-       <Upernavbar pagename="Detailes" />
+       <Upernavbar pagename="Details" />
  <DynamicDetailes />
       </div>
     </div>

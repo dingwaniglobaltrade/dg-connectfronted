@@ -122,7 +122,7 @@ const refreshRoutes = async () => {
         const distributor = info.getValue();
         if (!distributor) return "—";
 
-        return distributor.name || "—";
+        return distributor.firmname || "—";
       },
     }),
     columnHelper.accessor("retailerCount", {

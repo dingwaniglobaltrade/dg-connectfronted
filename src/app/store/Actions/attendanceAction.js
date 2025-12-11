@@ -119,6 +119,31 @@ export const InEnteryOFSalespersom =
     }
   };
 
+
+  export const logOutEnteryOFSalespersom =
+  (OutEnteryDataForm) => async (dispatch, getState) => {
+
+    try {
+      const token = getToken();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "/attendance/Out-entry",
+        OutEnteryDataForm,
+        config
+      );
+
+      dispatch(editAttendance(data));
+      return { success: true, payload: data };
+    } catch (error) {
+      console.error("Error in OutAttendaneAction:", error.message);
+      dispatch(iserror(error.message));
+    }
+  };
+
 //edit attendance detailes
 export const OutEntryOfSalesperson =
   (id, updatedData) => async (dispatch, getState) => {

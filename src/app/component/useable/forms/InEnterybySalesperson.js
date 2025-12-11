@@ -18,14 +18,13 @@ const InEnterybySalesperson = () => {
   const [liveAddress, setLiveAddress] = useState("");
 
   // Handle lat/lng update
-const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
+  const handleLocation = ({ latitude, longitude }) => {
     setInEnteryDataForm((prev) => ({
       ...prev,
-      InTimeLatitude,
-      InTimeLongitude,
+      InTimeLatitude: latitude,
+      InTimeLongitude: longitude,
     }));
   };
-
   // Handle human-readable address update
   const handleAddress = (address) => {
     setLiveAddress(address);
@@ -33,8 +32,15 @@ const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const result = await dispatch(InEnteryOFSalespersom(InEnteryDataForm));
+      const formData = new FormData();
+      formData.append("InTimeImage", InEnteryDataForm.InTimeImage);
+      formData.append("InTimeLatitude", InEnteryDataForm.InTimeLatitude);
+      formData.append("InTimeLongitude", InEnteryDataForm.InTimeLongitude);
+      console.log({ formData });
+
+      const result = await dispatch(InEnteryOFSalespersom(formData));
 
       if (result?.success) {
         toast.success("Attendance submitted successfully!");
@@ -77,16 +83,17 @@ const handleLocation = ({ InTimeLatitude, InTimeLongitude }) => {
               Capture Image
             </label>
             <CameraCapture
-              onCapture={async (img) => {
-                const file = await base64ToFile(img, "attendance.jpg");
-                console.log({ file });
+              onCapture={async (file) => {
+                console.log("Received file from camera:", file);
 
-                const imageUrl = await uploadImageToBackend(file);
-                console.log({ imageUrl });
+                // Upload directly
+                // const imageUrl = await uploadImageToBackend(file);
+
+                // console.log("Uploaded Image URL:", imageUrl);
 
                 setInEnteryDataForm((prev) => ({
                   ...prev,
-                  InTimeImage: imageUrl,
+                  InTimeImage: file,
                 }));
               }}
             />
