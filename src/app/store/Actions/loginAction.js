@@ -18,15 +18,11 @@ export const asyncfetchlogin = (formData) => async (dispatch, getState) => {
       localStorage.setItem("token", data.token);
     }
 
-    // ✅ store only user details in redux
+    // store only user details in redux
     dispatch(loginuser(data.user));
 
     return { success: true, payload: data };
   } catch (error) {
-    console.error(
-      "Login failed:",
-      error?.response?.data?.message || error.message
-    );
     dispatch(iserror(error?.response?.data?.message || "Login failed"));
 
     return {

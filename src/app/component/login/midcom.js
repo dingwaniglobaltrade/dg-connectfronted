@@ -57,6 +57,8 @@ const Midcom = () => {
           router.push(redirectPath);
         }, 1500); // small delay to show spinner
       } else {
+        console.log({result});
+        
         toast.error(result.message || "Login failed. Please try again.");
         setError(result.message || "Login failed. Please try again.");
       }

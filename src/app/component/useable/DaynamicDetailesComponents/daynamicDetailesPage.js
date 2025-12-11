@@ -29,12 +29,15 @@ const userFieldConfig = {
       { label: "Concern Person Name", key: "name" },
       { label: "GSTIN Number", key: "gstn" },
       { label: "Route Name", key: "retailerRoute.routeName" },
-      { label: "Assigned Distributor Name", key: "assignedDistributorName" },
+      {
+        label: "Assigned Distributor Name",
+        key: "Distributordetailes.firmName",
+      },
     ],
     contactInfo: [
       { label: "Email Address", key: "email" },
       { label: "Mobile Number", key: "mobile" },
-      { label: "Address", key: "address.complectAddress" },
+      { label: "Address", key: "address" },
     ],
   },
   distributor: {
@@ -106,7 +109,6 @@ export default function DaynamicDetailesPage() {
       console.error("Update failed:", err);
     }
   };
-
 
   if (!userDetails) return <p className="p-4">Loading...</p>;
 

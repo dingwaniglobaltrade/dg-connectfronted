@@ -42,21 +42,20 @@ const Main = () => {
   // ---------------- FETCH DATA ----------------
 
   const refreshRetailers = async () => {
-  try {
-    const result = await dispatch(
-      asyncfetchretailer({ page: currentPage, limit: pageSize })
-    );
+    try {
+      const result = await dispatch(
+        asyncfetchretailer({ page: currentPage, limit: pageSize })
+      );
 
-    if (result) {
-      setRetailersData(result.retailers || []);
-      setTotalPages(result.totalPages || 1);
-      setTotalCount(result.count || 0);
+      if (result) {
+        setRetailersData(result.retailers || []);
+        setTotalPages(result.totalPages || 1);
+        setTotalCount(result.count || 0);
+      }
+    } catch (error) {
+      console.error("Error refreshing retailer list:", error);
     }
-  } catch (error) {
-    console.error("Error refreshing retailer list:", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,7 +142,6 @@ const Main = () => {
 
   // ---------------- TABLE COLUMNS ----------------
   const columns = [
-
     columnHelper.accessor("shopName", {
       header: "Shop Name",
       cell: (info) => {
@@ -167,10 +165,19 @@ const Main = () => {
         );
       },
     }),
+    columnHelper.accessor("email", { header: "Email" }),
     columnHelper.accessor("mobile", { header: "Mobile" }),
     columnHelper.accessor("gstn", { header: "GSTN" }),
     columnHelper.accessor("name", { header: "Concern Person" }),
-    columnHelper.accessor("address", { header: "Address" }),
+    columnHelper.accessor("address", {
+      header: "Address",
+      cell: (info) => (
+        <div className="whitespace-normal break-words max-w-[200px]">
+          {info.getValue()}
+        </div>
+      ),
+    }),
+
     columnHelper.display({
       id: "livelocation",
       header: "Live Location",
