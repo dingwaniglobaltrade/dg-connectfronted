@@ -88,7 +88,10 @@ const productcard = () => {
                   }
                 >
                   <img
-                    src={getImageUrl(product.media?.[0]?.fileName)}
+                    src={getImageUrl(
+                      product.media?.[1]?.fileName ||
+                        product.media?.[0]?.fileName
+                    )}
                     alt={product.ProductName}
                     className="h-full w-full object-cover object-center rounded-[10px]"
                   />

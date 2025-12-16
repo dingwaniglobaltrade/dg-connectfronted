@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // ✅ use router
-
+import { useRouter } from "next/navigation";
+import { getImageUrl } from "@/app/utils/imageurl";
 import {
   fetchCartData,
   updateCartQuantity,
@@ -117,28 +117,27 @@ export default function CartPage() {
                 {/* Product column stays left aligned with image + text */}
                 <td className="p-3 flex items-center gap-3 font-semibold text-left">
                   {item.Product.media && item.Product.media.length > 0 ? (
-                    // Check the first media type
                     item.Product.media[0].url.endsWith(".glb") ? (
                       <img
-                        src="/3d-placeholder.png" // a placeholder icon for 3D files
+                        src="/3d-placeholder.png"
                         alt={item.Product.ProductName}
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
                     ) : (
                       <img
-                        src={item.Product.media[0].url}
+                        src={getImageUrl(item.Product.media?.[0]?.url)}
                         alt={item.Product.ProductName}
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
                     )
                   ) : (
-                    // fallback if no media
                     <img
                       src="/default-product.png"
                       alt={item.Product.ProductName}
                       className="w-12 h-12 bg-gray-200 rounded-[10px]"
                     />
                   )}
+
                   {item.Product.ProductName}
                 </td>
 
@@ -195,22 +194,20 @@ export default function CartPage() {
             >
               <div className="w-[30%] h-full rounded-[10px]">
                 {item.Product.media && item.Product.media.length > 0 ? (
-                  // Check the first media type
                   item.Product.media[0].url.endsWith(".glb") ? (
                     <img
-                      src="/3d-placeholder.png" // a placeholder icon for 3D files
+                      src="/3d-placeholder.png"
                       alt={item.Product.ProductName}
                       className="w-full h-full bg-gray-400 rounded-[10px]"
                     />
                   ) : (
                     <img
-                      src={item.Product.media[0].url}
+                      src={getImageUrl(item.Product.media?.[0]?.url)}
                       alt={item.Product.ProductName}
                       className="w-full h-full bg-gray-400 rounded-[10px]"
                     />
                   )
                 ) : (
-                  // fallback if no media
                   <img
                     src="/default-product.png"
                     alt={item.Product.ProductName}

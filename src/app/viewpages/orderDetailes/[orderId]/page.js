@@ -5,8 +5,6 @@ import ProtectedRoute from "@/app/component/protectedroute";
 import OrderDetailes from "@/app/component/order/daynamiceOrderDetailes";
 
 const page = () => {
-
-
   return (
     <ProtectedRoute>
       <div className="h-[100vh] w-full ">
