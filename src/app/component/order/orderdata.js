@@ -67,26 +67,24 @@ const Main = () => {
     }
   }, [dispatch, currentPage, pageSize, isFiltering]);
 
-
   const refreshOrders = async () => {
-  try {
-    const result = await dispatch(
-      asyncfetchOrders({
-        page: currentPage,
-        limit: pageSize,
-      })
-    );
+    try {
+      const result = await dispatch(
+        asyncfetchOrders({
+          page: currentPage,
+          limit: pageSize,
+        })
+      );
 
-    if (result) {
-      setTableData(result.data || []);
-      setTotalPages(result.totalPages || 1);
-      setTotalCount(result.totalOrders || 0);
+      if (result) {
+        setTableData(result.data || []);
+        setTotalPages(result.totalPages || 1);
+        setTotalCount(result.totalOrders || 0);
+      }
+    } catch (error) {
+      console.error("Error refreshing order list:", error);
     }
-  } catch (error) {
-    console.error("Error refreshing order list:", error);
-  }
-};
-
+  };
 
   // ---------- HANDLE SEARCHFILTER RESULT ----------
   const handleDataFetched = (result) => {
@@ -370,6 +368,20 @@ const Main = () => {
           row.DistributorCustomer?.name ||
           row.UserCustomer?.name ||
           "Unknown"
+        );
+      },
+    }),
+    columnHelper.accessor("assignedDistributorDetail", {
+      header: "Assigned Distributor",
+      cell: (info) => {
+        const distributor = info.row.original.assignedDistributorDetails;
+
+        return distributor ? (
+          <span className="text-green-600 font-medium">
+            {distributor.firmName || distributor.name}
+          </span>
+        ) : (
+          <span className="text-gray-400">Not Assigned</span>
         );
       },
     }),

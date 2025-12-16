@@ -9,6 +9,7 @@ import { use } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -69,11 +70,13 @@ const Page = ({ params }) => {
                   slidesPerView={1}
                   className="rounded-lg shadow-md bg-white "
                 >
-                  {/* 🌀 First Slide - 3D Model */}
+                  {/* First Slide - 3D Model */}
                   {modelFile && (
                     <SwiperSlide key="model-viewer">
                       <div className="w-full h-full flex justify-center items-center bg-gray-100">
-                        <ModelViewer url={modelFile.url} />
+                        <ModelViewer
+                          url={getImageUrl(modelFile.fileName || modelFile.url)}
+                        />
                       </div>
                     </SwiperSlide>
                   )}
@@ -84,7 +87,7 @@ const Page = ({ params }) => {
                         <SwiperSlide key={index}>
                           <div className="w-full h-[400px] relative">
                             <Image
-                              src={img.url}
+                              src={getImageUrl(img.fileName || img.url)}
                               alt={`Product image ${index + 1}`}
                               fill
                               className="object-contain"

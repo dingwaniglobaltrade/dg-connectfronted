@@ -6,7 +6,7 @@ import CameraCapture from "@/app/component/salesperson/CameraCapture";
 import LocationFetcher from "@/app/component/salesperson/LocationFetcher";
 import { logOutEnteryOFSalespersom } from "@/app/store/Actions/attendanceAction";
 
-const OutEntrybySalesperson = () => {
+const OutEntrybySalesperson = ({ onSubmit }) => {
   const dispatch = useDispatch();
 
   const [OutEnteryDataForm, setOutEnteryDataForm] = useState({
@@ -31,29 +31,29 @@ const OutEntrybySalesperson = () => {
     setLiveAddress(address);
   };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-  
-      try {
-        const formData = new FormData();
-        formData.append("OutTimeImage", OutEnteryDataForm.OutTimeImage);
-        formData.append("OutTimeLatitude", OutEnteryDataForm.OutTimeLatitude);
-        formData.append("OutTimeLongitude", OutEnteryDataForm.OutTimeLongitude);
-        console.log({ formData });
-  
-        const result = await dispatch(logOutEnteryOFSalespersom(formData));
-  
-        if (result?.success) {
-          toast.success("Attendance submitted successfully!");
-        } else {
-          toast.warn(result?.message || "Something went wrong");
-        }
-      } catch (error) {
-        console.error("Error submitting attendance:", error);
-        toast.error("An error occurred while submitting attendance.");
-      }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    try {
+      const formData = new FormData();
+      formData.append("OutTimeImage", OutEnteryDataForm.OutTimeImage);
+      formData.append("OutTimeLatitude", OutEnteryDataForm.OutTimeLatitude);
+      formData.append("OutTimeLongitude", OutEnteryDataForm.OutTimeLongitude);
+      console.log({ formData });
+
+      const result = await dispatch(logOutEnteryOFSalespersom(formData));
+
+      if (result?.success) {
+        if (onSubmit) onSubmit();
+        toast.success("Attendance submitted successfully!");
+      } else {
+        toast.warn(result?.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error submitting attendance:", error);
+      toast.error("An error occurred while submitting attendance.");
+    }
+  };
 
   return (
     <div>

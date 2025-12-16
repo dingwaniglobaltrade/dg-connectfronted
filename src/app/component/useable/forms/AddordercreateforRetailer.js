@@ -4,6 +4,7 @@ import { asyncfetchretailer } from "@/app/store/Actions/retailerAction";
 import { createCustomerOrder } from "@/app/store/Actions/orderAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 const Addordercreate = ({ onSubmit }) => {
   const [retailers, setRetailers] = useState([]);
@@ -143,48 +144,49 @@ const Addordercreate = ({ onSubmit }) => {
   };
 
   // --- Step 1 ---
-  const renderStep1 = () => (
-    <div className="text-[12px] text-start">
-      <label className="font-semibold">Retailer Firm Name</label>
-      <select
-        className="w-full py-1.5 rounded px-2 mt-1 text-black border border-gray-300"
-        value={selectedRetailers?.id || ""}
-        onChange={(e) => {
-          const selected = retailers.find((d) => d.id === e.target.value);
-          setSelectedRetailers(selected || null);
-        }}
-        required
-      >
-        <option value="">Select Retailer</option>
-        {retailers.map((person) => (
-          <option key={person.id} value={person.id}>
-            {person.shopName}
-          </option>
-        ))}
-      </select>
+  const renderStep1 = () => {
+    const retailerOptions = retailers.map((r) => ({
+      value: r.id,
+      label: r.shopName,
+      data: r,
+    }));
 
-      {hasMore && (
-        <button
-          type="button"
-          onClick={fetchRetailers}
-          className="mt-2 bg-gray-400 text-white px-3 py-1 rounded"
-        >
-          Load More
-        </button>
-      )}
+    return (
+      <div className="text-[12px] text-start">
+        <label className="font-semibold">Retailer Firm Name</label>
 
-      <div className="w-full flex justify-end mt-2">
-        <button
-          type="button"
-          onClick={() => selectedRetailers && setStep(2)}
-          className="bg-primary text-white px-4 py-1 rounded"
-          disabled={!selectedRetailers}
-        >
-          Next
-        </button>
+        <Select
+          options={retailerOptions}
+          onMenuScrollToBottom={hasMore ? fetchRetailers : undefined} // Load more on scroll
+          value={
+            selectedRetailers
+              ? {
+                  value: selectedRetailers.id,
+                  label: selectedRetailers.shopName,
+                }
+              : null
+          }
+          onChange={(selected) => {
+            setSelectedRetailers(selected?.data || null);
+          }}
+          placeholder="Search or select retailer..."
+          isSearchable={true}
+          className="mt-1"
+        />
+
+        <div className="w-full flex justify-end mt-2">
+          <button
+            type="button"
+            onClick={() => selectedRetailers && setStep(2)}
+            className="bg-primary text-white px-4 py-1 rounded"
+            disabled={!selectedRetailers}
+          >
+            Next
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // --- Step 2 ---
   const renderStep2 = () => (

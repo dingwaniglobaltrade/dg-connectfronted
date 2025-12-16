@@ -13,6 +13,7 @@ import {
   asyncfetchretailer,
   deleteRetailerAction,
 } from "@/app/store/Actions/retailerAction";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 const columnHelper = createColumnHelper();
 
@@ -146,6 +147,8 @@ const Main = () => {
       header: "Shop Name",
       cell: (info) => {
         const row = info.row.original;
+        const imageUrl = getImageUrl(row.shopImage);
+
         return (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -153,8 +156,12 @@ const Main = () => {
               window.open(`/portalpages/detailes/retailer/${row.id}`, "_blank")
             }
           >
-            {row.shopImage ? (
-              <img src={row.shopImage} alt="Shop" className="w-8 h-8 rounded" />
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt="Shop"
+                className="w-8 h-8 rounded object-cover"
+              />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
                 N/A

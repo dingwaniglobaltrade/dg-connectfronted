@@ -7,6 +7,7 @@ import useIsMobile from "@/app/customhooks/mobileview";
 import SearchFilter from "@/app/component/useable/searchfiled"; // import search
 import { asyncfetchproduct } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 const columnHelper = createColumnHelper();
 
@@ -76,7 +77,7 @@ const InventoryManagement = () => {
   const filteredData = getFilteredData();
   const isMobile = useIsMobile();
 
-  // ✅ handle search results
+  // handle search results
   const handleDataFetched = (result) => {
     if (result?.data) {
       setTableData(result.data);
@@ -85,7 +86,7 @@ const InventoryManagement = () => {
     }
   };
 
-  // ✅ final data = search result OR filter result
+  // final data = search result OR filter result
   const finalData = tableData.length > 0 ? tableData : filteredData;
 
   const toggleAllRows = (checked) => {
@@ -127,7 +128,12 @@ const InventoryManagement = () => {
       enableSorting: true,
       cell: (info) => {
         const row = info.row.original;
+
+        // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
+        const imageUrl = firstImage
+          ? getImageUrl(firstImage.fileName || firstImage.url)
+          : null;
         return (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -135,11 +141,11 @@ const InventoryManagement = () => {
               window.open(`/portalpages/allproduct/${row.id}`, "_blank")
             }
           >
-            {firstImage ? (
+            {imageUrl ? (
               <img
-                src={firstImage.url}
+                src={imageUrl}
                 alt="product"
-                className="w-8 h-8 rounded"
+                className="w-8 h-8 rounded object-cover"
               />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
@@ -204,7 +210,6 @@ const InventoryManagement = () => {
                 ref={searchRef}
                 model="Product"
                 filterOptions={[]} // can add filter options later
-
                 onDataFetched={handleDataFetched}
               />
               {openEditModal && (

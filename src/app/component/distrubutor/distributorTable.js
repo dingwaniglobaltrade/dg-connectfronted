@@ -14,8 +14,8 @@ import {
   deleteDistributor,
 } from "@/app/store/Actions/distributorAction";
 import { toast } from "react-toastify";
+import { getImageUrl } from "@/app/utils/imageurl";
 
-// import SearchFilter
 import SearchFilter from "@/app/component/useable/searchfiled";
 
 const columnHelper = createColumnHelper();
@@ -145,6 +145,8 @@ const Main = () => {
       header: "Firm Name",
       cell: (info) => {
         const row = info.row.original;
+        const imageUrl = getImageUrl(row.profileImage);
+
         return (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -155,11 +157,11 @@ const Main = () => {
               )
             }
           >
-            {row.profileImage ? (
+            {imageUrl ? (
               <img
-                src={row.profileImage}
+                src={imageUrl}
                 alt="Shop Image"
-                className="w-8 h-8 rounded"
+                className="w-8 h-8 rounded object-cover"
               />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">

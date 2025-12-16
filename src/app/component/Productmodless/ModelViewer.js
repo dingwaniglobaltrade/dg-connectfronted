@@ -6,6 +6,8 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Box3, Vector3 } from "three";
 
 const Model = ({ url }) => {
+  console.log({url});
+  
   const ref = useRef();
 
   useEffect(() => {
@@ -13,7 +15,6 @@ const Model = ({ url }) => {
       console.error("No model URL provided!");
       return;
     }
-
 
     fetch(url)
       .then((res) => {

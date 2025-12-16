@@ -4,6 +4,7 @@ import Image from "next/image";
 import Searchbtn from "@/app/component/useable/FormSearchbtn";
 import Table from "@/app/component/useable/peginationTable";
 import useIsMobile from "@/app/customhooks/mobileview";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 import DropdownMenu from "../useable/dropdown1";
 import Action from "@/icons/attendance/action.svg";
@@ -190,8 +191,14 @@ const Main = () => {
       header: "Start Image / Bill Image",
       cell: (info) => {
         const row = info.row.original;
-        const imageUrl = row.StartImage || row.BillImage; // fallback
-        if (!imageUrl) return <span className="text-gray-400 italic">N/A</span>;
+        const imageName = row.StartImage || row.BillImage;
+
+        const imageUrl = getImageUrl(imageName);
+       console.log({imageUrl});
+       
+        if (!imageUrl) {
+          return <span className="text-gray-400 italic">N/A</span>;
+        }
 
         return (
           <span
@@ -206,13 +213,17 @@ const Main = () => {
         );
       },
     }),
-
     columnHelper.accessor("EndImage", {
       header: "End Image / Payment Proof",
       cell: (info) => {
         const row = info.row.original;
-        const imageUrl = row.EndImage || row.Paymentproof; // fallback
-        if (!imageUrl) return <span className="text-gray-400 italic">N/A</span>;
+        const imageName = row.EndImage || row.Paymentproof;
+
+        const imageUrl = getImageUrl(imageName);
+
+        if (!imageUrl) {
+          return <span className="text-gray-400 italic">N/A</span>;
+        }
 
         return (
           <span

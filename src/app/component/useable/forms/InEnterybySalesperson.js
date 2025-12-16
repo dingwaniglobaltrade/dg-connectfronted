@@ -6,7 +6,7 @@ import CameraCapture from "@/app/component/salesperson/CameraCapture";
 import LocationFetcher from "@/app/component/salesperson/LocationFetcher";
 import { InEnteryOFSalespersom } from "@/app/store/Actions/attendanceAction";
 
-const InEnterybySalesperson = () => {
+const InEnterybySalesperson = ({ onSubmit }) => {
   const dispatch = useDispatch();
 
   const [InEnteryDataForm, setInEnteryDataForm] = useState({
@@ -43,6 +43,7 @@ const InEnterybySalesperson = () => {
       const result = await dispatch(InEnteryOFSalespersom(formData));
 
       if (result?.success) {
+        if (onSubmit) onSubmit();
         toast.success("Attendance submitted successfully!");
       } else {
         toast.warn(result?.message || "Something went wrong");

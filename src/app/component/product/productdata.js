@@ -16,6 +16,7 @@ import {
 } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 const columnHelper = createColumnHelper();
 
@@ -207,6 +208,9 @@ const ProductData = () => {
 
         // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
+        const imageUrl = firstImage
+          ? getImageUrl(firstImage.fileName || firstImage.url)
+          : null;
 
         return (
           <div
@@ -215,11 +219,11 @@ const ProductData = () => {
               window.open(`/portalpages/allproduct/${row.id}`, "_blank")
             }
           >
-            {firstImage ? (
+            {imageUrl ? (
               <img
-                src={firstImage.url}
+                src={imageUrl}
                 alt="product"
-                className="w-8 h-8 rounded"
+                className="w-8 h-8 rounded object-cover"
               />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
@@ -233,7 +237,6 @@ const ProductData = () => {
         );
       },
     }),
-
     columnHelper.accessor("ProductPrice", {
       header: "MRP",
       enableSorting: true,

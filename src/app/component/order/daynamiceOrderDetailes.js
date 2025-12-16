@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
 import { FetchOrderDetailesByID } from "@/app/store/Actions/orderAction";
+import { FaUserFriends } from "react-icons/fa";
 
 import PhoneIcon from "@/icons/phoneIcon.svg";
 import EmailIcons from "@/icons/mailIcon.svg";
@@ -22,15 +23,12 @@ const DaynamiceOrderDetailes = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       if (id) {
-
         const result = await dispatch(FetchOrderDetailesByID(id));
         setOrderDetailes(result.data);
       }
     };
     fetchOrders();
   }, [id, dispatch]);
-
-
 
   // Define status styles
   const statusStyles = {
@@ -53,9 +51,10 @@ const DaynamiceOrderDetailes = () => {
                 Order ID : <span>{orderDetailes.id}</span>
               </h1>
               <div
-                className={`px-4 py-1 rounded-[10px] ${statusStyles[orderDetailes.orderStatus] ||
+                className={`px-4 py-1 rounded-[10px] ${
+                  statusStyles[orderDetailes.orderStatus] ||
                   "bg-gray-200 text-gray-800 border-[1px] border-gray-400"
-                  }`}
+                }`}
               >
                 {orderDetailes.orderStatus}
               </div>
@@ -113,9 +112,10 @@ const DaynamiceOrderDetailes = () => {
               <div className="flex justify-between ">
                 <h1 className="text-[18px] font-bold">Order Summary</h1>
                 <div
-                  className={`px-4 py-1 rounded-[10px] ${statusStyles[orderDetailes.orderStatus] ||
+                  className={`px-4 py-1 rounded-[10px] ${
+                    statusStyles[orderDetailes.orderStatus] ||
                     "bg-gray-200 text-gray-800 border-[1px] border-gray-400"
-                    }`}
+                  }`}
                 >
                   {orderDetailes.orderStatus}
                 </div>
@@ -184,6 +184,19 @@ const DaynamiceOrderDetailes = () => {
                   </div>
                 </div>
               </div>
+
+              {/* assigned distribuor  */}
+             {orderDetailes?.AssignedDistributor?.id && (
+  <div>
+     <h1 className="text-[18px] font-bold mb-1">Assigned Distributor </h1>
+          <div className="flex flex-col px-3 gap-2" >
+             <div className="flex "><span className="h-7 w-7 text-[20px]"><FaUserFriends /></span>
+ {orderDetailes.AssignedDistributor.firmName}</div>
+    <div className="flex gap-1"><span> <Image src={PhoneIcon} alt="Phone Icon" /></span>{orderDetailes.AssignedDistributor.mobile}</div>
+          </div>
+  </div>
+)}
+
             </div>
           </div>
         </>

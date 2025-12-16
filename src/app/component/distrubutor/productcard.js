@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { asyncfetchproduct } from "@/app/store/Actions/productAction";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 import { useRouter } from "next/navigation";
 import { AddCartItems } from "@/app/store/Actions/cartAction";
@@ -15,7 +16,6 @@ const productcard = () => {
   const UserId = loginState?.admin?.id; // or from localStorage
   const UserType = loginState?.admin?.userType;
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -23,7 +23,6 @@ const productcard = () => {
         if (result && result.products) {
           setProducts(result.products);
         }
-
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -50,8 +49,6 @@ const productcard = () => {
       CartoonType: UserType === "distributor" ? "large" : "retail",
       Price: selectedPrice,
     };
-
-
 
     try {
       const result = await dispatch(AddCartItems(CartData));
@@ -91,7 +88,7 @@ const productcard = () => {
                   }
                 >
                   <img
-                    src={product.media?.[0]?.url || "/placeholder.png"}
+                    src={getImageUrl(product.media?.[0]?.fileName)}
                     alt={product.ProductName}
                     className="h-full w-full object-cover object-center rounded-[10px]"
                   />
@@ -107,8 +104,6 @@ const productcard = () => {
                     {UserType === "distributor"
                       ? product.LargeCartoonPrice // distributor sees LargeCartoonPrice
                       : product.RetailerPrice}
-
-                      
                   </h1>
 
                   <div className="flex flex-row justify-end border-t-[1px] border-gray-100 py-2">

@@ -57,6 +57,7 @@ const userFieldConfig = {
     personalInfo: [
       { label: "Full Name", key: "name" },
       { label: "Employee ID", key: "employeeId" },
+      { label: "Assigned Route", key: "salespersonRoute.routeName" },
     ],
     contactInfo: [
       { label: "Email Address", key: "email" },

@@ -76,9 +76,29 @@ const Main = () => {
     fetchAttendance(userId, currentPage);
   }, [dispatch, currentUser, currentPage]);
 
+  const refreshAttendance = async () => {
+    try {
+      const userId = currentUser?._id || currentUser?.id;
+      if (!userId) return;
+
+      const result = await dispatch(
+        fetchsalespersonwiseattendance({
+          id: userId,
+          page: currentPage + 1, // backend expects 1-based
+          limit: pageSize,
+        })
+      );
+
+      if (result) {
+        setsalespernAttendance(result.data || []);
+        setTotalPages(result.totalPages || 1);
+      }
+    } catch (error) {
+      console.error("Error refreshing attendance:", error);
+    }
+  };
 
   const columns = [
- 
     columnHelper.accessor("createdAt", {
       header: "Date",
       cell: (info) => {
@@ -105,7 +125,11 @@ const Main = () => {
     columnHelper.accessor("OutTime", {
       header: "Out-Time",
       cell: (info) => {
-        const date = new Date(info.getValue());
+        const value = info.getValue();
+
+        if (!value) return "-"; // <-- FIX
+
+        const date = new Date(value);
         return date.toLocaleString("en-IN", {
           hour: "2-digit",
           minute: "2-digit",
@@ -120,7 +144,6 @@ const Main = () => {
       header: "Hours",
       cell: ({ row }) => {
         const inTime = new Date(row.original.InTime);
-
 
         const outTime = new Date(row.original.OutTime);
 
@@ -148,8 +171,16 @@ const Main = () => {
       <div className="w-full h-[96%] lg:px-6 md:px-6 px-2">
         <div className="h-full w-full bg-white flex flex-col rounded-[10px]">
           <div className="flex justify-end gap-3 mt-4 lg:px-4 md:px-4 px-2 items-center gap-5">
-            <Searchbtn btntext={"Add In-Entry"} display="flex" />
-            <Searchbtn btntext={"Add Out-Entry"} display="flex" />
+            <Searchbtn
+              btntext={"Add In-Entry"}
+              display="flex"
+              onSuccess={refreshAttendance}
+            />
+            <Searchbtn
+              btntext={"Add Out-Entry"}
+              display="flex"
+              onSuccess={refreshAttendance}
+            />
           </div>
 
           <div className="lg:px-4 md:px-4 px-2 h-[90%] overflow-auto scroll-smooth">
