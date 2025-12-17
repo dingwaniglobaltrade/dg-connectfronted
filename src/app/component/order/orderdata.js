@@ -430,6 +430,80 @@ const Main = () => {
         ) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
+        const rowId = row.original.id;
+        const isOpen = openDropdownId === rowId;
+        const status = row.original.orderStatus;
+
+        const getOptions = () => {
+          if (status === "Pending") {
+            return [
+              { label: "Accept", action: () => handleAccpect(row.original) },
+              {
+                label: "Cancelled",
+                action: () => handleReject(row.original),
+                danger: true,
+              },
+            ];
+          } else if (status === "Accepted") {
+            return [
+              { label: "Shipped", action: () => handleShipped(row.original) },
+              {
+                label: "Cancelled",
+                action: () => handleReject(row.original),
+                danger: true,
+              },
+            ];
+          } else if (status === "Shipped") {
+            return [
+              { label: "Track", action: () => handleTrack(row.original) },
+              {
+                label: "Cancelled",
+                action: () => handleReject(row.original),
+                danger: true,
+              },
+            ];
+          } else if (status === "Track") {
+            return [
+              {
+                label: "Delivered",
+                action: () => handleDelivered(row.original),
+              },
+              {
+                label: "Cancelled",
+                action: () => handleReject(row.original),
+                danger: true,
+              },
+            ];
+          } else if (status === "Delivered") {
+            return [
+              { label: "Return", action: () => handleReturn(row.original) },
+            ];
+          }
+          return null;
+        };
+
+        const options = getOptions();
+        if (!options) return <span className="text-gray-400 italic">N/A</span>;
+        return (
+          <div
+            key={rowId}
+            className="relative"
+            ref={(el) => {
+              if (isOpen) dropdownRefs.current[rowId] = el;
+            }}
+          >
+            <Image
+              src={Action}
+              alt="icon"
+              className="w-5 h-5 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenDropdownId((prev) => (prev === rowId ? null : rowId));
+              }}
+            />
+            {isOpen && <DropdownMenu options={options} />}
+          </div>
+        );
         // existing action logic...
       },
     }),
