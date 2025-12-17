@@ -4,7 +4,9 @@ let socket = null;
 
 export function initSocket(token) {
   if (!socket) {
-    socket = io( "https://dingwanifoods-backned-code.onrender.com/api/v1", {
+    socket = io( 
+    // "https://dingwanifoods-backned-code.onrender.com/api/v1" ||
+       process.env.NEXT_PUBLIC_Socket_URL, {
       auth: { token },
       transports: ["websocket", "polling"], // fallback included
       reconnection: true,

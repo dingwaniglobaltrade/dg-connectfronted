@@ -329,19 +329,21 @@ const Main = () => {
       enableSorting: true,
       cell: (info) => {
         const row = info.row.original;
+        const shortId = row.id.slice(0, 6); // first 6 characters
+
         return (
           <span
             className="text-primary hover:underline cursor-pointer"
             onClick={() =>
               window.open(`/viewpages/orderDetailes/${row.id}`, "_blank")
             }
+            title={row.id} // full ID on hover (optional but recommended)
           >
-            {row.id}
+            {shortId}
           </span>
         );
       },
     }),
-
     columnHelper.display({
       id: "Customer",
       header: "Customer",
@@ -372,6 +374,10 @@ const Main = () => {
                 <span className="text-gray-400">Not Assigned</span>
               );
             },
+          }),
+          columnHelper.accessor("salespersonID.name", {
+            header: "Created By",
+            cell: (info) => info.getValue(),
           }),
         ]
       : []),
