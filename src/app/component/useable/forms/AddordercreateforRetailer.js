@@ -18,7 +18,8 @@ const Addordercreate = ({ onSubmit }) => {
   ]);
   const [totalPrice, setTotalPrice] = useState(0); // New state for total amount
   const [PaymentMode, setPaymentMode] = useState("");
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const limit = 10;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,63 +36,45 @@ const Addordercreate = ({ onSubmit }) => {
     fetchData();
   }, [dispatch]);
 
-  const fetchRetailers = async (search = "", newPage = 1) => {
+  const fetchRetailers = async () => {
+    if (!hasMore) return;
+
     try {
-      const result = await dispatch(asyncfetchretailer(newPage, search));
+      const result = await dispatch(
+        asyncfetchretailer({ page, limit, search: searchTerm })
+      );
 
-      if (!result || !result.retailers) {
-        setHasMore(false);
-        return;
-      }
-
-      if (search) {
-        // Searching → Replace list
-        setRetailers(result.retailers);
-        setPage(2);
-        setHasMore(result.retailers.length >= result.pageSize);
-      } else {
-        // Scrolling → Append
+      if (result && result.retailers.length > 0) {
         setRetailers((prev) => {
-          const all = [...prev, ...result.retailers];
-          return Array.from(new Map(all.map((r) => [r.id, r])).values());
+          if (page === 1) return result.retailers; // new search resets list
+          return [...prev, ...result.retailers];
         });
 
-        if (result.retailers.length < result.pageSize) {
-          setHasMore(false);
-        } else {
-          setPage((prev) => prev + 1);
-        }
+        setPage((prev) => prev + 1);
+        setHasMore(result.retailers.length === limit);
+      } else {
+        setHasMore(false);
       }
-    } catch (error) {
-      console.error("Error fetching retailers:", error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    fetchRetailers();
-  }, []);
+    const delay = setTimeout(() => {
+      setPage(1);
+      setHasMore(true);
+      fetchRetailers();
+    }, 400); // ⏳ debounce request
+
+    return () => clearTimeout(delay);
+  }, [searchTerm]);
 
   const addProduct = () => {
     setProducts((prev) => [
       ...prev,
       { ProductID: "", quantity: "", Price: 0, CartoonType: "large" },
     ]);
-  };
-
-  let searchTimeout;
-  const handleSearch = (text) => {
-    clearTimeout(searchTimeout);
-
-    searchTimeout = setTimeout(() => {
-      if (text.trim() === "") {
-        // Reset when clearing search
-        setPage(1);
-        setRetailers([]);
-        fetchRetailers("", 1);
-      } else {
-        fetchRetailers(text, 1);
-      }
-    }, 400); // debounce delay
   };
 
   const handleProductChange = (index, field, value) => {
@@ -175,9 +158,11 @@ const Addordercreate = ({ onSubmit }) => {
         <label className="font-semibold">Retailer Firm Name</label>
 
         <Select
-          options={retailerOptions}
-          onInputChange={handleSearch} // <-- ADDED: live search API call
-          onMenuScrollToBottom={() => fetchRetailers("", page)} // <-- pagination scroll
+          options={retailers.map((r) => ({
+            value: r.id,
+            label: `${r.shopName} (${r.mobile})`,
+            data: r,
+          }))}
           value={
             selectedRetailers
               ? {
@@ -186,10 +171,22 @@ const Addordercreate = ({ onSubmit }) => {
                 }
               : null
           }
-          onChange={(selected) => setSelectedRetailers(selected?.data || null)}
-          placeholder="Search or select retailer..."
-          isSearchable={true}
+          onChange={(selected) => {
+            setSelectedRetailers(selected?.data || null);
+          }}
+          onInputChange={(val) => {
+            setSearchTerm(val);
+            setPage(1);
+          }}
+          onMenuScrollToBottom={() => {
+            if (hasMore) fetchRetailers();
+          }}
+          placeholder="Search retailer by name or mobile number..."
+          isSearchable
           className="mt-1"
+          noOptionsMessage={() =>
+            searchTerm ? "No retailer found" : "Start typing..."
+          }
         />
 
         <div className="w-full flex justify-end mt-2">
