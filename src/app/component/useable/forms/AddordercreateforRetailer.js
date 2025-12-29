@@ -35,32 +35,35 @@ const Addordercreate = ({ onSubmit }) => {
     fetchData();
   }, [dispatch]);
 
-  const fetchRetailers = async () => {
-    if (!hasMore) return;
-
+  const fetchRetailers = async (search = "", newPage = 1) => {
     try {
-      const result = await dispatch(asyncfetchretailer(page));
+      const result = await dispatch(asyncfetchretailer(newPage, search));
 
-      if (result && result.retailers.length > 0) {
+      if (!result || !result.retailers) {
+        setHasMore(false);
+        return;
+      }
+
+      if (search) {
+        // Searching → Replace list
+        setRetailers(result.retailers);
+        setPage(2);
+        setHasMore(result.retailers.length >= result.pageSize);
+      } else {
+        // Scrolling → Append
         setRetailers((prev) => {
           const all = [...prev, ...result.retailers];
-          const unique = Array.from(
-            new Map(all.map((r) => [r.id, r])).values()
-          );
-          return unique;
+          return Array.from(new Map(all.map((r) => [r.id, r])).values());
         });
 
         if (result.retailers.length < result.pageSize) {
           setHasMore(false);
         } else {
           setPage((prev) => prev + 1);
-          a;
         }
-      } else {
-        setHasMore(false);
       }
     } catch (error) {
-      console.error("Error fetching distributor data:", error);
+      console.error("Error fetching retailers:", error);
     }
   };
 
@@ -73,6 +76,22 @@ const Addordercreate = ({ onSubmit }) => {
       ...prev,
       { ProductID: "", quantity: "", Price: 0, CartoonType: "large" },
     ]);
+  };
+
+  let searchTimeout;
+  const handleSearch = (text) => {
+    clearTimeout(searchTimeout);
+
+    searchTimeout = setTimeout(() => {
+      if (text.trim() === "") {
+        // Reset when clearing search
+        setPage(1);
+        setRetailers([]);
+        fetchRetailers("", 1);
+      } else {
+        fetchRetailers(text, 1);
+      }
+    }, 400); // debounce delay
   };
 
   const handleProductChange = (index, field, value) => {
@@ -157,7 +176,8 @@ const Addordercreate = ({ onSubmit }) => {
 
         <Select
           options={retailerOptions}
-          onMenuScrollToBottom={hasMore ? fetchRetailers : undefined} // Load more on scroll
+          onInputChange={handleSearch} // <-- ADDED: live search API call
+          onMenuScrollToBottom={() => fetchRetailers("", page)} // <-- pagination scroll
           value={
             selectedRetailers
               ? {
@@ -166,9 +186,7 @@ const Addordercreate = ({ onSubmit }) => {
                 }
               : null
           }
-          onChange={(selected) => {
-            setSelectedRetailers(selected?.data || null);
-          }}
+          onChange={(selected) => setSelectedRetailers(selected?.data || null)}
           placeholder="Search or select retailer..."
           isSearchable={true}
           className="mt-1"
