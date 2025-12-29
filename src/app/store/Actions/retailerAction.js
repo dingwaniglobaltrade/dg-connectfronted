@@ -15,7 +15,7 @@ const getToken = () => {
 };
 
 export const asyncfetchretailer =
-  ({ page, limit }) =>
+  ({ page, limit ,search  }) =>
   async (dispatch, getState) => {
     try {
       const token = getToken(); // get token from localStorage
@@ -24,7 +24,7 @@ export const asyncfetchretailer =
         headers: {
           Authorization: `Bearer ${token}`, // attach token in headers
         },
-        params: { page, limit },
+        params: { page, limit, search  },
       };
 
       const { data } = await axios.get("/retailer/all-retailers", config);
@@ -35,7 +35,7 @@ export const asyncfetchretailer =
       console.error("Error in asyncaddadmin:", error.message);
       dispatch(iserror(error.message));
     }
-  };
+};
 
 //create Retailer
 export const createRetailer =
