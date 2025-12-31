@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 export default function ProfileHeader({
   userDetails,
@@ -8,14 +9,26 @@ export default function ProfileHeader({
   setFormData,
   formData,
 }) {
-  const [previewImage, setPreviewImage] = useState(userDetails.profileImage);
+  // Generate initial preview URL using getImageUrl if we have a fileName
+  const initialImage = userDetails.profileImage
+    ? getImageUrl(userDetails.profileImage)
+    : userDetails.shopImage
+    ? getImageUrl(userDetails.shopImage)
+    : null;
+
+  const [previewImage, setPreviewImage] = useState(initialImage);
 
   useEffect(() => {
     // Reset preview when editing is cancelled
     if (!isEditing) {
-      setPreviewImage(userDetails.profileImage || userDetails.shopImage);
+      const resetImage = userDetails.profileImage
+        ? getImageUrl(userDetails.profileImage)
+        : userDetails.shopImage
+        ? getImageUrl(userDetails.shopImage)
+        : null;
+      setPreviewImage(resetImage);
     }
-  }, [isEditing, userDetails.profileImage]);
+  }, [isEditing, userDetails.profileImage, userDetails.shopImage]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -31,11 +44,17 @@ export default function ProfileHeader({
     <div className="flex items-center justify-between py-6 border-b mb-6">
       <div className="flex flex-row gap-4">
         <div className="relative w-[70px] h-[70px] rounded-full overflow-hidden">
-          <img
-            className="rounded-full h-full w-full object-cover"
-            src={previewImage}
-            alt="Profile Image"
-          />
+          {previewImage ? (
+            <img
+              className="rounded-full h-full w-full object-cover"
+              src={previewImage}
+              alt="Profile Image"
+            />
+          ) : (
+            <div className="rounded-full h-full w-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
+              N/A
+            </div>
+          )}
           {isEditing && (
             <input
               type="file"

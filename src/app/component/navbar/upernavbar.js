@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { io } from "socket.io-client";
+import { getImageUrl } from "@/app/utils/imageurl";
 
 import {
   fetchCurrentUser,
@@ -122,27 +123,30 @@ const Upernavbar = ({ pagename }) => {
         {/* 👤 Profile */}
         <div className="flex gap-4 relative">
           {/* IMAGE SECTION */}
-          {(() => {
-            let imageUrl = null;
+        {(() => {
+  let fileName = null;
 
-            if (admin?.userType === "retailer") {
-              imageUrl = admin?.shopImage || "/default-user.png";
-            } else if (admin?.userType === "distributor") {
-              imageUrl = admin?.profileImage || "/default-user.png";
-            }
+  if (admin?.userType === "retailer") {
+    fileName = admin?.shopImage;
+  } else if (admin?.userType === "distributor") {
+    fileName = admin?.profileImage;
+  }
 
-            return imageUrl ? (
-              <div className="w-[50px] h-[50px] rounded-[12px] overflow-hidden bg-gray-200">
-                <img
-                  src={imageUrl}
-                  alt="User image"
-                  height={50}
-                  width={50}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ) : null;
-          })()}
+  const imageUrl = fileName
+    ? getImageUrl(fileName)
+    : "/default-user.png";
+
+  return (
+    <div className="w-[50px] h-[50px] rounded-[12px] overflow-hidden bg-gray-200">
+      <img
+        src={imageUrl}
+        alt="User image"
+        className="w-full h-full object-cover"
+        onError={(e) => (e.target.src = "/default-user.png")}
+      />
+    </div>
+  );
+})()}
 
           <div className="flex flex-col py-1">
             <div className="text-texthearder font-medium font-[16px]">

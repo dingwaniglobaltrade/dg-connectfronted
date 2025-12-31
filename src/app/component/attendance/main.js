@@ -170,10 +170,6 @@ const main = () => {
         cell: (info) => info.getValue(),
       }
     ),
-    columnHelper.accessor("id", {
-      header: "Employee ID",
-      cell: (info) => info.getValue(),
-    }),
     columnHelper.accessor("InTime", {
       header: "Login Time",
       cell: (info) => formatDate(info.getValue(), true), // true = include time

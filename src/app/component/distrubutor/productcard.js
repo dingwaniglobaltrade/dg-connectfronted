@@ -87,14 +87,20 @@ const productcard = () => {
                     )
                   }
                 >
-                  <img
-                    src={getImageUrl(
-                      product.media?.[1]?.fileName ||
-                        product.media?.[0]?.fileName
-                    )}
-                    alt={product.ProductName}
-                    className="h-full w-full object-cover object-center rounded-[10px]"
-                  />
+                  {product.media && product.media.length > 0 ? (
+                    <img
+                      src={getImageUrl(
+                        product.media.find((m) => m.type === "IMAGE")
+                          ?.fileName || product.media[0]?.fileName
+                      )}
+                      alt={product.ProductName}
+                      className="h-full w-full object-cover object-center rounded-[10px]"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center text-gray-500 bg-gray-200 rounded-[10px]">
+                      No Image
+                    </div>
+                  )}
                 </div>
 
                 {/* Product Info */}

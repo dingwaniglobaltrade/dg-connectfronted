@@ -123,8 +123,18 @@ const sidenavitems = [
   //   iconKey: "warehouse",
   //   roles: ["retailer"],
   // },
-  { label: "Reports", link: "/gfbh", iconKey: "reports", roles: ["admin"] },
-  { label: "Analytics", link: "/gf", iconKey: "analytics", roles: ["admin"] },
+  {
+    label: "Reports",
+    link: "/portalpages/reports",
+    iconKey: "reports",
+    roles: ["admin"],
+  },
+  {
+    label: "Analytics",
+    link: "/portalpages/#",
+    iconKey: "analytics",
+    roles: ["admin"],
+  },
   {
     label: "Profile",
     link: "/viewpages/profile", // base path
@@ -233,7 +243,7 @@ const Sidenavbar = () => {
       {/* 💻 Desktop & Tablet Sidebar (md and up) */}
       <div className="2xl:flex xl:flex lg:flex md:hidden hidden flex-col w-[18%] bg-white shadow-sm py-4 h-screen overflow-y-auto">
         <div className="px-4 flex justify-center mb-4">
-            <Image src={LogoImage} alt="Logo" className="" />
+          <Image src={LogoImage} alt="Logo" className="" />
         </div>
 
         <div className="flex flex-col gap-3 px-2">

@@ -54,7 +54,7 @@ const DashboardHalf = ({ lable, link }) => {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 3;
 
-  // 🗓️ Set today's date on mount
+  // Set today's date on mount
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // format: YYYY-MM-DD
     setAttendaceDate(today);
@@ -81,7 +81,7 @@ const DashboardHalf = ({ lable, link }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!attendaceDate) return;
-    //  console.log({ attendaceDate });
+      //  console.log({ attendaceDate });
 
       try {
         const result = await dispatch(
@@ -111,14 +111,12 @@ const DashboardHalf = ({ lable, link }) => {
         if (result && result.products) {
           setProducts(result.products);
         }
-       
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
     };
     fetchData();
   }, [dispatch]);
-
 
   const columns1 = [
     columnHelper.accessor("ProductName", {
@@ -239,7 +237,6 @@ const DashboardHalf = ({ lable, link }) => {
   //   }),
   // ];
 
-  
   const columns3 = [
     //  columnHelper.accessor("id", {
     //     header: "Order Id",

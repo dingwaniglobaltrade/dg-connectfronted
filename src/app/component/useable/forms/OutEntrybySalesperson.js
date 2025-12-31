@@ -69,6 +69,7 @@ const OutEntrybySalesperson = ({ onSubmit }) => {
                 type="text"
                 name="livelocation"
                 value={liveAddress}
+                required
                 readOnly
                 className="w-full py-1.5 rounded px-2 mt-1 text-black border border-grey-200"
               />
@@ -85,6 +86,7 @@ const OutEntrybySalesperson = ({ onSubmit }) => {
               Capture Image
             </label>
             <CameraCapture
+              required
               onCapture={(img) =>
                 setOutEnteryDataForm((prev) => ({ ...prev, OutTimeImage: img }))
               }
