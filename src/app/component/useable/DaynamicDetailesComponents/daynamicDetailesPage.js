@@ -33,6 +33,8 @@ const userFieldConfig = {
         label: "Assigned Distributor Name",
         key: "Distributordetailes.firmName",
       },
+      { label: "Total Orders", key: "totalOrderValue" },
+      { label: "Current Month Orders", key: "currentMonthOrderValue" },
     ],
     contactInfo: [
       { label: "Email Address", key: "email" },
@@ -46,6 +48,8 @@ const userFieldConfig = {
       { label: "Owner Name", key: "name" },
       { label: "GSTIN Number", key: "gstn" },
       { label: "Region Covered", key: "routes.routeName" },
+      { label: "Total Orders", key: "totalOrderValue" },
+      { label: "Current Month Orders", key: "currentMonthOrderValue" },
     ],
     contactInfo: [
       { label: "Email Address", key: "email" },
@@ -58,6 +62,10 @@ const userFieldConfig = {
       { label: "Full Name", key: "name" },
       { label: "Employee ID", key: "employeeId" },
       { label: "Assigned Route", key: "salespersonRoute.routeName" },
+      { label: "Total Orders", key: "totalOrderValue" },
+      { label: "Current Month value", key: "currentMonthOrderValue" },
+      { label: "Orders", key: "totalOrders" },
+      { label: "Current Month Orders", key: "currentMonthOrders" },
     ],
     contactInfo: [
       { label: "Email Address", key: "email" },
