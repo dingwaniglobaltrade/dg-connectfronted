@@ -1,16 +1,8 @@
 import axios from "@/app/utils/axios";
-import {
-  productreport,
-  salesperreport,
-  attendancereport,
-  distributorreport,
-  retailersreport,
-  expensereport,
-  orderitemsreport,
-  iserror,
-  removeerror,
-} from "../Reducers/reportsReducer";
 
+/* =======================
+   Helper: Get Token
+======================= */
 const getToken = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("token");
@@ -18,317 +10,155 @@ const getToken = () => {
   return null;
 };
 
-//salesperson create report
-export const createSalesReport = (start, end) => async (dispatch) => {
+/* =======================
+   Helper: Download Excel
+======================= */
+const downloadExcel = async (url, fileName, start, end) => {
+  const token = getToken();
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: "blob",
+  };
+
+  const query = new URLSearchParams({ start, end }).toString();
+
+  const { data } = await axios.get(`${url}?${query}`, config);
+
+  const blobUrl = window.URL.createObjectURL(data);
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(blobUrl);
+};
+
+/* =======================
+   Sales Report
+======================= */
+export const createSalesReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(`/reports/sales/excel?${query}`, config);
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "sales_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(salesperreport(data));
-
+    await downloadExcel(
+      "/reports/sales/excel",
+      "sales_report.xlsx",
+      start,
+      end
+    );
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message || "Failed to download Sales Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Sales report error:", error);
+    return { success: false };
   }
 };
 
-//attendance reports
-export const createAttendanceReport = (start, end) => async (dispatch) => {
+/* =======================
+   Attendance Report
+======================= */
+export const createAttendanceReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(
-      `/reports/attendance/excel?${query}`,
-      config
+    await downloadExcel(
+      "/reports/attendance/excel",
+      "attendance_report.xlsx",
+      start,
+      end
     );
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "attendance_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(attendancereport(data));
-
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message || "Failed to download Sales Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Attendance report error:", error);
+    return { success: false };
   }
 };
 
-//product reports
-export const createProductReport = (start, end) => async (dispatch) => {
+/* =======================
+   Product Report
+======================= */
+export const createProductReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(`/reports/product/excel?${query}`, config);
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "product_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(productreport(data));
-
+    await downloadExcel(
+      "/reports/product/excel",
+      "product_report.xlsx",
+      start,
+      end
+    );
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message || "Failed to download product Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Product report error:", error);
+    return { success: false };
   }
 };
 
-//distributor report
-export const createDistributorReport = (start, end) => async (dispatch) => {
+/* =======================
+   Distributor Report
+======================= */
+export const createDistributorReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(
-      `/reports/distributor/excel?${query}`,
-      config
+    await downloadExcel(
+      "/reports/distributor/excel",
+      "distributor_report.xlsx",
+      start,
+      end
     );
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "distributor_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(distributorreport(data));
-
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message ||
-          "Failed to download distributor Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Distributor report error:", error);
+    return { success: false };
   }
 };
 
-//retailer report
-export const createRetailerReport = (start, end) => async (dispatch) => {
+/* =======================
+   Retailer Report
+======================= */
+export const createRetailerReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(
-      `/reports/retailer/excel?${query}`,
-      config
+    await downloadExcel(
+      "/reports/retailer/excel",
+      "retailer_report.xlsx",
+      start,
+      end
     );
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "retailer_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(retailersreport(data));
-
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message || "Failed to download retailer Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Retailer report error:", error);
+    return { success: false };
   }
 };
 
-//order items report
-export const createOrderItemsReport = (start, end) => async (dispatch) => {
+/* =======================
+   Order Items Report
+======================= */
+export const createOrderItemsReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(
-      `/reports/OrderItems/excel?${query}`,
-      config
+    await downloadExcel(
+      "/reports/OrderItems/excel",
+      "orderItems_report.xlsx",
+      start,
+      end
     );
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "orderItems_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(orderitemsreport(data));
-
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message ||
-          "Failed to download orderItems_report Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Order items report error:", error);
+    return { success: false };
   }
 };
 
-//expenses reports
-export const createExpenseReport = (start, end) => async (dispatch) => {
+/* =======================
+   Expense Report
+======================= */
+export const createExpenseReport = (start, end) => async () => {
   try {
-    const token = getToken();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      responseType: "blob", // <-- IMPORTANT for file download
-    };
-
-    const query = new URLSearchParams({ start, end }).toString();
-    console.log({ start, end });
-
-    const { data } = await axios.get(`/reports/expense/excel?${query}`, config);
-
-    // Create a download for the Excel file
-    const url = window.URL.createObjectURL(new Blob([data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "expense_report.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    dispatch(expensereport(data));
-
+    await downloadExcel(
+      "/reports/expense/excel",
+      "expense_report.xlsx",
+      start,
+      end
+    );
     return { success: true };
   } catch (error) {
-    dispatch(
-      iserror(
-        error?.response?.data?.message || "Failed to download expense Report"
-      )
-    );
-    return {
-      success: false,
-      message: error?.response?.data?.message || "Error",
-    };
+    console.error("Expense report error:", error);
+    return { success: false };
   }
 };

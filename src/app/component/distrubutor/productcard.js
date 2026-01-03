@@ -2,25 +2,46 @@
 import React, { useEffect, useState } from "react";
 import { asyncfetchproduct } from "@/app/store/Actions/productAction";
 import { getImageUrl } from "@/app/utils/imageurl";
-
 import { useRouter } from "next/navigation";
 import { AddCartItems } from "@/app/store/Actions/cartAction";
 import { useDispatch, useSelector } from "react-redux";
 
-const productcard = () => {
+const ProductCard = () => {
   const [products, setProducts] = useState([]);
+  const [addedProductIds, setAddedProductIds] = useState([]);
+  const [loadingProductId, setLoadingProductId] = useState(null);
+
   const dispatch = useDispatch();
   const router = useRouter();
 
+  /**
+   * ===============================
+   * USER INFO
+   * ===============================
+   */
   const loginState = useSelector((state) => state.login);
-  const UserId = loginState?.admin?.id; // or from localStorage
+  const UserId = loginState?.admin?.id;
   const UserType = loginState?.admin?.userType;
 
+  /**
+   * ===============================
+   * CART FROM REDUX (CORRECT PATH)
+   * ===============================
+   */
+  const cartItems = useSelector(
+    (state) => state.cart?.cart?.data?.cartItems || []
+  );
+
+  /**
+   * ===============================
+   * FETCH PRODUCTS
+   * ===============================
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await dispatch(asyncfetchproduct());
-        if (result && result.products) {
+        if (result?.products) {
           setProducts(result.products);
         }
       } catch (error) {
@@ -30,56 +51,70 @@ const productcard = () => {
     fetchData();
   }, [dispatch]);
 
+  /**
+   * ===============================
+   * ADD TO CART HANDLER
+   * ===============================
+   */
   const handleAddToCart = async (product) => {
     if (!UserId) {
       alert("Please login first");
       return;
     }
 
-    // pick correct price based on role
+    setLoadingProductId(product.id);
+
     const selectedPrice =
       UserType === "distributor"
-        ? product.LargeCartoonPrice // distributor sees LargeCartoonPrice
+        ? product.LargeCartoonPrice
         : product.RetailerPrice;
 
     const CartData = {
-      UserId: UserId,
-      ProductID: product.id, // Product id
-      Quantity: 1, // default to 1, or let user choose
+      UserId,
+      ProductID: product.id,
+      Quantity: 1,
       CartoonType: UserType === "distributor" ? "large" : "retail",
       Price: selectedPrice,
     };
 
     try {
       const result = await dispatch(AddCartItems(CartData));
-      console.log("Cart response:");
+
+      if (result?.success === true) {
+        setAddedProductIds((prev) => [
+          ...new Set([...prev, product.id]),
+        ]);
+      }
     } catch (error) {
       console.error("Error adding to cart:", error);
+    } finally {
+      setLoadingProductId(null);
     }
   };
 
-  //condition to control add to cart and go to cart
-  const cartData = useSelector((state) => state.cartItems); // full cart object
-  const cartItems = cartData?.cart || []; // products inside cart
-  // console.log("cartData:", cartData);
-  // console.log("cartItems:", cartItems);
-
+  /**
+   * ===============================
+   * UI
+   * ===============================
+   */
   return (
-    <div className="lg:h-[90vh] md:h-[92vh] h-[90vh] w-full bg-[#f8f9fa] lg:px-5 md:px-5 px-2 py-4">
-      <div className="lg:h-[98%] bg-white md:[100%] h-[96%] lg:px-4 md:px-6 px-2 py-4 rounded-md overflow-y-auto">
-        <div className="flex flex-wrap gap-5 lg:justify-start ms:justify-start justify-center">
-          {products.map((product, index) => {
-            const isInCart = cartItems.some(
-              (item) => item.ProductID === product.id
-            );
+    <div className="lg:h-[90vh] md:h-[92vh] h-[90vh] w-full bg-[#f8f9fa] px-4 py-4">
+      <div className="bg-white h-full rounded-md p-4 overflow-y-auto">
+        <div className="flex flex-wrap gap-5 justify-center lg:justify-start">
+          {products.map((product) => {
+            const isInCart =
+              cartItems.some(
+                (item) => item.ProductID === product.id
+              ) || addedProductIds.includes(product.id);
+
             return (
               <div
-                key={index}
-                className="w-[270px] h-[325px] border-[1px] rounded-[10px] border-gray-200 cursor-pointer"
+                key={product.id}
+                className="w-[270px] h-[325px] border rounded-lg border-gray-200"
               >
-                {/* Product Image */}
+                {/* IMAGE */}
                 <div
-                  className="h-[60%] w-full bg-blue-200 rounded-[10px]"
+                  className="h-[60%] w-full bg-gray-200 rounded-lg cursor-pointer"
                   onClick={() =>
                     window.open(
                       `/portalpages/allproduct/${product.id}`,
@@ -87,53 +122,53 @@ const productcard = () => {
                     )
                   }
                 >
-                  {product.media && product.media.length > 0 ? (
+                  {product.media?.length ? (
                     <img
                       src={getImageUrl(
                         product.media.find((m) => m.type === "IMAGE")
                           ?.fileName || product.media[0]?.fileName
                       )}
                       alt={product.ProductName}
-                      className="h-full w-full object-cover object-center rounded-[10px]"
+                      className="h-full w-full object-cover rounded-lg"
                     />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center text-gray-500 bg-gray-200 rounded-[10px]">
+                    <div className="h-full flex items-center justify-center text-gray-500">
                       No Image
                     </div>
                   )}
                 </div>
 
-                {/* Product Info */}
-                <div className="w-full px-2 py-3 flex flex-col gap-1">
-                  <h2 className="text-gray-500 text-[16px] ">
+                {/* INFO */}
+                <div className="px-2 py-3 flex flex-col gap-1">
+                  <h2 className="text-gray-500 text-sm">
                     {product.ProductName}
                   </h2>
-                  <h1 className="font-bold text-black text-[20px]">
+
+                  <h1 className="font-bold text-lg">
                     ₹{" "}
                     {UserType === "distributor"
-                      ? product.LargeCartoonPrice // distributor sees LargeCartoonPrice
+                      ? product.LargeCartoonPrice
                       : product.RetailerPrice}
                   </h1>
 
-                  <div className="flex flex-row justify-end border-t-[1px] border-gray-100 py-2">
-                    {/* <div className="h-7 w-16 rounded-full bg-yellow-500 text-white font-medium flex gap-1 justify-center items-center">
-                      <HiStar className="text-white text-[18px]" />{" "}
-                      {product.AvgRatings}
-                    </div> */}
-
+                  {/* ACTION BUTTON */}
+                  <div className="flex justify-end border-t pt-2">
                     {isInCart ? (
                       <button
                         onClick={() => router.push("/cart")}
-                        className="bg-green-500 py-1 px-5 text-white rounded-[10px]"
+                        className="bg-green-500 px-5 py-1 text-white rounded-md"
                       >
-                        Go to Cart
+                        View Cart
                       </button>
                     ) : (
                       <button
+                        disabled={loadingProductId === product.id}
                         onClick={() => handleAddToCart(product)}
-                        className="bg-primary py-1 px-5 text-white rounded-[10px]"
+                        className="bg-primary px-5 py-1 text-white rounded-md disabled:opacity-50"
                       >
-                        Add to Cart
+                        {loadingProductId === product.id
+                          ? "Adding..."
+                          : "Add to Cart"}
                       </button>
                     )}
                   </div>
@@ -147,4 +182,4 @@ const productcard = () => {
   );
 };
 
-export default productcard;
+export default ProductCard;
