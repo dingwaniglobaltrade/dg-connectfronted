@@ -155,7 +155,7 @@ const ProductCard = () => {
                   <div className="flex justify-end border-t pt-2">
                     {isInCart ? (
                       <button
-                        onClick={() => router.push("/cart")}
+                        onClick={() => router.push("/viewpages/cart")}
                         className="bg-green-500 px-5 py-1 text-white rounded-md"
                       >
                         View Cart
