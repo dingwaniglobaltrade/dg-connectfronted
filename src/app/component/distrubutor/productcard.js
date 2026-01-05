@@ -5,11 +5,13 @@ import { getImageUrl } from "@/app/utils/imageurl";
 import { useRouter } from "next/navigation";
 import { AddCartItems } from "@/app/store/Actions/cartAction";
 import { useDispatch, useSelector } from "react-redux";
+import LogoLoader from "../LogoLoader";
 
 const ProductCard = () => {
   const [products, setProducts] = useState([]);
   const [addedProductIds, setAddedProductIds] = useState([]);
   const [loadingProductId, setLoadingProductId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -40,6 +42,7 @@ const ProductCard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const result = await dispatch(asyncfetchproduct());
         if (result?.products) {
           setProducts(result.products);
@@ -81,9 +84,7 @@ const ProductCard = () => {
       const result = await dispatch(AddCartItems(CartData));
 
       if (result?.success === true) {
-        setAddedProductIds((prev) => [
-          ...new Set([...prev, product.id]),
-        ]);
+        setAddedProductIds((prev) => [...new Set([...prev, product.id])]);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -97,15 +98,15 @@ const ProductCard = () => {
    * UI
    * ===============================
    */
+
   return (
     <div className="lg:h-[90vh] md:h-[92vh] h-[90vh] w-full bg-[#f8f9fa] px-4 py-4">
       <div className="bg-white h-full rounded-md p-4 overflow-y-auto">
         <div className="flex flex-wrap gap-5 justify-center lg:justify-start">
           {products.map((product) => {
             const isInCart =
-              cartItems.some(
-                (item) => item.ProductID === product.id
-              ) || addedProductIds.includes(product.id);
+              cartItems.some((item) => item.ProductID === product.id) ||
+              addedProductIds.includes(product.id);
 
             return (
               <div

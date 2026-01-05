@@ -1,0 +1,38 @@
+.logo-loader-container {
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-svg-loader {
+  width: 120px;
+  height: 120px;
+}
+
+.logo-svg-loader path {
+  fill: none;
+  stroke: #2563eb; /* primary blue */
+  stroke-width: 4;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 2s ease-in-out infinite,
+             pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getImageUrl } from "@/app/utils/imageurl";
+import { useSelector } from "react-redux";
 
 export default function ProfileHeader({
   userDetails,
@@ -40,6 +41,8 @@ export default function ProfileHeader({
     }
   };
 
+  const loginState = useSelector((state) => state.login);
+  const UserType = loginState?.admin?.userType;
   return (
     <div className="flex items-center justify-between py-6 border-b mb-6">
       <div className="flex flex-row gap-4">
@@ -73,14 +76,14 @@ export default function ProfileHeader({
         </div>
       </div>
 
-      {!isEditing ? (
+      {!isEditing && (UserType === "admin" || UserType === "subadmin") ? (
         <button
           onClick={() => setIsEditing(true)}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Edit Profile
         </button>
-      ) : (
+      ) : isEditing ? (
         <div className="flex gap-3">
           <button
             onClick={handleSave}
@@ -98,7 +101,7 @@ export default function ProfileHeader({
             Cancel
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
