@@ -8,10 +8,9 @@ import Retailer from "@/icons/reports/retailer.png";
 import Product from "@/icons/reports/productreport.png";
 import Distributor from "@/icons/reports/distributorrepo.png";
 
-
 const allreports = () => {
   return (
-    <div className="flex flex-wrap justify-center items-center">
+    <div className="flex flex-wrap justify-center items-center overflow-auto">
       <ReportDownloadCard
         title="Sales Report"
         reportType="sales"
@@ -26,28 +25,28 @@ const allreports = () => {
       <ReportDownloadCard
         title="Attendance Report"
         reportType="attendance"
-         imageSrc={Attendance}
+        imageSrc={Attendance}
       />
 
       <ReportDownloadCard
         title="Expense Report"
         reportType="expense"
-         imageSrc={Expense}
+        imageSrc={Expense}
       />
       <ReportDownloadCard
         title="Order Items Report"
         reportType="orderItems"
-         imageSrc={OrderItems}
+        imageSrc={OrderItems}
       />
       <ReportDownloadCard
         title="Retailers Report"
         reportType="retailer"
-         imageSrc={Retailer}
+        imageSrc={Retailer}
       />
       <ReportDownloadCard
         title="Distributor Report"
         reportType="distributor"
-         imageSrc={Distributor}
+        imageSrc={Distributor}
       />
     </div>
   );

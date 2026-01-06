@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,8 +7,36 @@ import { RiWhatsappFill } from "react-icons/ri";
 import { FaFacebook } from "react-icons/fa6";
 import { RiInstagramFill } from "react-icons/ri";
 import { FaLinkedin } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRetailerbyID } from "@/app/store/Actions/retailerAction";
 
 const contactDetailes = () => {
+  const dispatch = useDispatch();
+
+  const loginState = useSelector((state) => state.login);
+  const userType = loginState?.admin?.userType;
+  const id = loginState?.admin?.id;
+
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    if (userType !== "retailer" || !id) return;
+
+    const fetchData = async () => {
+      try {
+        const res = await dispatch(fetchRetailerbyID(id));
+        const data = res?.payload || res;
+        setUserDetails(data);
+      } catch (error) {
+        console.error("Failed to fetch retailer:", error);
+      }
+    };
+
+    fetchData();
+  }, [userType, id, dispatch]);
+
+  console.log({ userDetails });
+
   return (
     <div className="h-[90%] w-full lg:px-7 md:px-5 px-2 py-4 bg-[#f8f9fa] flex flex-col lg:gap-20 md:gap-20 gap-10 justify-center items-center">
       <div className="flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2 px-4">
@@ -30,6 +59,32 @@ const contactDetailes = () => {
             <span className="text-black font-medium">feedback</span>, we're here
             to help!
           </p>
+          {userType === "retailer" && userDetails?.Distributordetailes && (
+            <>
+              <h2 className="font-medium text-[14px]">
+                Assigned Distributor Contact Number :
+                <a
+                  href={`https://wa.me/${userDetails.Distributordetailes.mobile}`}
+                  target="_blank"
+                  className="text-primary font-semibold underline ml-1 text-[15px]"
+                >
+                  {userDetails.Distributordetailes.mobile}
+                </a>
+              </h2>
+
+              <h3 className="font-medium text-[14px]">
+                Assigned Distributor Email :
+                <a
+                  href={`mailto:${userDetails.Distributordetailes.email}`}
+                  target="_blank"
+                  className="text-primary underline ml-1 text-[15px] font-semibold"
+                >
+                  {userDetails.Distributordetailes.email}
+                </a>
+              </h3>
+            </>
+          )}
+
           <h2 className="font-medium text-[14px]">
             Contact Number :
             <a

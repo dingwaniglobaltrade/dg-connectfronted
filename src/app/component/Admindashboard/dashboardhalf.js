@@ -210,33 +210,6 @@ const DashboardHalf = ({ lable, link }) => {
     }),
   ];
 
-  // const columns2 = [
-  //   columnHelper.accessor(
-  //     (row) => row.salesperson?.name || selected.name || "N/A", // safe accessor
-  //     {
-  //       id: "employeeName", // required when using a function accessor
-  //       header: "Employee Name",
-  //       cell: (info) => info.getValue(),
-  //     }
-  //   ),
-  //   columnHelper.accessor("id", {
-  //     header: "Employee ID",
-  //     cell: (info) => info.getValue(),
-  //   }),
-  //   columnHelper.accessor("InTime", {
-  //     header: "Login Time",
-  //     cell: (info) => formatDate(info.getValue(), true), // true = include time
-  //   }),
-  //   columnHelper.accessor("OutTime", {
-  //     header: "Logout Time",
-  //     cell: (info) => formatDate(info.getValue(), true), // true = include time
-  //   }),
-  //   columnHelper.accessor("orders", {
-  //     header: "Orders",
-  //     cell: (info) => info.getValue(),
-  //   }),
-  // ];
-
   const columns3 = [
     //  columnHelper.accessor("id", {
     //     header: "Order Id",

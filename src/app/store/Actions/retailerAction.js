@@ -70,6 +70,7 @@ export const createRetailer =
 
 //fetch the retailer by the id
 export const fetchRetailerbyID = (id) => async (dispatch, getState) => {
+console.log({id});
 
   try {
     const token = getToken(); // get token from localStorage
