@@ -15,6 +15,7 @@ const AssignModal = ({ distributor, onClose, mode }) => {
   const [items, setItems] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckboxChange = (id) => {
     setSelectedIds((prev) =>
@@ -46,6 +47,9 @@ const AssignModal = ({ distributor, onClose, mode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+
+    setIsLoading(true);
     if (selectedIds.length === 0) {
       toast.error(`Please select at least one ${mode}`);
       return;
@@ -68,9 +72,11 @@ const AssignModal = ({ distributor, onClose, mode }) => {
         onClose();
       } else {
         toast.error(`Failed to assign ${mode}(s)`);
+        setIsLoading(false);
       }
     } catch (error) {
       toast.error("Something went wrong");
+      setIsLoading(false);
       console.error(error);
     }
   };
@@ -117,9 +123,12 @@ const AssignModal = ({ distributor, onClose, mode }) => {
               </button>
               <button
                 type="submit"
-                className="bg-primary text-[12px] text-white mt-4 px-6 py-2 rounded"
+                disabled={isLoading}
+                className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600"}
+  `}
               >
-                Assign
+                {isLoading ? "Assigning..." : "Assign"}
               </button>
             </div>
           </form>

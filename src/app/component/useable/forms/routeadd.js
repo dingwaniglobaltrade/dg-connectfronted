@@ -13,7 +13,7 @@ const RouteForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const [route, setRoute] = useState({
     routeName: "",
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,6 +32,9 @@ const RouteForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       let result;
       if (initialData) {
@@ -65,10 +68,12 @@ const RouteForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         dispatch(asyncfetchroute());
       } else {
         toast.warn(result.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Route Submit Error:", err);
       toast.error("An error occurred.");
+      setIsLoading(false);
     }
   };
 
@@ -94,9 +99,18 @@ const RouteForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
       <div className="flex justify-end w-full">
         <button
           type="submit"
-          className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+          disabled={isLoading}
+          className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
         >
-          {initialData ? "Update Route" : "Create Route"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update Route"
+            : "Create Route"}
         </button>
       </div>
     </form>

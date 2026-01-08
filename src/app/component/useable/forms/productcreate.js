@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [productFormData, setProductFormData] = useState({
     ProductName: "",
@@ -58,6 +59,9 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       let result;
       const formData = new FormData();
@@ -130,10 +134,12 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         dispatch(asyncfetchproduct());
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Product Submit Error:", err);
       toast.error("An error occurred while submitting the form.");
+      setIsLoading(false);
     }
   };
 
@@ -499,9 +505,18 @@ const ProductForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
       <div className="flex justify-end w-full">
         <button
           type="submit"
-          className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+          disabled={isLoading}
+          className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
         >
-          {initialData ? "Update Product" : "Create Product"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update Product"
+            : "Create Product"}
         </button>
       </div>
     </form>

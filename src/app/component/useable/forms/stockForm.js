@@ -15,7 +15,7 @@ const StockForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
     RetaileStock: "",
     productId: "",
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
   // Fetch routes
@@ -61,7 +61,9 @@ const StockForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
 
+    setIsLoading(true);
     try {
       const { productId, ...stockFields } = stockData; // Destructure productId
       // Send productId and rest of the form separately
@@ -69,9 +71,10 @@ const StockForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
       if (onSubmit) onSubmit(stockData);
 
-      toast.success("Stock Updated Sucessfully")
+      toast.success("Stock Updated Sucessfully");
     } catch (error) {
       console.error("Failed to update stock:", error);
+      setIsLoading(false);
     }
   };
 
@@ -132,9 +135,12 @@ const StockForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         <div className="flex justify-end w-full">
           <button
             type="submit"
-            className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+            disabled={isLoading}
+            className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
           >
-            Add Stock
+            {isLoading ? "Adding..." : " Add Stock"}
           </button>
         </div>
       </form>

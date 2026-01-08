@@ -18,6 +18,7 @@ const Midcom = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false); // new
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,19 +33,24 @@ const Midcom = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 🚫 Prevent multiple requests
+    if (isLoading) return;
+
+    setIsLoading(true);
     setError("");
+
     try {
       const response = await dispatch(asyncfetchlogin(formData));
       const result = response?.payload || response;
 
-      const token = result.token;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", token);
+      if (result?.token && typeof window !== "undefined") {
+        localStorage.setItem("token", result.token);
       }
 
       if (result.success) {
         toast.success("Login Successful");
-        setIsRedirecting(true); // show loading screen
+        setIsRedirecting(true);
 
         const role = formData.userType.toLowerCase();
         let redirectPath = "/";
@@ -55,17 +61,17 @@ const Midcom = () => {
 
         setTimeout(() => {
           router.push(redirectPath);
-        }, 1500); // small delay to show spinner
+        }, 1500);
       } else {
-        console.log({result});
-        
-        toast.error(result.message || "Login failed. Please try again.");
-        setError(result.message || "Login failed. Please try again.");
+        toast.error(result.message || "Login failed");
+        setError(result.message || "Login failed");
+        setIsLoading(false); // 🔓 unlock button
       }
     } catch (err) {
       toast.error("An unexpected error occurred.");
-      console.error("Login Error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error(err);
+      setError("Something went wrong");
+      setIsLoading(false); // 🔓 unlock button
     }
   };
 
@@ -154,9 +160,12 @@ const Midcom = () => {
             <div className="w-full flex justify-center items-center">
               <button
                 type="submit"
-                className="px-4 py-2.5 text-sm font-semibold text-white rounded-[8px] bg-primary"
+                disabled={isLoading}
+                className={`px-4 py-2.5 text-sm font-semibold text-white rounded-[8px] 
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
               >
-                Login Now
+                {isLoading ? "Logging in..." : "Login Now"}
               </button>
             </div>
           </div>

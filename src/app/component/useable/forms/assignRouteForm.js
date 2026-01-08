@@ -11,6 +11,7 @@ const AssignRouteForm = ({ staff, onClose }) => {
   const [routes, setRoutes] = useState([]);
   const [selectedRouteId, setSelectedRouteId] = useState("");
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -29,6 +30,9 @@ const AssignRouteForm = ({ staff, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      if (isLoading) return;
+
+  setIsLoading(true);
     if (!selectedRouteId) {
       toast.error("Please select a route");
       return;
@@ -44,10 +48,12 @@ const AssignRouteForm = ({ staff, onClose }) => {
         onClose();
       } else {
         toast.error("Failed to assign route");
+         setIsLoading(false);
       }
     } catch (error) {
       toast.error("Something went wrong");
       console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -131,9 +137,10 @@ const AssignRouteForm = ({ staff, onClose }) => {
               </button>
               <button
                 type="submit"
+                disabled={isLoading}
                 className="bg-primary text-[12px] text-white mt-4 px-6 py-2 rounded"
               >
-                Assign
+                {isLoading ? "Assigning..." : "Assign"}
               </button>
             </div>
           </form>

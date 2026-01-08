@@ -21,6 +21,7 @@ const Addordercreate = ({ onSubmit }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const limit = 10;
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +66,7 @@ const Addordercreate = ({ onSubmit }) => {
       setPage(1);
       setHasMore(true);
       fetchRetailers();
-    }, 400); // ⏳ debounce request
+    }, 400); // debounce request
 
     return () => clearTimeout(delay);
   }, [searchTerm]);
@@ -110,9 +111,12 @@ const Addordercreate = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
 
+    setIsLoading(true);
     if (!selectedRetailers) {
-      toast.error("Please select a distributor.");
+      toast.error("Please select a Retailer.");
+      setIsLoading(false);
       return;
     }
 
@@ -142,6 +146,9 @@ const Addordercreate = ({ onSubmit }) => {
     if (result?.success) {
       if (onSubmit) onSubmit();
       toast.success(`Order created successfully!`);
+    } else {
+      toast.error(result?.message || "Failed to create order");
+      setIsLoading(false); // 🔓 unlock
     }
   };
 
@@ -314,9 +321,12 @@ const Addordercreate = ({ onSubmit }) => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-green-600 text-white px-3 py-1 rounded"
+            disabled={isLoading}
+            className={`ptext-white px-3 py-1 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600"}
+  `}
           >
-            Place Order
+            {isLoading ? "Placing Order..." : "Place Order"}
           </button>
         </div>
         {/* Total Amount */}

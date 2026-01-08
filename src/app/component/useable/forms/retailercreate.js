@@ -45,7 +45,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const limit = 10; // number per page
   const [liveAddress, setLiveAddress] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   // Handle lat/lng update
   const handleLocation = ({ latitude, longitude }) => {
     setRetailerFormData((prev) => ({
@@ -151,6 +151,9 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
       const formData = new FormData();
 
@@ -180,10 +183,12 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         );
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Retailer Submit Error:", err);
       toast.error("An error occurred while submitting the form.");
+      setIsLoading(false);
     }
   };
 
@@ -420,9 +425,18 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         <div className="flex justify-end w-full">
           <button
             type="submit"
-            className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+            disabled={isLoading}
+            className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
           >
-            {initialData ? "Update Retailer" : "Create Retailer"}
+            {isLoading
+              ? initialData
+                ? "Updating..."
+                : "Creating..."
+              : initialData
+              ? "Update Retailer"
+              : "Create Retailer"}
           </button>
         </div>
       </form>

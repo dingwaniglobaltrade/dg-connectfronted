@@ -18,6 +18,7 @@ const Addordercreate = ({ onSubmit }) => {
   const [totalPrice, setTotalPrice] = useState(0); // New state for total amount
   const [PaymentMode, setPaymentMode] = useState("");
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,45 +107,47 @@ const Addordercreate = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedDistributor) {
-      toast.error("Please select a distributor.");
-      return;
-    }
+    // 🚫 Stop duplicate clicks
+    if (isLoading) return;
 
-    // Constructing full address
-    const addressObject = selectedDistributor.address?.[0]; // Because `address` is an array
-    const fullAddress = addressObject
-      ? `${addressObject.complectAddress || ""}, ${addressObject.city || ""}, ${
-          addressObject.stateName || ""
-        } - ${addressObject.pincode || ""}`
-      : "";
+    setIsLoading(true);
 
-    const orderData = {
-      products,
-      totalPrice,
-      ShippingAdress: selectedDistributor.address,
-      BillingAdress: selectedDistributor.address,
-      Subtotal: totalPrice,
-      Discount: 0,
-      Shippingcost: 0,
-      PaymentMode,
-    };
+    try {
+      if (!selectedDistributor) {
+        toast.error("Please select a distributor.");
+        setIsLoading(false); // 🔓 unlock
+        return;
+      }
 
-    // console.log({
-    //   CustomerID: selectedDistributor.id,
-    //   BillingAdress: fullAddress,
-    //   ShippingAdress: fullAddress,
-    //   products,
-    //   totalPrice,
-    // });
+      const orderData = {
+        products,
+        totalPrice,
+        ShippingAdress: selectedDistributor.address,
+        BillingAdress: selectedDistributor.address,
+        Subtotal: totalPrice,
+        Discount: 0,
+        Shippingcost: 0,
+        PaymentMode,
+      };
 
-    const result = await dispatch(
-      createCustomerOrder({ id: selectedDistributor.id, orderData })
-    );
+      const result = await dispatch(
+        createCustomerOrder({
+          id: selectedDistributor.id,
+          orderData,
+        })
+      );
 
-    if (result?.success) {
-      if (onSubmit) onSubmit();
-      toast.success(`Order created successfully!`);
+      if (result?.success) {
+        toast.success("Order created successfully!");
+        if (onSubmit) onSubmit();
+      } else {
+        toast.error(result?.message || "Failed to create order");
+        setIsLoading(false); // 🔓 unlock
+      }
+    } catch (error) {
+      console.error("Order create error:", error);
+      toast.error("Something went wrong while creating order");
+      setIsLoading(false); // 🔓 unlock
     }
   };
 
@@ -302,10 +305,13 @@ const Addordercreate = ({ onSubmit }) => {
 
           <button
             type="submit"
+            disabled={isLoading}
             onClick={handleSubmit}
-            className="bg-green-600 text-white px-3 py-1 rounded"
+            className={`px-3 py-1 rounded text-white
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600"}
+  `}
           >
-            Place Order
+            {isLoading ? "Placing Order..." : "Place Order"}
           </button>
         </div>
         {/* Total Amount */}

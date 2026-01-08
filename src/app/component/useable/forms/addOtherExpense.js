@@ -22,6 +22,7 @@ const OtherExpenseForm = ({
     BillImage: "",
     Paymentproof: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +40,9 @@ const OtherExpenseForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
 
+    setIsLoading(true);
     try {
       const formData = new FormData();
 
@@ -90,7 +93,7 @@ const OtherExpenseForm = ({
         toast.success(
           `Expense ${initialData ? "updated" : "created"} successfully!`
         );
-           if (onSubmit) onSubmit();
+        if (onSubmit) onSubmit();
         if (!initialData) {
           // Reset the form
           setAddExpenseData({
@@ -104,9 +107,11 @@ const OtherExpenseForm = ({
         dispatch(asyncfetchExpenses());
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Expense Submit Error:", err);
+      setIsLoading(false);
     }
   };
 
@@ -184,9 +189,18 @@ const OtherExpenseForm = ({
       <div className="flex justify-end w-full">
         <button
           type="submit"
-          className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+          disabled={isLoading}
+          className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600"}
+  `}
         >
-          {initialData ? "Update Expense" : "Create Expense"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update Expense"
+            : "Create Expense"}
         </button>
       </div>
     </form>

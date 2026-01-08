@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const AttendanceForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const [salespersons, setSalespersons] = useState([]);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [salespersonForm, setSalespersonForm] = useState({
     SalespersonID: "",
@@ -51,6 +52,10 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 🚫 Prevent multiple submits
+    if (isLoading) return;
+
+    setIsLoading(true);
 
     const formatDateTime = (datetimeValue) => {
       if (!datetimeValue) return "";
@@ -113,61 +118,14 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         // dispatch(fetchAttendanceList());
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error submitting attendance:", error);
+      setIsLoading(false);
       toast.error("An error occurred while submitting attendance.");
     }
   };
-
-  // Handle form submission
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const formatDateTime = (datetimeValue) => {
-  //     if (!datetimeValue) return "";
-  //     const date = new Date(datetimeValue);
-  //     const pad = (n) => n.toString().padStart(2, "0");
-
-  //     const year = date.getFullYear();
-  //     const month = pad(date.getMonth() + 1);
-  //     const day = pad(date.getDate());
-  //     const hours = pad(date.getHours());
-  //     const minutes = pad(date.getMinutes());
-  //     const seconds = pad(date.getSeconds());
-
-  //     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  //   };
-
-  //   const formattedForm = {
-  //     ...salespersonForm,
-  //     InTime: formatDateTime(salespersonForm.InTime),
-  //     OutTime: formatDateTime(salespersonForm.OutTime),
-  //   };
-
-  //   try {
-  //     const result = await dispatch(
-  //       CreateAttendaneAction({
-  //         id: salespersonForm.SalespersonID,
-  //         salespersonForm: formattedForm,
-  //       })
-  //     );
-
-  //     if (result?.success) {
-  //       toast.success("Attendance submitted successfully!");
-  //       setSalespersonForm({
-  //         SalespersonID: "",
-  //         InTime: "",
-  //         OutTime: "",
-  //         attendanceStatus: "",
-  //       });
-  //     } else {
-  //       toast.alert("Failed to submit attendance.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error submitting attendance:", error);
-  //     toast.error("Something went wrong while submitting attendance.");
-  //   }
-  // };
 
   return (
     <div>
@@ -245,9 +203,18 @@ const AttendanceForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         <div className="flex justify-end w-full">
           <button
             type="submit"
-            className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+            disabled={isLoading}
+            className={`text-[12px] mt-4 px-6 py-2 mb-4 rounded text-white
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
           >
-            {initialData ? "Update Attendance" : "Add Attendance"}
+            {isLoading
+              ? initialData
+                ? "Updating..."
+                : "Saving..."
+              : initialData
+              ? "Update Attendance"
+              : "Add Attendance"}
           </button>
         </div>
       </form>

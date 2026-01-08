@@ -39,6 +39,7 @@ const DistributorForm = ({
   const [routes, setRoutes] = useState([]);
   const [salespersons, setSalespersons] = useState([]);
   const [profilePreview, setProfilePreview] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load profile preview for edit mode
   useEffect(() => {
@@ -104,34 +105,50 @@ const DistributorForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    // 🚫 Prevent double submit
+    if (isLoading) return;
 
-    Object.keys(distributorFormData).forEach((key) => {
-      const value = distributorFormData[key];
+    setIsLoading(true);
 
-      if (key === "profileImage" && value instanceof File) {
-        formData.append("profileImage", value);
-      } else if (Array.isArray(value) || typeof value === "object") {
-        formData.append(key, JSON.stringify(value));
+    try {
+      const formData = new FormData();
+
+      Object.keys(distributorFormData).forEach((key) => {
+        const value = distributorFormData[key];
+
+        if (key === "profileImage" && value instanceof File) {
+          formData.append("profileImage", value);
+        } else if (Array.isArray(value) || typeof value === "object") {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
+      });
+
+      let result;
+
+      if (!initialData) {
+        result = await dispatch(createDistributor(formData));
       } else {
-        formData.append(key, value);
+        result = await dispatch(
+          editDistributordetailes(initialData.id, formData)
+        );
       }
-    });
 
-    let result;
-    if (!initialData) {
-      result = await dispatch(createDistributor(formData));
-    } else {
-      result = await dispatch(
-        editDistributordetailes(initialData.id, formData)
-      );
-    }
+      if (result?.success) {
+        toast.success(
+          `Distributor ${initialData ? "Updated" : "Created"} Successfully`
+        );
 
-    if (result?.success) {
-      toast.success(
-        `Distributor ${initialData ? "Updated" : "Created"} Successfully`
-      );
-      if (onSubmit) onSubmit();
+        if (onSubmit) onSubmit();
+      } else {
+        toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false); // 🔓 unlock
+      }
+    } catch (error) {
+      console.error("Distributor submit error:", error);
+      toast.error("An error occurred while saving distributor.");
+      setIsLoading(false); // 🔓 unlock
     }
   };
 
@@ -333,9 +350,18 @@ const DistributorForm = ({
       <div className="flex justify-end w-full">
         <button
           type="submit"
-          className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+          disabled={isLoading}
+          className={`text-[12px] mt-4 px-6 py-2 mb-4 rounded text-white
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
         >
-          {initialData ? "Update Distributor" : "Create Distributor"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update Distributor"
+            : "Create Distributor"}
         </button>
       </div>
     </form>

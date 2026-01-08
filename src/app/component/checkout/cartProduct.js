@@ -18,7 +18,7 @@ const CartProduct = () => {
   const items = cartData?.cartItems || [];
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
+ 
   if (!cartData) return <p>No cart data found. Please go back to cart.</p>;
 
 
@@ -50,7 +50,7 @@ const CartProduct = () => {
         router.push("/viewpages/orderSucess")
     }
       
-    else alert("❌ Failed: " + result.message);
+    else alert("Failed: " + result.message);
   };
 
   // Handle Online Payment order
@@ -80,7 +80,6 @@ const CartProduct = () => {
    
     const receipt = rpResult.payload.result.receipt;
  
-
     // Step 3: Open Razorpay Checkout
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,

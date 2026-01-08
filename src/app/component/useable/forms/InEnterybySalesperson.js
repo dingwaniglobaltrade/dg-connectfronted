@@ -8,7 +8,7 @@ import { InEnteryOFSalespersom } from "@/app/store/Actions/attendanceAction";
 
 const InEnterybySalesperson = ({ onSubmit }) => {
   const dispatch = useDispatch();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [InEnteryDataForm, setInEnteryDataForm] = useState({
     InTimeImage: "",
     InTimeLatitude: "",
@@ -32,7 +32,9 @@ const InEnterybySalesperson = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
 
+    setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append("InTimeImage", InEnteryDataForm.InTimeImage);
@@ -47,10 +49,12 @@ const InEnterybySalesperson = ({ onSubmit }) => {
         toast.success("Attendance submitted successfully!");
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error submitting attendance:", error);
       toast.error("An error occurred while submitting attendance.");
+      setIsLoading(false);
     }
   };
 
@@ -103,9 +107,12 @@ const InEnterybySalesperson = ({ onSubmit }) => {
           <div className="flex items-end mt-4">
             <button
               type="submit"
-              className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+              disabled={isLoading}
+              className={`bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
             >
-              Add Attendance
+              {isLoading ? "Adding..." : "Add Attendance"}
             </button>
           </div>
         </div>

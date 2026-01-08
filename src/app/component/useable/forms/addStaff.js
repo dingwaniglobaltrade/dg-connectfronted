@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 const AddStaffForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [addStaffFormData, setAddStaffFormData] = useState({
     name: "",
@@ -37,7 +38,9 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      if (isLoading) return;
 
+  setIsLoading(true);
     try {
       let result;
 
@@ -79,6 +82,7 @@ const AddStaffForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
     } catch (err) {
       console.error("Submit Error:", err);
       toast.error("An error occurred.");
+       setIsLoading(false);
     }
   };
 

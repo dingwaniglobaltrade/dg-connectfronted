@@ -35,7 +35,6 @@ const contactDetailes = () => {
     fetchData();
   }, [userType, id, dispatch]);
 
-  console.log({ userDetails });
 
   return (
     <div className="h-[90%] w-full lg:px-7 md:px-5 px-2 py-4 bg-[#f8f9fa] flex flex-col lg:gap-20 md:gap-20 gap-10 justify-center items-center">

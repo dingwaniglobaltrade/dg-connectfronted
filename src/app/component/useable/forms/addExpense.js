@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 
 const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [addExpenseData, setAddExpenseData] = useState({
     Date: "",
@@ -35,7 +36,9 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
 
+    setIsLoading(true);
     try {
       const formData = new FormData();
 
@@ -110,10 +113,12 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         }
       } else {
         toast.warn(result?.message || "Something went wrong");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Expense Submit Error:", err);
       toast.error("An error occurred while submitting the form.");
+      setIsLoading(false);
     }
   };
 
@@ -189,9 +194,18 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
       <div className="flex justify-end w-full">
         <button
           type="submit"
-          className="bg-primary text-[12px] text-white mt-4 px-6 py-2 mb-4 rounded"
+          disabled={isLoading}
+          className={`text-[12px] mt-4 px-6 py-2 mb-4 rounded text-white
+    ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"}
+  `}
         >
-          {initialData ? "Update Expense" : "Create Expense"}
+          {isLoading
+            ? initialData
+              ? "Updating..."
+              : "Creating..."
+            : initialData
+            ? "Update Expense"
+            : "Create Expense"}
         </button>
       </div>
     </form>
