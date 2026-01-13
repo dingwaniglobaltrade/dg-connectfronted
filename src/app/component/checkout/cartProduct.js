@@ -10,7 +10,7 @@ import {
 import { removeCart } from "@/app/store/Actions/cartAction";
 import { useRouter } from "next/navigation";
 
-const CartProduct = () => {
+const CartProduct = ({complecteAddress}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const checkoutCart = useSelector((state) => state.cart);
@@ -34,8 +34,8 @@ const CartProduct = () => {
     Discount: 0,
     Shippingcost: 0,
     totalPrice: cartData.totalAmount,
-    ShippingAdress: "12/109 Balaji complex station road rau",
-    BillingAdress: "12/109 Balaji complex station road rau",
+    ShippingAdress: complecteAddress,
+    BillingAdress: complecteAddress,
     PaymentStatus: "pending",
     PaymentMode: PaymentMode,
   });

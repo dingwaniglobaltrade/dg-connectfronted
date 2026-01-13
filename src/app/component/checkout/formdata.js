@@ -4,15 +4,15 @@ import {
   fetchCurrentUser,
   updateCurrentUser,
 } from "@/app/store/Actions/loginAction";
-import {editDistributordetailes } from "@/app/store/Actions/distributorAction";
-import { editRetailerdetailes} from "@/app/store/Actions/retailerAction";
+import { editDistributordetailes } from "@/app/store/Actions/distributorAction";
+import { editRetailerdetailes } from "@/app/store/Actions/retailerAction";
 import { useDispatch, useSelector } from "react-redux";
 
 import DistributorForm from "./distributorForm";
 import RetailerForm from "./retailerForm";
 import { toast } from "react-toastify";
 
-const FormData = () => {
+const FormData = ({ setcomplecteAddress }) => {
   const dispatch = useDispatch();
   const loginState = useSelector((state) => state.login);
 
@@ -46,95 +46,136 @@ const FormData = () => {
   }, [dispatch]);
 
   // Populate state from admin
-  useEffect(() => {
-    if (admin) {
-      if (userType === "retailer") {
-        setFormValues((prev) => ({
-          ...prev,
-          name: admin?.name || "",
-          mobile: admin?.mobile || "",
-          email: admin?.email || "",
-          firmName: admin?.firmName || "",
-          gstn: admin?.gstn || "",
-          shopName: admin?.shopName || "",
-          address: admin?.address || "", // retailer has only string address
-          shopImage: admin?.shopImage || "",
-        }));
-      } else if (userType === "distributor") {
-        const address = admin?.address?.[0] || {};
-        setFormValues((prev) => ({
-          ...prev,
-          name: admin?.name || "",
-          mobile: admin?.mobile || "",
-          email: admin?.email || "",
-          firmName: admin?.firmName || "",
-          gstn: admin?.gstn || "",
-          shopName: admin?.shopName || "",
-          complectAddress: address?.complectAddress || "",
-          city: address?.city || "",
-          stateName: address?.stateName || "",
-          pincode: address?.pincode || "",
-        }));
-      }
-    }
-  }, [admin, userType]);
-
-  // Handle input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // Handle submit
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const id = admin.id;
-
-  let payload;
-  let result;
+useEffect(() => {
+  if (!admin) return;
 
   if (userType === "retailer") {
-    payload = {
-      name: formValues.name,
-      mobile: formValues.mobile,
-      email: formValues.email,
-      shopName: formValues.shopName,
-      gstn: formValues.gstn,
-      address: formValues.address,
-      shopImage: formValues.shopImage,
-    };
+    const retailerAddress = admin?.address || "";
 
-    // Call retailer-specific action
-    result = await dispatch(editRetailerdetailes(id, payload));
-   if(result?.success){
-    toast.success("Your Detailes Updated Sucessfully")
-   }
-   
-  } else if (userType === "distributor") {
-    payload = {
-      ...formValues,
-      address: [
-        {
-          complectAddress: formValues.complectAddress,
-          city: formValues.city,
-          stateName: formValues.stateName,
-          pincode: formValues.pincode,
-        },
-      ],
-    };
+    setFormValues((prev) => ({
+      ...prev,
+      name: admin?.name || "",
+      mobile: admin?.mobile || "",
+      email: admin?.email || "",
+      firmName: admin?.firmName || "",
+      gstn: admin?.gstn || "",
+      shopName: admin?.shopName || "",
+      address: retailerAddress,
+      shopImage: admin?.shopImage || "",
+    }));
 
-    // Call distributor-specific action
-    result = await dispatch(editDistributordetailes(id, payload));
-    // console.log({result});
-    
-     if(result?.success){
-    toast.success("Your Detailes Updated Sucessfully")
-   }
-   
+    // 🔥 SET SHARED ADDRESS (retailer)
+    setcomplecteAddress({
+      complectAddress: retailerAddress,
+      city: "",
+      stateName: "",
+      pincode: "",
+    });
   }
 
+  if (userType === "distributor") {
+    const address = admin?.address?.[0] || {};
+
+    setFormValues((prev) => ({
+      ...prev,
+      name: admin?.name || "",
+      mobile: admin?.mobile || "",
+      email: admin?.email || "",
+      firmName: admin?.firmName || "",
+      gstn: admin?.gstn || "",
+      shopName: admin?.shopName || "",
+      complectAddress: address?.complectAddress || "",
+      city: address?.city || "",
+      stateName: address?.stateName || "",
+      pincode: address?.pincode || "",
+    }));
+
+    // 🔥 SET SHARED ADDRESS (distributor)
+    setcomplecteAddress({
+      complectAddress: address?.complectAddress || "",
+      city: address?.city || "",
+      stateName: address?.stateName || "",
+      pincode: address?.pincode || "",
+    });
+  }
+}, [admin, userType, setcomplecteAddress]);
+
+
+  // Handle input
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormValues((prev) => ({ ...prev, [name]: value }));
+
+  // 🔥 Retailer address (string)
+  if (userType === "retailer" && name === "address") {
+    setcomplecteAddress({
+      complectAddress: value,
+      city: "",
+      stateName: "",
+      pincode: "",
+    });
+  }
+
+  // 🔥 Distributor address (object)
+  if (
+    userType === "distributor" &&
+    ["complectAddress", "city", "stateName", "pincode"].includes(name)
+  ) {
+    setcomplecteAddress((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
 };
 
+
+  // Handle submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const id = admin.id;
+
+    let payload;
+    let result;
+
+    if (userType === "retailer") {
+      payload = {
+        name: formValues.name,
+        mobile: formValues.mobile,
+        email: formValues.email,
+        shopName: formValues.shopName,
+        gstn: formValues.gstn,
+        address: formValues.address,
+        shopImage: formValues.shopImage,
+      };
+
+      // Call retailer-specific action
+      result = await dispatch(editRetailerdetailes(id, payload));
+      if (result?.success) {
+        toast.success("Your Detailes Updated Sucessfully");
+      }
+    } else if (userType === "distributor") {
+      payload = {
+        ...formValues,
+        address: [
+          {
+            complectAddress: formValues.complectAddress,
+            city: formValues.city,
+            stateName: formValues.stateName,
+            pincode: formValues.pincode,
+          },
+        ],
+      };
+
+      // Call distributor-specific action
+      result = await dispatch(editDistributordetailes(id, payload));
+      // console.log({result});
+
+      if (result?.success) {
+        toast.success("Your Detailes Updated Sucessfully");
+      }
+    }
+  };
 
   return (
     <div className="py-3">
