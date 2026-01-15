@@ -45,3 +45,15 @@
 .animate-slide-in {
   animation: slide-in 0.3s ease-out forwards;
 }
+
+.backgroundcolor {
+  background-color: rgba(245, 245, 245, 0.637);
+}
+
+.form-input {
+  @apply w-full bg-transparent border-b border-gray-400 py-2 text-xs sm:text-sm outline-none focus:border-blue-500;
+}
+
+.h3-class-css{
+  @apply font-bold text-primary text-2xl sm:text-2xl lg:text-[28px] mb-8;
+}

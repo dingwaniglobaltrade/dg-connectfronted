@@ -102,7 +102,7 @@ const contactDetailes = () => {
               target="_blank"
               className="text-primary underline ml-1 text-[15px] font-semibold"
             >
-              connect@dglobaltrade.com
+              info@dingwanifoods.com
             </a>
           </h3>
           <div className="flex flex-row gap-4">

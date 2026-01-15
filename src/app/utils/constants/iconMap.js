@@ -1,4 +1,5 @@
 // src/constants/iconMap.js
+import { GiSpellBook } from "react-icons/gi";
 
 export const iconMap = {
   dashboard: require("@/icons/dashboard1.svg"),
@@ -18,4 +19,5 @@ export const iconMap = {
   signout: require("@/icons/signout.svg"),
   profile: require("@/icons/profile.svg"),
   support: require("@/icons/service.svg"),
+  enquries: <GiSpellBook />,
 };

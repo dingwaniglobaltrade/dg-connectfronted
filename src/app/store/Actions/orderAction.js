@@ -214,24 +214,24 @@ export const verifyPayment = (paymentData) => async (dispatch) => {
   }
 };
 
-export const FetchOrderDetailesByID = (id) =>async(dispatch) =>{
-   try {
-      const token = getToken(); // get token from localStorage
-  
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`, // attach token in headers
-        },
-      };
-      console.log(token);
-  
-      const { data } = await axios.get(`/order/orders/${id}`, config);
-      console.log({data});
-  
-      dispatch(fetchOrdersbyid(data));
-      return data;
-    } catch (error) {
-      console.error("Error in fetcing Order detailes:", error.message);
-      dispatch(iserror(error.message));
-    }
-}
+export const FetchOrderDetailesByID = (id) => async (dispatch) => {
+  try {
+    const token = getToken(); // get token from localStorage
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, // attach token in headers
+      },
+    };
+    console.log(token);
+
+    const { data } = await axios.get(`/order/orders/${id}`, config);
+    console.log({ data });
+
+    dispatch(fetchOrdersbyid(data));
+    return data;
+  } catch (error) {
+    console.error("Error in fetcing Order detailes:", error.message);
+    dispatch(iserror(error.message));
+  }
+};

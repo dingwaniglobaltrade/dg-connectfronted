@@ -117,12 +117,12 @@ const sidenavitems = [
     iconKey: "routes",
     roles: ["admin", "distributor"],
   },
-  // {
-  //   label: "Profile",
-  //   link: "/gfbh",
-  //   iconKey: "warehouse",
-  //   roles: ["retailer"],
-  // },
+  {
+    label: "Enquries",
+    link: "/portalpages/enquries",
+    iconKey: "enquries",
+    roles: ["admin", "subadmin"],
+  },
   {
     label: "Reports",
     link: "/portalpages/reports",
