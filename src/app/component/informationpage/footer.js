@@ -32,8 +32,7 @@ const Footer = () => {
               connected way of doing business.
             </p>
             <p className="text-sm sm:text-base leading-relaxed">
-              Dingwani Connects — Connecting Growth. Empowered by Dingwani
-              Foods.
+              Dingwani Connects — Connecting Growth. Powered by Dingwani Foods.
             </p>
           </div>
 
@@ -61,6 +60,9 @@ const Footer = () => {
             <p>info@dingwanifoods.com</p>
           </div>
         </div>
+      </div>
+      <div className="text-center mt-7 text-[14px]">
+        © 2025 — Dingwani Foods. All rights reserved.
       </div>
     </footer>
   );

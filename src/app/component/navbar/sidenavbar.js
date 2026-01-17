@@ -120,7 +120,7 @@ const sidenavitems = [
   {
     label: "Enquries",
     link: "/portalpages/enquries",
-    iconKey: "enquries",
+    iconKey: "expense",
     roles: ["admin", "subadmin"],
   },
   {
