@@ -20,9 +20,9 @@
 
 // export default nextConfig;
 
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   images: {
     remotePatterns: [
       {
@@ -33,7 +33,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-       hostname: "dingwanifood-app.s3.ap-south-1.amazonaws.com",// e.g. render.com backend
+        hostname: "dingwanifood-app.s3.ap-south-1.amazonaws.com", // e.g. render.com backend
       },
     ],
   },
