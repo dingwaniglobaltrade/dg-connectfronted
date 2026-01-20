@@ -13,7 +13,7 @@ import Image from "next/image";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import S3Image from "../useable/S3Image";
+import S3Image from "@/app/component/useable/S3Image";
 
 import { fetchProductbyID } from "@/app/store/Actions/productAction";
 
