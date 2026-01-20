@@ -20,7 +20,7 @@ import { GiShoppingCart } from "react-icons/gi";
 const sidenavitems = [
   {
     label: "Dashboard",
-    link: "/",
+    link: "/portalpages/dashboard",
     altLinks: {
       salesperson: "/salespersonpages",
       distributor: "/viewpages/productpages",

@@ -252,6 +252,22 @@ const Midcom = () => {
                   className="w-full py-2 px-3 rounded-md bg-gray-100"
                   required
                 />
+                <div className="flex flex-row">
+                  <select
+                    className="w-full py-2 rounded-r-[6px] px-1 text-black bg-gray-100 outline-none"
+                    name="userType"
+                    value={formData.userType}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select User Role</option>
+                    <option value="admin">Admin</option>
+                    <option value="subadmin">Sub-admin</option>
+                    <option value="distributor">Distributor</option>
+                    <option value="retailer">Retailer</option>
+                    <option value="salesperson">Salesperson</option>
+                  </select>
+                </div>
                 <input
                   type="password"
                   name="password"
