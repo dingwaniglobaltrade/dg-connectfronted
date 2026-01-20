@@ -16,7 +16,7 @@ import {
 } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { getImageUrl } from "@/app/utils/imageurl";
+// import { getImageUrl } from "@/app/utils/imageurl";
 
 const columnHelper = createColumnHelper();
 
@@ -116,8 +116,8 @@ const ProductData = () => {
       // Update local state instantly
       setProducts((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, Active: "TRUE" } : exp
-        )
+          exp.id === row.id ? { ...exp, Active: "TRUE" } : exp,
+        ),
       );
     } catch (err) {
       toast.error("Failed to update order status.");
@@ -132,8 +132,8 @@ const ProductData = () => {
       // Update local state instantly
       setProducts((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, Active: "FALSE" } : exp
-        )
+          exp.id === row.id ? { ...exp, Active: "FALSE" } : exp,
+        ),
       );
     } catch (err) {
       toast.error("Failed to update order status.");
@@ -147,7 +147,7 @@ const ProductData = () => {
       if (result?.success) {
         // Remove deleted product from local state
         setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.id !== row.id)
+          prevProducts.filter((product) => product.id !== row.id),
         );
         await refreshProducts();
         console.log("Product deleted successfully:");
@@ -209,7 +209,7 @@ const ProductData = () => {
         // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
         const imageUrl = firstImage
-          ? getImageUrl(firstImage.fileName || firstImage.url)
+          ? firstImage.fileName || firstImage.url
           : null;
 
         return (
