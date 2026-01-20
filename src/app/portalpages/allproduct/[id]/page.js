@@ -9,7 +9,6 @@ import { use } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { getImageUrl } from "@/app/utils/imageurl";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -20,7 +19,7 @@ import { fetchProductbyID } from "@/app/store/Actions/productAction";
 // Lazy load 3D viewer
 const ModelViewer = dynamic(
   () => import("@/app/component/Productmodless/ModelViewer.js"),
-  { ssr: false }
+  { ssr: false },
 );
 
 const Page = ({ params }) => {
@@ -74,9 +73,7 @@ const Page = ({ params }) => {
                   {modelFile && (
                     <SwiperSlide key="model-viewer">
                       <div className="w-full h-full flex justify-center items-center bg-gray-100">
-                        <ModelViewer
-                          url={getImageUrl(modelFile.fileName || modelFile.url)}
-                        />
+                        <ModelViewer url={modelFile.url} />
                       </div>
                     </SwiperSlide>
                   )}
@@ -86,12 +83,10 @@ const Page = ({ params }) => {
                     ? imageFiles.map((img, index) => (
                         <SwiperSlide key={index}>
                           <div className="w-full h-[400px] relative">
-                            <Image
-                              src={getImageUrl(img.fileName || img.url)}
+                            <img
+                              src={img.url}
                               alt={`Product image ${index + 1}`}
-                              fill
-                              className="object-contain"
-                              priority={index === 0}
+                              className="w-full h-full object-contain"
                             />
                           </div>
                         </SwiperSlide>
