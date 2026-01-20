@@ -13,6 +13,7 @@ import Image from "next/image";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import S3Image from "../useable/S3Image";
 
 import { fetchProductbyID } from "@/app/store/Actions/productAction";
 
@@ -46,6 +47,7 @@ const Page = ({ params }) => {
   const modelFile = media.find((m) => m.type === "GLB");
   const imageFiles = media.filter((m) => m.type === "IMAGE");
   console.log({ imageFiles });
+  const signedModelUrl = useSignedFile(modelFile?.fileName);
 
   return (
     <ProtectedRoute>
@@ -73,7 +75,7 @@ const Page = ({ params }) => {
                   {modelFile && (
                     <SwiperSlide key="model-viewer">
                       <div className="w-full h-full flex justify-center items-center bg-gray-100">
-                        <ModelViewer url={modelFile.url} />
+                        <ModelViewer url={signedModelUrl} />
                       </div>
                     </SwiperSlide>
                   )}
@@ -83,8 +85,8 @@ const Page = ({ params }) => {
                     ? imageFiles.map((img, index) => (
                         <SwiperSlide key={index}>
                           <div className="w-full h-[400px] relative">
-                            <img
-                              src={img.url}
+                            <S3Image
+                              s3Key={img.url}
                               alt={`Product image ${index + 1}`}
                               className="w-full h-full object-contain"
                             />

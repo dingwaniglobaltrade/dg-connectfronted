@@ -16,7 +16,7 @@ import {
 } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-// import { getImageUrl } from "@/app/utils/imageurl";
+import S3Image from "../useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -220,10 +220,12 @@ const ProductData = () => {
             }
           >
             {imageUrl ? (
-              <img
-                src={imageUrl}
+              <S3Image
+                s3Key={imageUrl} // 👈 S3 KEY ONLY
                 alt="product"
-                className="w-8 h-8 rounded object-cover"
+                width={32}
+                height={32}
+                className="rounded object-cover"
               />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">

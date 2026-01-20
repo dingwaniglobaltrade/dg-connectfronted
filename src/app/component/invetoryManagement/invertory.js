@@ -132,7 +132,7 @@ const InventoryManagement = () => {
         // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
         const imageUrl = firstImage
-          ? getImageUrl(firstImage.fileName || firstImage.url)
+          ? (firstImage.fileName || firstImage.url)
           : null;
         return (
           <div
