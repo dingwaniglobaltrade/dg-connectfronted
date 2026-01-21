@@ -43,11 +43,12 @@ const Page = ({ params }) => {
     fetchData();
   }, [dispatch, id]);
 
-  const media = productData?.media || [];
+    const media = productData?.media || [];
   const modelFile = media.find((m) => m.type === "GLB");
   const imageFiles = media.filter((m) => m.type === "IMAGE");
-  console.log({ imageFiles });
-  const signedModelUrl = useSignedFile(modelFile?.fileName);
+
+  // ✅ Use the SAME hook for model signing
+  const signedModelUrl = useSignedImage(modelFile?.fileName);
 
   return (
     <ProtectedRoute>

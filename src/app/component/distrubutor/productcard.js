@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { AddCartItems } from "@/app/store/Actions/cartAction";
 import { useDispatch, useSelector } from "react-redux";
 import LogoLoader from "../LogoLoader";
+import S3Image from "@/app/component/useable/S3Image";
 
 const ProductCard = () => {
   const [products, setProducts] = useState([]);
@@ -31,7 +32,7 @@ const ProductCard = () => {
    * ===============================
    */
   const cartItems = useSelector(
-    (state) => state.cart?.cart?.data?.cartItems || []
+    (state) => state.cart?.cart?.data?.cartItems || [],
   );
 
   /**
@@ -119,16 +120,15 @@ const ProductCard = () => {
                   onClick={() =>
                     window.open(
                       `/portalpages/allproduct/${product.id}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                 >
                   {product.media?.length ? (
-                    <img
-                      src={getImageUrl(
-                        product.media.find((m) => m.type === "IMAGE")
-                          ?.fileName || product.media[0]?.fileName
-                      )}
+                    <S3Image
+                      s3Key={
+                        product.media.find((m) => m.type === "IMAGE")?.fileName
+                      }
                       alt={product.ProductName}
                       className="h-full w-full object-cover rounded-lg"
                     />
