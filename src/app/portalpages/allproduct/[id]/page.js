@@ -14,6 +14,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import S3Image from "@/app/component/useable/S3Image";
+import useSignedImage from "@/app/customhooks/useSignedImage"; // ✅ FIX
+
 
 import { fetchProductbyID } from "@/app/store/Actions/productAction";
 
