@@ -132,7 +132,9 @@ const InventoryManagement = () => {
 
         // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
-        const s3Key = firstImage?.fileName || firstImage?.url || null;
+        const imageUrl = firstImage
+          ? firstImage.fileName || firstImage.url
+          : null;
 
         return (
           <div
@@ -141,12 +143,14 @@ const InventoryManagement = () => {
               window.open(`/portalpages/allproduct/${row.id}`, "_blank")
             }
           >
-            {s3Key ? (
-              <S3Image
-                s3Key={s3Key}
-                alt="product"
-                className="w-8 h-8 rounded object-cover"
-              />
+            {imageUrl ? (
+              <div className="w-8 h-8 relative">
+                <S3Image
+                  s3Key={imageUrl}
+                  alt="product"
+                  className="object-cover rounded"
+                />
+              </div>
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
                 N/A
