@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getImageUrl } from "@/app/utils/imageurl";
 import {
   fetchCartData,
   updateCartQuantity,
@@ -9,6 +8,9 @@ import {
 } from "@/app/store/Actions/cartAction";
 import { useDispatch, useSelector } from "react-redux";
 import { FaTrashCan } from "react-icons/fa6";
+
+import S3Image from "@/app/component/useable/S3Image";
+import useSignedImage from "@/app/customhooks/useSignedImage"; 
 
 export default function CartPage() {
   const dispatch = useDispatch();
@@ -39,7 +41,7 @@ export default function CartPage() {
   // Increase Quantity
   const increaseQty = async (ProductID) => {
     const result = await dispatch(
-      updateCartQuantity(id, ProductID, "increase")
+      updateCartQuantity(id, ProductID, "increase"),
     );
     if (result?.success) {
       const refreshed = await dispatch(fetchCartData(id));
@@ -51,7 +53,7 @@ export default function CartPage() {
   // Decrease Quantity
   const decreaseQty = async (ProductID) => {
     const result = await dispatch(
-      updateCartQuantity(id, ProductID, "decrease")
+      updateCartQuantity(id, ProductID, "decrease"),
     );
     if (result?.success) {
       const refreshed = await dispatch(fetchCartData(id));
@@ -67,7 +69,7 @@ export default function CartPage() {
       if (result?.success) {
         // Update UI
         setCartItems((prev) =>
-          prev.filter((item) => item.ProductID !== ProductID)
+          prev.filter((item) => item.ProductID !== ProductID),
         );
       } else {
         console.error("Failed to delete product:", result?.message);
@@ -124,8 +126,8 @@ export default function CartPage() {
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
                     ) : (
-                      <img
-                        src={getImageUrl(item.Product.media?.[0]?.url)}
+                      <S3Image
+                        s3Key={item.Product.media?.[0]?.fileName}
                         alt={item.Product.ProductName}
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
@@ -201,10 +203,10 @@ export default function CartPage() {
                       className="w-full h-full bg-gray-400 rounded-[10px]"
                     />
                   ) : (
-                    <img
-                      src={getImageUrl(item.Product.media?.[0]?.url)}
+                    <S3Image
+                      s3Key={item.Product.media[0].fileName}
                       alt={item.Product.ProductName}
-                      className="w-full h-full bg-gray-400 rounded-[10px]"
+                      className="w-12 h-12 bg-gray-200 rounded-[10px]"
                     />
                   )
                 ) : (

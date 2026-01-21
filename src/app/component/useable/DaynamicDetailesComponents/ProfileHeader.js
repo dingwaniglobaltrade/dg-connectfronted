@@ -10,39 +10,37 @@ export default function ProfileHeader({
   setFormData,
   formData,
 }) {
-  // Generate initial preview URL using getImageUrl if we have a fileName
-  const initialImage = userDetails.profileImage
-    ? getImageUrl(userDetails.profileImage)
-    : userDetails.shopImage
-    ? getImageUrl(userDetails.shopImage)
-    : null;
+ const loginState = useSelector((state) => state.login);
+  const UserType = loginState?.admin?.userType;
 
-  const [previewImage, setPreviewImage] = useState(initialImage);
+  // Decide which S3 key to use
+  const s3Key =
+    userDetails?.profileImage || userDetails?.shopImage || null;
 
+  // Local preview (only for editing)
+  const [previewImage, setPreviewImage] = useState(null);
+
+  // Reset preview when edit is cancelled
   useEffect(() => {
-    // Reset preview when editing is cancelled
     if (!isEditing) {
-      const resetImage = userDetails.profileImage
-        ? getImageUrl(userDetails.profileImage)
-        : userDetails.shopImage
-        ? getImageUrl(userDetails.shopImage)
-        : null;
-      setPreviewImage(resetImage);
+      setPreviewImage(null);
     }
-  }, [isEditing, userDetails.profileImage, userDetails.shopImage]);
+  }, [isEditing]);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Preview locally
-      setPreviewImage(URL.createObjectURL(file));
-      // Save file in formData for uploading later
-      setFormData((prev) => ({ ...prev, profileImage: file }));
-    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show local preview
+    setPreviewImage(URL.createObjectURL(file));
+
+    // Store file for upload
+    setFormData((prev) => ({
+      ...prev,
+      profileImage: file,
+    }));
   };
 
-  const loginState = useSelector((state) => state.login);
-  const UserType = loginState?.admin?.userType;
   return (
     <div className="flex items-center justify-between py-6 border-b mb-6">
       <div className="flex flex-row gap-4">
@@ -53,7 +51,14 @@ export default function ProfileHeader({
               src={previewImage}
               alt="Profile Image"
             />
-          ) : (
+          ) : s3Key ? (
+            // 🔵 Existing S3 image
+            <S3Image
+              s3Key={s3Key}
+              alt="Profile Image"
+              className="w-full h-full object-cover rounded-full"
+            />
+          ) :  (
             <div className="rounded-full h-full w-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
               N/A
             </div>

@@ -7,7 +7,8 @@ import useIsMobile from "@/app/customhooks/mobileview";
 import SearchFilter from "@/app/component/useable/searchfiled"; // import search
 import { asyncfetchproduct } from "@/app/store/Actions/productAction";
 import { useDispatch } from "react-redux";
-import { getImageUrl } from "@/app/utils/imageurl";
+
+import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -131,9 +132,8 @@ const InventoryManagement = () => {
 
         // Find first media of type IMAGE
         const firstImage = row.media?.find((m) => m.type === "IMAGE");
-        const imageUrl = firstImage
-          ? (firstImage.fileName || firstImage.url)
-          : null;
+        const s3Key = firstImage?.fileName || firstImage?.url || null;
+
         return (
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -141,9 +141,9 @@ const InventoryManagement = () => {
               window.open(`/portalpages/allproduct/${row.id}`, "_blank")
             }
           >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
+            {s3Key ? (
+              <S3Image
+                s3Key={s3Key}
                 alt="product"
                 className="w-8 h-8 rounded object-cover"
               />

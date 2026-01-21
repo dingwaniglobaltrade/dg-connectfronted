@@ -9,16 +9,12 @@ import PhoneIcon from "@/icons/phoneIcon.svg";
 import EmailIcons from "@/icons/mailIcon.svg";
 import LocationPin from "@/icons/map-Pin.svg";
 import Image from "next/image";
+import S3Image from "@/app/component/useable/S3Image";
 
 const DaynamiceOrderDetailes = () => {
   const { orderId: id } = useParams();
   const dispatch = useDispatch();
   const [orderDetailes, setOrderDetailes] = useState(null);
-
-  //   // Get order detail from Redux (assuming your action updates this)
-  //   const orderDetailFromStore = useSelector((state) => state.order.orderDetail);
-  //   const loading = useSelector((state) => state.order.loading);
-  //   const error = useSelector((state) => state.order.error);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -82,11 +78,20 @@ const DaynamiceOrderDetailes = () => {
                     key={item.id}
                     className="px-2 py-2 flex flex-row gap-5 border-b-[1px] border-grey-300"
                   >
-                    <img
-                      src={item.Product.media?.[0]?.url || "/placeholder.png"}
-                      alt={item.Product.ProductName}
-                      className="w-16 h-16 rounded-[10px]"
-                    />
+                    {item.Product.media?.[0]?.url ? (
+                      <S3Image
+                        s3Key={item.Product.media[0].url}
+                        alt={item.Product.ProductName}
+                        className="w-16 h-16 rounded-[10px] object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/placeholder.png"
+                        alt="No Image"
+                        className="w-16 h-16 rounded-[10px]"
+                      />
+                    )}
+
                     <div className="flex flex-col">
                       <h1 className="text-[16px] font-semibold">
                         {item.Product.ProductName}
@@ -126,10 +131,7 @@ const DaynamiceOrderDetailes = () => {
                   <div>Subtotal</div>
                   <div>₹ {orderDetailes.Subtotal}</div>
                 </div>
-                {/* <div className="flex justify-between">
-                  <div>Discount</div>
-                  <div>₹ {orderDetailes.Discount}</div>
-                </div> */}
+
                 <div className="flex justify-between">
                   <div>Shipping</div>
                   <div>₹ {orderDetailes.Shippingcost}</div>
@@ -146,7 +148,6 @@ const DaynamiceOrderDetailes = () => {
                 </div>
               </div>
 
-              {/* Contact Information */}
               {/* Contact Information */}
               <div className="mt-4">
                 <h1 className="text-[18px] font-bold mb-1">
@@ -186,17 +187,28 @@ const DaynamiceOrderDetailes = () => {
               </div>
 
               {/* assigned distribuor  */}
-             {orderDetailes?.AssignedDistributor?.id && (
-  <div>
-     <h1 className="text-[18px] font-bold mb-1">Assigned Distributor </h1>
-          <div className="flex flex-col px-3 gap-2" >
-             <div className="flex "><span className="h-7 w-7 text-[20px]"><FaUserFriends /></span>
- {orderDetailes.AssignedDistributor.firmName}</div>
-    <div className="flex gap-1"><span> <Image src={PhoneIcon} alt="Phone Icon" /></span>{orderDetailes.AssignedDistributor.mobile}</div>
-          </div>
-  </div>
-)}
-
+              {orderDetailes?.AssignedDistributor?.id && (
+                <div>
+                  <h1 className="text-[18px] font-bold mb-1">
+                    Assigned Distributor{" "}
+                  </h1>
+                  <div className="flex flex-col px-3 gap-2">
+                    <div className="flex ">
+                      <span className="h-7 w-7 text-[20px]">
+                        <FaUserFriends />
+                      </span>
+                      {orderDetailes.AssignedDistributor.firmName}
+                    </div>
+                    <div className="flex gap-1">
+                      <span>
+                        {" "}
+                        <Image src={PhoneIcon} alt="Phone Icon" />
+                      </span>
+                      {orderDetailes.AssignedDistributor.mobile}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>

@@ -9,8 +9,9 @@ import {
 } from "@/app/store/Actions/orderAction";
 import { removeCart } from "@/app/store/Actions/cartAction";
 import { useRouter } from "next/navigation";
+import S3Image from "@/app/component/useable/S3Image";
 
-const CartProduct = ({complecteAddress}) => {
+const CartProduct = ({ complecteAddress }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const checkoutCart = useSelector((state) => state.cart);
@@ -18,9 +19,8 @@ const CartProduct = ({complecteAddress}) => {
   const items = cartData?.cartItems || [];
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
- 
-  if (!cartData) return <p>No cart data found. Please go back to cart.</p>;
 
+  if (!cartData) return <p>No cart data found. Please go back to cart.</p>;
 
   // Prepare base orderData
   const buildOrderData = (PaymentMode) => ({
@@ -47,10 +47,8 @@ const CartProduct = ({complecteAddress}) => {
     const result = await dispatch(createOrder(orderData));
     if (result.success) {
       dispatch(removeCart());
-        router.push("/viewpages/orderSucess")
-    }
-      
-    else alert("Failed: " + result.message);
+      router.push("/viewpages/orderSucess");
+    } else alert("Failed: " + result.message);
   };
 
   // Handle Online Payment order
@@ -62,8 +60,6 @@ const CartProduct = ({complecteAddress}) => {
 
     if (!result.success)
       return alert("Failed to create order: " + result.message);
-
- 
 
     // const result = await dispatch()
     const { orderID, orderAmount } = result.data.result;
@@ -77,9 +73,9 @@ const CartProduct = ({complecteAddress}) => {
       return alert("Failed to create Razorpay order: " + rpResult.message);
 
     const providerOrderId = rpResult.payload.result.id;
-   
+
     const receipt = rpResult.payload.result.receipt;
- 
+
     // Step 3: Open Razorpay Checkout
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -112,7 +108,7 @@ const CartProduct = ({complecteAddress}) => {
       },
       theme: { color: "#3399cc" },
     };
- 
+
     if (!window.Razorpay) {
       alert("Razorpay SDK failed to load. Please refresh the page.");
       return;
@@ -137,9 +133,9 @@ const CartProduct = ({complecteAddress}) => {
       <div className="flex flex-col gap-3">
         {items.length > 0 ? (
           items.map((item) => {
-            const firstImage = item.Product?.media?.find(
-              (m) => m.type === "IMAGE"
-            )?.url;
+            const imageMedia = item.Product?.media?.filter(
+              (m) => m.type === "IMAGE",
+            );
 
             return (
               <div
@@ -148,11 +144,19 @@ const CartProduct = ({complecteAddress}) => {
               >
                 <div className="flex flex-row gap-2 items-center">
                   <div className="w-14 h-14 bg-blue-500 rounded-lg overflow-hidden">
-                    <img
-                      src={firstImage || "/placeholder.png"} // fallback if no image
-                      alt="Product Image"
-                      className="h-full w-full object-cover rounded-lg"
-                    />
+                    {imageMedia?.length > 0 ? (
+                      <S3Image
+                        s3Key={imageMedia[0].fileName}
+                        alt={item.Product?.ProductName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/placeholder.png"
+                        alt="No image"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
                   <div className="font-semibold text-[16px]">
                     {item.Product?.ProductName || "Unnamed Product"}
