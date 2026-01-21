@@ -4,6 +4,7 @@ import useSignedImage from "@/app/customhooks/useSignedImage";
 
 export default function S3Image({ s3Key, className = "", alt = "" }) {
   const signedUrl = useSignedImage(s3Key);
+console.log({s3Key});
 
   if (!signedUrl) {
     return (
