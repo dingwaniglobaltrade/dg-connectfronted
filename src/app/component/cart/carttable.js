@@ -127,7 +127,7 @@ export default function CartPage() {
                       />
                     ) : (
                       <S3Image
-                        s3Key={item.Product.media?.[0]?.fileName}
+                        s3Key={item.Product.media?.[0]?.url}
                         alt={item.Product.ProductName}
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
