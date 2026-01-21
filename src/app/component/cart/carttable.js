@@ -10,12 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaTrashCan } from "react-icons/fa6";
 
 import S3Image from "@/app/component/useable/S3Image";
-import useSignedImage from "@/app/customhooks/useSignedImage"; 
 
 export default function CartPage() {
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState([]);
-  const [carttotal, setCartTotal] = useState([]);
+  const [carttotal, setCartTotal] = useState({});
   const router = useRouter();
 
   const loginState = useSelector((state) => state.login);
@@ -127,7 +126,7 @@ export default function CartPage() {
                       />
                     ) : (
                       <S3Image
-                        s3Key={item.Product.media?.[0]?.url}
+                       s3Key={item.Product.media[0].fileName}
                         alt={item.Product.ProductName}
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />

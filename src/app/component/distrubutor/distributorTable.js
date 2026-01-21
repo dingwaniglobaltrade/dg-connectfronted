@@ -14,9 +14,9 @@ import {
   deleteDistributor,
 } from "@/app/store/Actions/distributorAction";
 import { toast } from "react-toastify";
-import { getImageUrl } from "@/app/utils/imageurl";
 
 import SearchFilter from "@/app/component/useable/searchfiled";
+import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -65,7 +65,7 @@ const Main = () => {
     const fetchData = async () => {
       try {
         const result = await dispatch(
-          fetchAllDistributor({ page: currentPage, pageSize })
+          fetchAllDistributor({ page: currentPage, pageSize }),
         );
 
         if (result) {
@@ -83,7 +83,7 @@ const Main = () => {
 
   const refreshDistributor = async () => {
     const result = await dispatch(
-      fetchAllDistributor({ page: currentPage, pageSize })
+      fetchAllDistributor({ page: currentPage, pageSize }),
     );
 
     if (result) {
@@ -105,7 +105,7 @@ const Main = () => {
       if (result?.success) {
         await refreshDistributor();
         setDistributordata((prevDistributor) =>
-          prevDistributor.filter((distributor) => distributor.id !== row.id)
+          prevDistributor.filter((distributor) => distributor.id !== row.id),
         );
         toast.success("Distributor deleted successfully");
       } else {
@@ -143,9 +143,12 @@ const Main = () => {
   const columns = [
     columnHelper.accessor("firmName", {
       header: "Firm Name",
+      enableSorting: true,
       cell: (info) => {
         const row = info.row.original;
-        const imageUrl = getImageUrl(row.profileImage);
+
+        // S3 key stored in DB (example: 1768897643426-opss.png)
+        const imageKey = row.profileImage || null;
 
         return (
           <div
@@ -153,26 +156,31 @@ const Main = () => {
             onClick={() =>
               window.open(
                 `/portalpages/detailes/distributor/${row.id}`,
-                "_blank"
+                "_blank",
               )
             }
           >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Shop Image"
-                className="w-8 h-8 rounded object-cover"
-              />
+            {imageKey ? (
+              <div className="w-8 h-8 relative">
+                <S3Image
+                  s3Key={imageKey}
+                  alt="product"
+                  className="object-cover rounded"
+                />
+              </div>
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
                 N/A
               </div>
             )}
-            <span className="text-primary hover:underline">{row.firmName}</span>
+            <span className="text-primary hover:underline">
+              {row.ProductName}
+            </span>
           </div>
         );
       },
     }),
+
     columnHelper.accessor("mobile", {
       header: "Mobile",
       cell: (info) => info.getValue(),

@@ -14,6 +14,7 @@ import {
   deleteRetailerAction,
 } from "@/app/store/Actions/retailerAction";
 import { getImageUrl } from "@/app/utils/imageurl";
+import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -45,7 +46,7 @@ const Main = () => {
   const refreshRetailers = async () => {
     try {
       const result = await dispatch(
-        asyncfetchretailer({ page: currentPage, limit: pageSize })
+        asyncfetchretailer({ page: currentPage, limit: pageSize }),
       );
 
       if (result) {
@@ -62,7 +63,7 @@ const Main = () => {
     const fetchData = async () => {
       try {
         const result = await dispatch(
-          asyncfetchretailer({ page: currentPage, limit: pageSize })
+          asyncfetchretailer({ page: currentPage, limit: pageSize }),
         );
 
         if (result) {
@@ -85,7 +86,7 @@ const Main = () => {
     // Filter
     if (activeFilter !== "all") {
       filtered = filtered.filter(
-        (item) => item.status?.toLowerCase() === activeFilter
+        (item) => item.status?.toLowerCase() === activeFilter,
       );
     }
 
@@ -97,7 +98,7 @@ const Main = () => {
           item.shopName?.toLowerCase().includes(q) ||
           item.mobile?.toLowerCase().includes(q) ||
           item.gstn?.toLowerCase().includes(q) ||
-          item.address?.toLowerCase().includes(q)
+          item.address?.toLowerCase().includes(q),
       );
     }
 
@@ -133,7 +134,7 @@ const Main = () => {
       if (result?.success) {
         await refreshRetailers();
         setRetailersData((prev) =>
-          prev.filter((retailer) => retailer.id !== row.id)
+          prev.filter((retailer) => retailer.id !== row.id),
         );
       }
     } catch (error) {
@@ -147,7 +148,7 @@ const Main = () => {
       header: "Shop Name",
       cell: (info) => {
         const row = info.row.original;
-        const imageUrl = getImageUrl(row.shopImage);
+        const imageKey = row.shopImage || null;
 
         return (
           <div
@@ -156,9 +157,9 @@ const Main = () => {
               window.open(`/portalpages/detailes/retailer/${row.id}`, "_blank")
             }
           >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
+            {imageKey ? (
+              <S3Image
+                s3Key={imageKey}
                 alt="Shop"
                 className="w-8 h-8 rounded object-cover"
               />
@@ -227,7 +228,7 @@ const Main = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setOpenDropdownId((prev) =>
-                        prev === rowId ? null : rowId
+                        prev === rowId ? null : rowId,
                       );
                     }}
                   />
