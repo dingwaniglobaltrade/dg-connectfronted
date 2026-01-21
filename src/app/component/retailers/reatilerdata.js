@@ -13,7 +13,6 @@ import {
   asyncfetchretailer,
   deleteRetailerAction,
 } from "@/app/store/Actions/retailerAction";
-import { getImageUrl } from "@/app/utils/imageurl";
 import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
@@ -148,7 +147,7 @@ const Main = () => {
       header: "Shop Name",
       cell: (info) => {
         const row = info.row.original;
-        const imageKey = row.shopImage || null;
+        const imageKey = row.shopImage;
 
         return (
           <div
@@ -161,7 +160,7 @@ const Main = () => {
               <S3Image
                 s3Key={imageKey}
                 alt="Shop"
-                className="w-8 h-8 rounded object-cover"
+                className="w-8 h-8 rounded object-cover bg-red-500"
               />
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">

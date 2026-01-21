@@ -174,7 +174,7 @@ const Main = () => {
               </div>
             )}
             <span className="text-primary hover:underline">
-              {row.ProductName}
+              {row.firmName}
             </span>
           </div>
         );

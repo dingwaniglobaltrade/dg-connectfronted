@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "next/navigation";
-
+import S3Image from "@/app/component/useable/S3Image";
 // Actions
 import {
   fetchRetailerbyID,
