@@ -8,7 +8,7 @@ console.log({s3Key});
 
   if (!signedUrl) {
     return (
-      <div className="bg-gray-200 animate-pulse rounded w-full h-full" />
+      <div className="bg-gray-200 rounded w-full h-full" />
     );
   }
 

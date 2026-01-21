@@ -127,7 +127,7 @@ const ProductCard = () => {
                   {product.media?.length ? (
                     <S3Image
                       s3Key={
-                        product.media.find((m) => m.type === "IMAGE")?.fileName
+                        product.media.find((m) => m.type === "IMAGE")?.url
                       }
                       alt={product.ProductName}
                       className="h-full w-full object-cover rounded-lg"
