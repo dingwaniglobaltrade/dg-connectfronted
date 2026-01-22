@@ -193,7 +193,7 @@ const Main = () => {
       cell: (info) => {
         const row = info.row.original;
         const imageKey = row.StartImage || row.BillImage;
-   console.log({imageKey});
+        console.log({ imageKey });
         if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
@@ -202,6 +202,7 @@ const Main = () => {
           <span
             className="text-blue-600 underline cursor-pointer"
             onClick={() => {
+              if (!imageKey) return;
               setModalImage(imageKey);
               setIsModalOpen(true);
             }}
@@ -216,8 +217,8 @@ const Main = () => {
       cell: (info) => {
         const row = info.row.original;
         const imageKey = row.EndImage || row.Paymentproof;
-          console.log({imageKey});
-          
+        console.log({ imageKey });
+
         if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
@@ -226,6 +227,7 @@ const Main = () => {
           <span
             className="text-blue-600 underline cursor-pointer"
             onClick={() => {
+              if (!imageKey) return;
               setModalImage(imageKey);
               setIsModalOpen(true);
             }}
@@ -449,7 +451,7 @@ const Main = () => {
             className="bg-white p-4 rounded max-w-[90%] max-h-[90%] overflow-auto relative"
             onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
           >
-            <div className="max-w-full max-h-[80vh] object-contain">
+            <div className="max-w-full w-[50vw] h-[60vh] max-h-[80vh] object-contain">
               <S3Image
                 s3Key={modalImage}
                 alt="Expense"
