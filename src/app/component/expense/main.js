@@ -193,7 +193,7 @@ const Main = () => {
       cell: (info) => {
         const row = info.row.original;
         const imageKey = row.StartImage || row.BillImage;
-
+   console.log({imageKey});
         if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
@@ -216,7 +216,8 @@ const Main = () => {
       cell: (info) => {
         const row = info.row.original;
         const imageKey = row.EndImage || row.Paymentproof;
-
+          console.log({imageKey});
+          
         if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
@@ -450,7 +451,7 @@ const Main = () => {
           >
             <div className="max-w-full max-h-[80vh] object-contain">
               <S3Image
-                fileName={modalImage}
+                s3Key={modalImage}
                 alt="Expense"
                 className="h-full w-full object-contain"
               />

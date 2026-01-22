@@ -134,7 +134,7 @@ const Upernavbar = ({ pagename }) => {
             return (
               <div className="w-[50px] h-[50px] rounded-[12px] overflow-hidden bg-gray-200">
                 <S3Image
-                  src={fileName}
+                  s3Key={fileName}
                   alt="User image"
                   className="w-full h-full object-cover"
                   fallback="/default-user.png"
