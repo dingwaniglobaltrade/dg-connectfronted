@@ -19,6 +19,8 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { formatDate } from "@/app/utils/date";
+import S3Image from "@/app/component/useable/S3Image";
+
 
 const columnHelper = createColumnHelper();
 
@@ -40,6 +42,8 @@ const main = () => {
   const dropdownRefs = useRef({});
   const selectDropdownRef = useRef();
 
+    const [modalImage, setModalImage] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0); // 0-based index
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 8;
@@ -174,9 +178,59 @@ const main = () => {
       header: "Login Time",
       cell: (info) => formatDate(info.getValue(), true), // true = include time
     }),
+     columnHelper.accessor("InTimeImage", {
+      header: "In Image",
+      cell: (info) => {
+        const row = info.row.original;
+        const imageKey = row.InTimeImage;
+        console.log({ imageKey });
+
+        if (!imageKey) {
+          return <span className="text-gray-400 italic">N/A</span>;
+        }
+
+        return (
+          <span
+            className="text-blue-600 underline cursor-pointer"
+            onClick={() => {
+              if (!imageKey) return;
+              setModalImage(imageKey);
+              setIsModalOpen(true);
+            }}
+          >
+            View Image
+          </span>
+        );
+      },
+    }),
     columnHelper.accessor("OutTime", {
       header: "Logout Time",
       cell: (info) => formatDate(info.getValue(), true), // true = include time
+    }),
+   columnHelper.accessor("OutTimeImage", {
+      header: "Out Image",
+      cell: (info) => {
+        const row = info.row.original;
+        const imageKey = row.OutTimeImage;
+        console.log({ imageKey });
+
+        if (!imageKey) {
+          return <span className="text-gray-400 italic">N/A</span>;
+        }
+
+        return (
+          <span
+            className="text-blue-600 underline cursor-pointer"
+            onClick={() => {
+              if (!imageKey) return;
+              setModalImage(imageKey);
+              setIsModalOpen(true);
+            }}
+          >
+            View Image
+          </span>
+        );
+      },
     }),
     columnHelper.accessor("totalhours", {
       header: "Total Hours",
@@ -366,6 +420,32 @@ const main = () => {
           </div>
         </div>
       </div>
+
+        {isModalOpen && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                onClick={() => setIsModalOpen(false)} // close modal when clicking outside
+              >
+                <div
+                  className="bg-white p-4 rounded max-w-[90%] max-h-[90%] overflow-auto relative"
+                  onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+                >
+                  <div className="max-w-full w-[50vw] h-[60vh] max-h-[80vh] object-contain">
+                    <S3Image
+                      s3Key={modalImage}
+                      alt="Expense"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                  <button
+                    className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-white rounded"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
     </div>
   );
 };

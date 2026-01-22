@@ -4,7 +4,6 @@ import Image from "next/image";
 import Searchbtn from "@/app/component/useable/FormSearchbtn";
 import Table from "@/app/component/useable/peginationTable";
 import useIsMobile from "@/app/customhooks/mobileview";
-import { getImageUrl } from "@/app/utils/imageurl";
 
 import DropdownMenu from "../useable/dropdown1";
 import Action from "@/icons/attendance/action.svg";
