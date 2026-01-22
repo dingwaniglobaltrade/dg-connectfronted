@@ -137,6 +137,8 @@ const CartProduct = ({ complecteAddress }) => {
               (m) => m.type === "IMAGE",
             );
 
+            const s3Key = imageMedia?.fileName;
+            if (!s3Key) return;
             return (
               <div
                 key={item.id}
@@ -147,7 +149,7 @@ const CartProduct = ({ complecteAddress }) => {
                     {imageMedia?.length > 0 ? (
                       <div className="w-14 h-14">
                         <S3Image
-                          s3Key={imageMedia[0].fileName}
+                          s3Key={s3Key}
                           alt={item.Product?.ProductName}
                           className="w-full h-full object-cover"
                         />
