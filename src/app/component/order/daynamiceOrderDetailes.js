@@ -79,11 +79,13 @@ const DaynamiceOrderDetailes = () => {
                     className="px-2 py-2 flex flex-row gap-5 border-b-[1px] border-grey-300"
                   >
                     {item.Product.media?.[0]?.url ? (
-                      <S3Image
+                      <div  className="w-16 h-16 rounded-[10px]">
+                        <S3Image
                         s3Key={item.Product.media[0].url}
                         alt={item.Product.ProductName}
-                        className="w-16 h-16 rounded-[10px] object-cover"
+                        className="w-full w-full rounded-[10px] object-cover"
                       />
+                      </div>
                     ) : (
                       <img
                         src="/placeholder.png"

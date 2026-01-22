@@ -16,6 +16,7 @@ import {
 } from "@/app/store/Actions/expenseAction";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -51,7 +52,7 @@ const Main = () => {
           asyncfetchExpenses({
             page: currentPage,
             limit: pageSize,
-          })
+          }),
         );
         if (result && result.data) {
           setExpenses(result.data);
@@ -70,7 +71,7 @@ const Main = () => {
       asyncfetchExpenses({
         page: currentPage,
         limit: pageSize,
-      })
+      }),
     ).then((result) => {
       if (result && result.data) {
         setExpenses(result.data);
@@ -102,7 +103,7 @@ const Main = () => {
         (item) =>
           item.salesperson?.name?.toLowerCase().includes(q) ||
           item.Date?.toLowerCase().includes(q) ||
-          item.expenseStatus?.toLowerCase().includes(q)
+          item.expenseStatus?.toLowerCase().includes(q),
       );
     }
 
@@ -127,14 +128,14 @@ const Main = () => {
   const handleAccpect = async (row) => {
     try {
       await dispatch(
-        updatetheExpenseStatus(row.id, { expenseStatus: "Accepted" })
+        updatetheExpenseStatus(row.id, { expenseStatus: "Accepted" }),
       );
       toast.success("Expense Accepted");
       await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, expenseStatus: "Accepted" } : exp
-        )
+          exp.id === row.id ? { ...exp, expenseStatus: "Accepted" } : exp,
+        ),
       );
     } catch (err) {
       toast.error("Failed to accept expense");
@@ -144,14 +145,14 @@ const Main = () => {
   const handleReject = async (row) => {
     try {
       await dispatch(
-        updatetheExpenseStatus(row.id, { expenseStatus: "Reject" })
+        updatetheExpenseStatus(row.id, { expenseStatus: "Reject" }),
       );
       toast.success("Expense Rejected");
       await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, expenseStatus: "Reject" } : exp
-        )
+          exp.id === row.id ? { ...exp, expenseStatus: "Reject" } : exp,
+        ),
       );
     } catch (err) {
       toast.error("Failed to reject expense");
@@ -161,14 +162,14 @@ const Main = () => {
   const handleApprove = async (row) => {
     try {
       await dispatch(
-        updatetheExpenseStatus(row.id, { expenseStatus: "Approved" })
+        updatetheExpenseStatus(row.id, { expenseStatus: "Approved" }),
       );
       toast.success("Expense Approved");
       await refreshExpenses();
       setExpenses((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, expenseStatus: "Approved" } : exp
-        )
+          exp.id === row.id ? { ...exp, expenseStatus: "Approved" } : exp,
+        ),
       );
     } catch (err) {
       toast.error("Failed to approve expense");
@@ -191,12 +192,9 @@ const Main = () => {
       header: "Start Image / Bill Image",
       cell: (info) => {
         const row = info.row.original;
-        const imageName = row.StartImage || row.BillImage;
+        const imageKey = row.StartImage || row.BillImage;
 
-        const imageUrl = getImageUrl(imageName);
-       console.log({imageUrl});
-       
-        if (!imageUrl) {
+        if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
 
@@ -204,7 +202,7 @@ const Main = () => {
           <span
             className="text-blue-600 underline cursor-pointer"
             onClick={() => {
-              setModalImage(imageUrl);
+              setModalImage(imageKey);
               setIsModalOpen(true);
             }}
           >
@@ -217,11 +215,9 @@ const Main = () => {
       header: "End Image / Payment Proof",
       cell: (info) => {
         const row = info.row.original;
-        const imageName = row.EndImage || row.Paymentproof;
+        const imageKey = row.EndImage || row.Paymentproof;
 
-        const imageUrl = getImageUrl(imageName);
-
-        if (!imageUrl) {
+        if (!imageKey) {
           return <span className="text-gray-400 italic">N/A</span>;
         }
 
@@ -229,7 +225,7 @@ const Main = () => {
           <span
             className="text-blue-600 underline cursor-pointer"
             onClick={() => {
-              setModalImage(imageUrl);
+              setModalImage(imageKey);
               setIsModalOpen(true);
             }}
           >
@@ -299,7 +295,7 @@ const Main = () => {
             </div>
           );
         },
-      })
+      }),
     );
   }
 
@@ -343,7 +339,7 @@ const Main = () => {
             </div>
           );
         },
-      })
+      }),
     );
   }
 
@@ -371,7 +367,7 @@ const Main = () => {
                     option.value === "all"
                       ? expenses.length
                       : expenses.filter(
-                          (item) => item.expenseStatus === option.value
+                          (item) => item.expenseStatus === option.value,
                         ).length;
 
                   return (
@@ -452,11 +448,13 @@ const Main = () => {
             className="bg-white p-4 rounded max-w-[90%] max-h-[90%] overflow-auto relative"
             onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
           >
-            <img
-              src={modalImage}
-              alt="Expense"
-              className="max-w-full max-h-[80vh] object-contain"
-            />
+            <div className="max-w-full max-h-[80vh] object-contain">
+              <S3Image
+                fileName={modalImage}
+                alt="Expense"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <button
               className="absolute top-2 right-2 px-3 py-1 bg-red-500 text-white rounded"
               onClick={() => setIsModalOpen(false)}

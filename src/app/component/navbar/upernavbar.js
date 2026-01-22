@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { io } from "socket.io-client";
-import { getImageUrl } from "@/app/utils/imageurl";
 
 import {
   fetchCurrentUser,
@@ -20,7 +19,7 @@ import {
 } from "@/app/store/Actions/loginAction";
 import { fetchCartData } from "@/app/store/Actions/cartAction";
 import NotificationDrawer from "../notification/notiicationcom";
-
+import S3Image from "@/app/component/useable/S3Image";
 
 const Upernavbar = ({ pagename }) => {
   const router = useRouter();
@@ -46,7 +45,7 @@ const Upernavbar = ({ pagename }) => {
 
   // 3. Auto-fetch user if token exists
   useEffect(() => {
-    const token = localStorage.getItem("token");  
+    const token = localStorage.getItem("token");
     if (token && !admin) {
       dispatch(fetchCurrentUser());
     }
@@ -123,30 +122,26 @@ const Upernavbar = ({ pagename }) => {
         {/* 👤 Profile */}
         <div className="flex gap-4 relative">
           {/* IMAGE SECTION */}
-        {(() => {
-  let fileName = null;
+          {(() => {
+            let fileName = null;
 
-  if (admin?.userType === "retailer") {
-    fileName = admin?.shopImage;
-  } else if (admin?.userType === "distributor") {
-    fileName = admin?.profileImage;
-  }
+            if (admin?.userType === "retailer") {
+              fileName = admin?.shopImage;
+            } else if (admin?.userType === "distributor") {
+              fileName = admin?.profileImage;
+            }
 
-  const imageUrl = fileName
-    ? getImageUrl(fileName)
-    : "/default-user.png";
-
-  return (
-    <div className="w-[50px] h-[50px] rounded-[12px] overflow-hidden bg-gray-200">
-      <img
-        src={imageUrl}
-        alt="User image"
-        className="w-full h-full object-cover"
-        onError={(e) => (e.target.src = "/default-user.png")}
-      />
-    </div>
-  );
-})()}
+            return (
+              <div className="w-[50px] h-[50px] rounded-[12px] overflow-hidden bg-gray-200">
+                <S3Image
+                  src={fileName}
+                  alt="User image"
+                  className="w-full h-full object-cover"
+                  fallback="/default-user.png"
+                />
+              </div>
+            );
+          })()}
 
           <div className="flex flex-col py-1">
             <div className="text-texthearder font-medium font-[16px]">
