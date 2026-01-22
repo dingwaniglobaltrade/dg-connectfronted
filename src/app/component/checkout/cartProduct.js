@@ -138,7 +138,6 @@ const CartProduct = ({ complecteAddress }) => {
             );
 
             const s3Key = imageMedia?.fileName;
-            if (!s3Key) return;
             return (
               <div
                 key={item.id}
