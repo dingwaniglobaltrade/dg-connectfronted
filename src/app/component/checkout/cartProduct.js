@@ -133,10 +133,9 @@ const CartProduct = ({ complecteAddress }) => {
       <div className="flex flex-col gap-3">
         {items.length > 0 ? (
           items.map((item) => {
-            const imageMedia = item.Product?.media?.filter(
+            const imageMedia = item.Product?.media?.find(
               (m) => m.type === "IMAGE",
             );
-
             const s3Key = imageMedia?.fileName;
             return (
               <div
@@ -145,14 +144,12 @@ const CartProduct = ({ complecteAddress }) => {
               >
                 <div className="flex flex-row gap-2 items-center">
                   <div className="w-14 h-14 bg-blue-500 rounded-lg overflow-hidden">
-                    {imageMedia?.length > 0 ? (
-                      <div className="w-14 h-14">
-                        <S3Image
-                          s3Key={s3Key}
-                          alt={item.Product?.ProductName}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                    {s3Key ? (
+                      <S3Image
+                        s3Key={s3Key}
+                        alt={item.Product?.ProductName || "Product image"}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <img
                         src="/placeholder.png"
