@@ -6,7 +6,7 @@ import MainImage from "@/icons/informationpage/mainpage.png";
 
 const HeroSection = () => {
   return (
-    <section className="w-full h-[100vh] relative overflow-hidden">
+    <section className="w-full h-[100vh] relative overflow-hidden bg-white">
       {/* Background Map */}
       <Image
         src={WorldMap}

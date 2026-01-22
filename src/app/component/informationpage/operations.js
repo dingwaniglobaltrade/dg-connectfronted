@@ -28,7 +28,7 @@ const operationsData = [
 
 const OperationsSection = () => {
   return (
-    <div className="w-full min-h-[60vh] flex flex-col lg:flex-row justify-between px-6 lg:px-12 py-10 gap-10">
+    <div className="w-full bg-white min-h-[60vh] flex flex-col lg:flex-row justify-between px-6 lg:px-12 py-10 gap-10">
       {/* Image Section */}
       <div className="w-full lg:w-1/2 flex justify-center items-center">
         <Image

@@ -52,7 +52,7 @@ const UpperNavbar = () => {
           <div onClick={() => setOpen(false)}>Home</div>
           <div onClick={() => setOpen(false)}>About Us</div>
           <div onClick={() => setOpen(false)}>Divisions</div>
-          <div onClick={() => setOpen(false)}>Login</div>
+          <div onClick={() => setOpen(false)}> <Link href={"/login"}>Login</Link></div>
         </div>
       )}
     </header>

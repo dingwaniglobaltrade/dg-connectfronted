@@ -2,7 +2,7 @@ import React from "react";
 
 const benifits = () => {
   return (
-    <div className="w-full flex flex-col lg:gap-10 md:gap-7 sm:gap-4 gap-4 justify-center text-center items-center py-5 px-4 lg:px-10 md:px-10">
+    <div className="bg-white w-full flex flex-col lg:gap-10 md:gap-7 sm:gap-4 gap-4 justify-center text-center items-center py-5 px-4 lg:px-10 md:px-10">
       <h1 className="text-[20px] bg-primary px-4 font-light text-white py-2 rounded-[10px]">
         What are your benifits of being a
       </h1>

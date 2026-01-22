@@ -90,7 +90,7 @@ const Midcom = () => {
 
   return (
     <>
-      <div className="hidden md:flex h-screen w-screen">
+      <div className="hidden md:flex h-screen w-screen bg-white text-black">
         {/* Left (Form) Section */}
         <div className="w-full lg:w-1/2 px-10 flex flex-col justify-center items-center">
           <Image
@@ -102,7 +102,7 @@ const Midcom = () => {
             {/* STEP 1 – USER TYPE */}
             {step === 1 && (
               <div className="flex flex-col items-center gap-5 max-w-md text-center">
-                <h2 className="text-2xl font-bold">Select Account Type</h2>
+                <h2 className="text-2xl font-bold ">Select Account Type</h2>
 
                 <p className="text-sm">
                   Registration for retailers, distributors, and event partners
@@ -236,7 +236,7 @@ const Midcom = () => {
       <div className="flex md:hidden min-h-screen w-screen items-center justify-center">
         {/* 🔄 LOADING STATE */}
         {isLoading ? (
-          <div className="w-screen h-screen">
+          <div className="w-screen h-screen bg-white">
             <div className="flex flex-col w-full h-full absolute ">
               <div
                 className="items-right text-end w-full font-semibold text-primary
@@ -266,7 +266,7 @@ const Midcom = () => {
               {" "}
               Dingwani Connects Together With Every Trade Partner.
             </h1>
-            <div className="text-center px-2 py-5 rounded-[10px] border-[1px] border-grey-50 shadow-lg">
+            <div className="text-center bg-white px-2 py-5 rounded-[10px] border-[1px] border-grey-50 shadow-lg">
               {step === 1 && (
                 <div className="flex flex-col items-center gap-5 max-w-md text-center">
                   <h2 className="text-2xl font-bold">Select Account Type</h2>

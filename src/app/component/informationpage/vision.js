@@ -9,7 +9,7 @@ import Favorite from "@/icons/informationpage/Favorite.svg";
 
 const Vision = () => {
   return (
-    <section className="w-full px-4 sm:px-6 md:px-10">
+    <section className="w-full px-4 sm:px-6 md:px-10 bg-white">
       <div
         className="shadow-md bg-[#ED7A031A] rounded-[35px] w-full max-w-7xl mx-auto
         flex flex-col items-center text-center py-3 sm:py-10 gap-6"

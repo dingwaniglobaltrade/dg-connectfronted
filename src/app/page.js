@@ -13,7 +13,7 @@ import Footer from "./component/informationpage/footer";
 
 const page = () => {
   return (
-    <>
+    < >
       <Upppernavbar />
 
       {/* HOME */}

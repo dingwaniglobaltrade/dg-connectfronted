@@ -3,7 +3,7 @@ import { RiDoubleQuotesL } from "react-icons/ri";
 
 const TrustAndGrowth = () => {
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-10 py-10">
+    <div className="w-full px-4 sm:px-6 lg:px-10 py-10 bg-white">
       <div className="relative border-2 border-[#D1C7BE] rounded-[10px] px-4 sm:px-8 lg:px-24 py-10">
         
         {/* Quote Icon */}
