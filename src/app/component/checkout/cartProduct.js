@@ -145,11 +145,13 @@ const CartProduct = ({ complecteAddress }) => {
                 <div className="flex flex-row gap-2 items-center">
                   <div className="w-14 h-14 bg-blue-500 rounded-lg overflow-hidden">
                     {imageMedia?.length > 0 ? (
-                      <S3Image
-                        s3Key={imageMedia[0].fileName}
-                        alt={item.Product?.ProductName}
-                        className="w-full h-full object-cover"
-                      />
+                      <div className="w-14 h-14">
+                        <S3Image
+                          s3Key={imageMedia[0].fileName}
+                          alt={item.Product?.ProductName}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     ) : (
                       <img
                         src="/placeholder.png"

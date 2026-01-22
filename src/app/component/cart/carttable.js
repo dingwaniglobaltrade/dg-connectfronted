@@ -125,11 +125,13 @@ export default function CartPage() {
                         className="w-12 h-12 bg-gray-200 rounded-[10px]"
                       />
                     ) : (
-                      <S3Image
-                       s3Key={item.Product.media[0].fileName}
-                        alt={item.Product.ProductName}
-                        className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                      />
+                      <div className="w-12 h-12 bg-gray-200 rounded-[10px]">
+                        <S3Image
+                          s3Key={item.Product.media[0].fileName}
+                          alt={item.Product.ProductName}
+                          className="w-full h-full rounded-[10px]"
+                        />
+                      </div>
                     )
                   ) : (
                     <img
@@ -202,11 +204,13 @@ export default function CartPage() {
                       className="w-full h-full bg-gray-400 rounded-[10px]"
                     />
                   ) : (
-                    <S3Image
-                      s3Key={item.Product.media[0].fileName}
-                      alt={item.Product.ProductName}
-                      className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                    />
+                    <div className="w-12 h-12 bg-gray-200 ">
+                      <S3Image
+                        s3Key={item.Product.media[0].fileName}
+                        alt={item.Product.ProductName}
+                        className="rounded-[10px] w-full h-full"
+                      />
+                    </div>
                   )
                 ) : (
                   <img
