@@ -136,7 +136,11 @@ const CartProduct = ({ complecteAddress }) => {
             const imageMedia = item.Product?.media?.find(
               (m) => m.type === "IMAGE",
             );
-            const s3Key = imageMedia?.fileName;
+            const s3Key =
+              imageMedia?.fileName ||
+              imageMedia?.key ||
+              imageMedia?.file?.fileName ||
+              null;
             return (
               <div
                 key={item.id}
