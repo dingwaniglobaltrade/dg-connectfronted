@@ -157,11 +157,13 @@ const Main = () => {
             }
           >
             {imageKey ? (
-              <S3Image
-                s3Key={imageKey}
-                alt="Shop"
-                className="w-8 h-8 rounded object-cover bg-red-500"
-              />
+              <div className="w-8 h-8 relative">
+                <S3Image
+                  s3Key={imageKey}
+                  alt="Shop"
+                  className="object-cover rounded"
+                />
+              </div>
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
                 N/A

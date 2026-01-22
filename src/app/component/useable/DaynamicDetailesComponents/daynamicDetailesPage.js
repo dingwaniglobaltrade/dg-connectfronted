@@ -186,8 +186,7 @@ const userFieldConfig = {
  */
 const filterFieldsByUserType = (fields, userType) => {
   return fields.filter(
-    (field) =>
-      !field.visibleTo || field.visibleTo.includes(userType)
+    (field) => !field.visibleTo || field.visibleTo.includes(userType),
   );
 };
 
@@ -274,7 +273,7 @@ export default function DaynamicDetailesPage() {
           title="Personal Information"
           fields={filterFieldsByUserType(
             userFieldConfig[userType].personalInfo,
-            UserType
+            UserType,
           )}
           userDetails={formData}
           isEditing={isEditing && canEdit}
@@ -285,7 +284,7 @@ export default function DaynamicDetailesPage() {
           title="Contact Information"
           fields={filterFieldsByUserType(
             userFieldConfig[userType].contactInfo,
-            UserType
+            UserType,
           )}
           userDetails={formData}
           isEditing={isEditing && canEdit}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getImageUrl } from "@/app/utils/imageurl";
 import { useSelector } from "react-redux";
+import S3Image from "@/app/component/useable/S3Image";
 
 export default function ProfileHeader({
   userDetails,
@@ -10,12 +11,11 @@ export default function ProfileHeader({
   setFormData,
   formData,
 }) {
- const loginState = useSelector((state) => state.login);
+  const loginState = useSelector((state) => state.login);
   const UserType = loginState?.admin?.userType;
 
   // Decide which S3 key to use
-  const s3Key =
-    userDetails?.profileImage || userDetails?.shopImage || null;
+  const s3Key = userDetails?.profileImage || userDetails?.shopImage || null;
 
   // Local preview (only for editing)
   const [previewImage, setPreviewImage] = useState(null);
@@ -58,7 +58,7 @@ export default function ProfileHeader({
               alt="Profile Image"
               className="w-full h-full object-cover rounded-full"
             />
-          ) :  (
+          ) : (
             <div className="rounded-full h-full w-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
               N/A
             </div>
