@@ -11,6 +11,8 @@ console.log({s3Key});
       <div className="bg-gray-200 rounded w-full h-full" />
     );
   }
+  console.log({signedUrl});
+  
 
   return (
     <div className="relative w-full h-full">

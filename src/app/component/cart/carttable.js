@@ -113,118 +113,52 @@ export default function CartPage() {
             </tr>
           </thead>
           <tbody>
-            {cartItems.map((item) => (
-              <tr key={item.id} className="border-b text-center">
-                {/* Product column stays left aligned with image + text */}
-                <td className="p-3 flex items-center gap-3 font-semibold text-left">
-                  {item.Product.media && item.Product.media.length > 0 ? (
-                    item.Product.media[0].url.endsWith(".glb") ? (
-                      <img
-                        src="/3d-placeholder.png"
-                        alt={item.Product.ProductName}
-                        className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-200 rounded-[10px]">
+            {cartItems.map((item) => {
+              const imageMedia = item?.Product?.media?.find(
+                (m) => m.type === "IMAGE",
+              );
+
+              return (
+                <tr key={item.id} className="border-b text-center">
+                  <td className="p-3 flex items-center gap-3 text-left">
+                    {imageMedia && (
+                      <div className="w-12 h-12 rounded ">
                         <S3Image
-                          s3Key={item.Product.media[0].fileName}
+                          s3Key={imageMedia.url}
                           alt={item.Product.ProductName}
-                          className="w-full h-full rounded-[10px]"
+                          className="w-full h-full rounded object-contain"
                         />
                       </div>
-                    )
-                  ) : (
-                    <img
-                      src="/default-product.png"
-                      alt={item.Product.ProductName}
-                      className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                    />
-                  )}
+                    )}
+                    {item.Product.ProductName}
+                  </td>
 
-                  {item.Product.ProductName}
-                </td>
+                  {/* Price */}
+                  <td className="p-3">₹ {item.Price}</td>
 
-                {/* Price */}
-                <td className="p-3">₹ {item.Price}</td>
-
-                {/* Quantity with flex but centered inside */}
-                <td className="p-3">
-                  <div className="flex justify-center items-center gap-2">
-                    <button
-                      className="px-2 py-1 border rounded"
-                      onClick={() => decreaseQty(item.ProductID)}
-                    >
-                      -
-                    </button>
-                    <span>{item.Quantity}</span>
-                    <button
-                      className="px-2 py-1 border rounded"
-                      onClick={() => increaseQty(item.ProductID)}
-                    >
-                      +
-                    </button>
-                  </div>
-                </td>
-
-                {/* Subtotal */}
-                <td className="p-3">₹ {item.Price * item.Quantity} </td>
-
-                <td className="cursor-pointer text-center cursor-pointer">
-                  <button
-                    type="button"
-                    className="mx-auto flex items-center justify-center cursor-pointer"
-                    onClick={() => handleRemove(item.ProductID)} // <-- wrapped arrow, pass id only
-                    aria-label={`Remove ${
-                      item?.Product?.ProductName ?? "item"
-                    }`}
-                  >
-                    <FaTrashCan />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* mobile responseive cart data card */}
-      <div className="lg:hidden md:hidden mb-3">
-        <div className="flex flex-col gap-3">
-          {cartItems.map((item) => (
-            <div
-              key={item.id}
-              className="w-full h-auto p-4 bg-gray-100 rounded-[10px] flex flex-row gap-3"
-            >
-              <div className="w-[30%] h-full rounded-[10px]">
-                {item.Product.media && item.Product.media.length > 0 ? (
-                  item.Product.media[0].url.endsWith(".glb") ? (
-                    <img
-                      src="/3d-placeholder.png"
-                      alt={item.Product.ProductName}
-                      className="w-full h-full bg-gray-400 rounded-[10px]"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 bg-gray-200 ">
-                      <S3Image
-                        s3Key={item.Product.media[0].fileName}
-                        alt={item.Product.ProductName}
-                        className="rounded-[10px] w-full h-full"
-                      />
+                  {/* Quantity with flex but centered inside */}
+                  <td className="p-3">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        className="px-2 py-1 border rounded"
+                        onClick={() => decreaseQty(item.ProductID)}
+                      >
+                        -
+                      </button>
+                      <span>{item.Quantity}</span>
+                      <button
+                        className="px-2 py-1 border rounded"
+                        onClick={() => increaseQty(item.ProductID)}
+                      >
+                        +
+                      </button>
                     </div>
-                  )
-                ) : (
-                  <img
-                    src="/default-product.png"
-                    alt={item.Product.ProductName}
-                    className="w-12 h-12 bg-gray-200 rounded-[10px]"
-                  />
-                )}
-              </div>
+                  </td>
 
-              <div className="flex flex-col gap-1 w-full">
-                <div className="w-full text-[16px] font-semibold flex justify-between">
-                  <div> {item.Product.ProductName} </div>
-                  <div>
+                  {/* Subtotal */}
+                  <td className="p-3">₹ {item.Price * item.Quantity} </td>
+
+                  <td className="cursor-pointer text-center cursor-pointer">
                     <button
                       type="button"
                       className="mx-auto flex items-center justify-center cursor-pointer"
@@ -235,34 +169,77 @@ export default function CartPage() {
                     >
                       <FaTrashCan />
                     </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* mobile responseive cart data card */}
+      <div className="lg:hidden md:hidden mb-3">
+        <div className="flex flex-col gap-3">
+          {cartItems.map((item) => {
+            const imageMedia = item?.Product?.media?.find(
+              (m) => m.type === "IMAGE",
+            );
+
+            return (
+              <div key={item.id} className="p-4 bg-gray-100 rounded flex gap-3">
+                {imageMedia && (
+                  <div className="w-20 h-20 rounded ">
+                    <S3Image
+                      s3Key={imageMedia.url}
+                      alt={item.Product.ProductName}
+                      className="w-full h-full rounded object-contain"
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-1 w-full">
+                  <div className="w-full text-[16px] font-semibold flex justify-between">
+                    <div> {item.Product.ProductName} </div>
+                    <div>
+                      <button
+                        type="button"
+                        className="mx-auto flex items-center justify-center cursor-pointer"
+                        onClick={() => handleRemove(item.ProductID)} // <-- wrapped arrow, pass id only
+                        aria-label={`Remove ${
+                          item?.Product?.ProductName ?? "item"
+                        }`}
+                      >
+                        <FaTrashCan />
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="font-semibold">Price</span> :{""} ₹
+                    {item.Price}
+                  </div>
+                  <div className="flex flex-row gap-2">
+                    <button
+                      className="px-2 py-[2px] border rounded"
+                      onClick={() => decreaseQty(item.ProductID)}
+                    >
+                      -
+                    </button>
+                    <span>{item.Quantity}</span>
+                    <button
+                      className="px-2 py-[2px] border rounded"
+                      onClick={() => increaseQty(item.ProductID)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div>
+                    <span className="font-semibold">Subtotal </span>: ₹{" "}
+                    {item.Price * item.Quantity}
                   </div>
                 </div>
-                <div>
-                  <span className="font-semibold">Price</span> :{""} ₹
-                  {item.Price}
-                </div>
-                <div className="flex flex-row gap-2">
-                  <button
-                    className="px-2 py-[2px] border rounded"
-                    onClick={() => decreaseQty(item.ProductID)}
-                  >
-                    -
-                  </button>
-                  <span>{item.Quantity}</span>
-                  <button
-                    className="px-2 py-[2px] border rounded"
-                    onClick={() => increaseQty(item.ProductID)}
-                  >
-                    +
-                  </button>
-                </div>
-                <div>
-                  <span className="font-semibold">Subtotal </span>: ₹{" "}
-                  {item.Price * item.Quantity}
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

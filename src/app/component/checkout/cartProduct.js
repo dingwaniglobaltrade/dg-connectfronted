@@ -131,48 +131,37 @@ const CartProduct = ({ complecteAddress }) => {
     <div className="px-5 flex flex-col">
       {/* Cart Items */}
       <div className="flex flex-col gap-3">
-        {items.length > 0 ? (
-          items.map((item) => {
-            const imageMedia = item.Product?.media?.find(
-              (m) => m.type === "IMAGE",
-            );
-            const s3Key =
-              imageMedia?.fileName ||
-              imageMedia?.key ||
-              imageMedia?.file?.fileName ||
-              null;
-            return (
-              <div
-                key={item.id}
-                className="w-full border rounded-lg flex justify-between items-center px-2 py-2"
-              >
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="w-14 h-14 bg-blue-500 rounded-lg overflow-hidden">
-                    {s3Key ? (
-                      <S3Image
-                        s3Key={s3Key}
-                        alt={item.Product?.ProductName || "Product image"}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <img
-                        src="/placeholder.png"
-                        alt="No image"
-                        className="w-full h-full object-cover"
-                      />
-                    )}
+      <div className="flex flex-col gap-3">
+        {items.map((item) => {
+          const imageMedia = item?.Product?.media?.find(
+            (m) => m.type === "IMAGE"
+          );
+
+          return (
+            <div
+              key={item.id}
+              className="w-full border rounded-lg flex justify-between items-center px-2 py-2"
+            >
+              <div className="flex gap-2 items-center">
+                {imageMedia && (
+                  <div className="w-14 h-14 rounded-lg overflow-hidden">
+                    <S3Image
+                      s3Key={imageMedia.url}
+                      alt={item.Product?.ProductName}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
-                  <div className="font-semibold text-[16px]">
-                    {item.Product?.ProductName || "Unnamed Product"}
-                  </div>
+                )}
+
+                <div className="font-semibold text-[16px]">
+                  {item.Product?.ProductName}
                 </div>
-                <div>₹ {item.Price * item.Quantity}</div>
               </div>
-            );
-          })
-        ) : (
-          <p>No items in cart</p>
-        )}
+
+              <div>₹ {item.Price * item.Quantity}</div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Total Section */}
@@ -210,6 +199,7 @@ const CartProduct = ({ complecteAddress }) => {
         onOnlinePay={handleOnlinePay}
       />
     </div>
+      </div>
   );
 };
 
