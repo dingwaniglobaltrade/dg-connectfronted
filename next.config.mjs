@@ -20,6 +20,8 @@
 
 // export default nextConfig;
 
+import nextPWA from "next-pwa";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -27,16 +29,21 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "8080", // backend port
+        port: "8080",
         pathname: "/uploads/**",
       },
       {
         protocol: "https",
-        hostname: "*.amazonaws.com", // e.g. render.com backend
+        hostname: "*.amazonaws.com",
       },
     ],
   },
 };
 
-export default nextConfig;
-// next.config.js
+const withPWA = nextPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+});
+
+export default withPWA(nextConfig);
