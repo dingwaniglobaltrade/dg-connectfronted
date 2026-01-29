@@ -334,7 +334,7 @@ const Midcom = () => {
                         onChange={handleChange}
                         placeholder="Email"
                         required
-                        className="w-[350px] px-2 py-2 bg-[#F1F0FE] rounded-r"
+                        className="w-full px-2 py-2 bg-[#F1F0FE] rounded-r"
                       />
                     </div>
 
@@ -353,7 +353,7 @@ const Midcom = () => {
                         onChange={handleChange}
                         placeholder="Password"
                         required
-                        className="w-[350px] px-2 py-2 bg-[#F1F0FE] rounded-r"
+                        className="w-full px-2 py-2 bg-[#F1F0FE] rounded-r"
                       />
                     </div>
 
