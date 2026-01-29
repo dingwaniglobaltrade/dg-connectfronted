@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import PlanLogo from "@/icons/informationpage/planlogo.png";
 import Link from "next/link";
+import { CONTACT_DETAILS } from "@/app/utils/constants/infoData";
+
 
 const Footer = () => {
   return (
@@ -39,16 +41,16 @@ const Footer = () => {
           {/* Links */}
           <div className="flex flex-col gap-3">
             <h3 className="text-[#FD853A] font-semibold">Links</h3>
-            <a href="#" className="hover:underline">
+            <a href="#home" className="hover:underline">
               Home
             </a>
-            <a href="#" className="hover:underline">
+            <a href="#about" className="hover:underline">
               About Us
             </a>
-            <a href="#" className="hover:underline">
+            <a href="#partners" className="hover:underline">
               Division
             </a>
-            <a href="#" className="hover:underline">
+            <a href="#enquiry" className="hover:underline">
               Contact
             </a>
           </div>
@@ -56,13 +58,13 @@ const Footer = () => {
           {/* Contact */}
           <div className="flex flex-col gap-3">
             <h3 className="text-[#FD853A] font-semibold">Contact</h3>
-            <p>+91 8269968097</p>
-            <p>info@dingwanifoods.com</p>
+            <p>{CONTACT_DETAILS.phone}</p>
+            <p>{CONTACT_DETAILS.email}</p>
           </div>
         </div>
       </div>
       <div className="text-center mt-7 text-[14px]">
-        © 2025 — Dingwani Foods. All rights reserved.
+        © 2025 — Dingwani Connects. All rights reserved.
       </div>
     </footer>
   );

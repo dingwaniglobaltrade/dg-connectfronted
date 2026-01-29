@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import WorldMap from "@/icons/informationpage/world-maps.png";
 import MainImage from "@/icons/informationpage/mainpage.png";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -37,7 +38,10 @@ const HeroSection = () => {
             </p>
 
             <button className="mt-6 px-6 py-3 bg-primary text-white rounded-md text-base sm:text-lg">
-              Contact Us
+              <Link href="#enquiry" className="cursor-pointer">
+                {" "}
+                Contact Us
+              </Link>
             </button>
           </div>
 

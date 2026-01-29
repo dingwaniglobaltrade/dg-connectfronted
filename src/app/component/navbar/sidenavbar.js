@@ -131,7 +131,7 @@ const sidenavitems = [
   },
   {
     label: "Analytics",
-    link: "/portalpages/#",
+    link: "/sjkd",
     iconKey: "analytics",
     roles: ["admin"],
   },

@@ -41,7 +41,7 @@ const partnersData = [
     name: "Dingwani Global Trade",
     description:
       "Dingwani Global Trade is an India-based export and trading company committed to connecting the world with India’s best-quality products",
-    link: "/",
+    link: "https://dglobaltrade.com/",
     view: "View More →",
   },
 ];
@@ -79,7 +79,11 @@ const Partners = () => {
               <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                 {partner.description}
               </p>
-              <Link href={partner.link} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={partner.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <p className="text-sm sm:text-base text-primary mt-3 leading-relaxed">
                   View More →
                 </p>

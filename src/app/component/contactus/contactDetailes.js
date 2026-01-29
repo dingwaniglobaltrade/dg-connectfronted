@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 
 import { RiWhatsappFill } from "react-icons/ri";
 import { FaFacebook } from "react-icons/fa6";
@@ -9,6 +7,7 @@ import { RiInstagramFill } from "react-icons/ri";
 import { FaLinkedin } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRetailerbyID } from "@/app/store/Actions/retailerAction";
+import { CONTACT_DETAILS } from "@/app/utils/constants/infoData";
 
 const contactDetailes = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,6 @@ const contactDetailes = () => {
 
     fetchData();
   }, [userType, id, dispatch]);
-
 
   return (
     <div className="h-[90%] w-full lg:px-7 md:px-5 px-2 py-4 bg-[#f8f9fa] flex flex-col lg:gap-20 md:gap-20 gap-10 justify-center items-center">
@@ -91,18 +89,18 @@ const contactDetailes = () => {
               target="_blank"
               className="text-primary font-semibold underline ml-1 text-[15px]"
             >
-              +91 8269968097
+              {CONTACT_DETAILS.phone}
             </a>
           </h2>
           <h3 className="font-medium text-[14px]">
             {" "}
             Email :
             <a
-              href="mailto:info@dingwanifoods.com"
+              href="mailto:{CONTACT_DETAILS.email}"
               target="_blank"
               className="text-primary underline ml-1 text-[15px] font-semibold"
             >
-              info@dingwanifoods.com
+              {CONTACT_DETAILS.email}
             </a>
           </h3>
           <div className="flex flex-row gap-4">

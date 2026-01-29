@@ -131,75 +131,75 @@ const CartProduct = ({ complecteAddress }) => {
     <div className="px-5 flex flex-col">
       {/* Cart Items */}
       <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-3">
-        {items.map((item) => {
-          const imageMedia = item?.Product?.media?.find(
-            (m) => m.type === "IMAGE"
-          );
+        <div className="flex flex-col gap-3">
+          {items.map((item) => {
+            const imageMedia = item?.Product?.media?.find(
+              (m) => m.type === "IMAGE",
+            );
 
-          return (
-            <div
-              key={item.id}
-              className="w-full border rounded-lg flex justify-between items-center px-2 py-2"
-            >
-              <div className="flex gap-2 items-center">
-                {imageMedia && (
-                  <div className="w-14 h-14 rounded-lg overflow-hidden">
-                    <S3Image
-                      s3Key={imageMedia.url}
-                      alt={item.Product?.ProductName}
-                      className="w-full h-full object-contain"
-                    />
+            return (
+              <div
+                key={item.id}
+                className="w-full border rounded-lg flex justify-between items-center px-2 py-2"
+              >
+                <div className="flex gap-2 items-center">
+                  {imageMedia && (
+                    <div className="w-14 h-14 rounded-lg overflow-hidden">
+                      <S3Image
+                        s3Key={imageMedia.url}
+                        alt={item.Product?.ProductName}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  )}
+
+                  <div className="font-semibold text-[16px]">
+                    {item.Product?.ProductName}
                   </div>
-                )}
-
-                <div className="font-semibold text-[16px]">
-                  {item.Product?.ProductName}
                 </div>
+
+                <div>₹ {item.Price * item.Quantity}</div>
               </div>
-
-              <div>₹ {item.Price * item.Quantity}</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Total Section */}
-      <div className="flex flex-col mt-4">
-        <div className="flex justify-between py-2 border-b">
-          <span>Subtotal:</span>
-          <span>₹ {cartData.totalAmount}</span>
+            );
+          })}
         </div>
-        <div className="flex justify-between py-2 border-b">
-          <span>Shipping:</span>
-          <span>Free</span>
-        </div>
-        <div className="flex justify-between font-semibold text-lg mt-2">
-          <span>Total:</span>
-          <span>₹ {cartData.totalAmount}</span>
-        </div>
-      </div>
 
-      {/* Place Order Button */}
-      <div className="text-right">
-        <button
-          className="w-[50%] mt-4 bg-primary text-white py-2 rounded"
-          onClick={() => setShowModal(true)}
-        >
-          Place Order
-        </button>
-      </div>
+        {/* Total Section */}
+        <div className="flex flex-col mt-4">
+          <div className="flex justify-between py-2 border-b">
+            <span>Subtotal:</span>
+            <span>₹ {cartData.totalAmount}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span>Shipping:</span>
+            <span>Free</span>
+          </div>
+          <div className="flex justify-between font-semibold text-lg mt-2">
+            <span>Total:</span>
+            <span>₹ {cartData.totalAmount}</span>
+          </div>
+        </div>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        totalAmount={cartData.totalAmount}
-        onCOD={handleCOD}
-        onOnlinePay={handleOnlinePay}
-      />
+        {/* Place Order Button */}
+        <div className="text-right">
+          <button
+            className="w-[50%] mt-4 bg-primary text-white py-2 rounded"
+            onClick={() => setShowModal(true)}
+          >
+            Place Order
+          </button>
+        </div>
+
+        {/* Payment Modal */}
+        <PaymentModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          totalAmount={cartData.totalAmount}
+          onCOD={handleCOD}
+          onOnlinePay={handleOnlinePay}
+        />
+      </div>
     </div>
-      </div>
   );
 };
 

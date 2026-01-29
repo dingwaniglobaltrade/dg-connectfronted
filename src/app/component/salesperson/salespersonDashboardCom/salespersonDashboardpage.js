@@ -9,6 +9,7 @@ import { asyncfetchretailer } from "@/app/store/Actions/retailerAction";
 import { asyncfetchOrders } from "@/app/store/Actions/orderAction";
 import { useDispatch, useSelector } from "react-redux";
 import { createColumnHelper } from "@tanstack/react-table";
+import S3Image from "@/app/component/useable/S3Image";
 
 const columnHelper = createColumnHelper();
 
@@ -44,16 +45,16 @@ const SalespersonDashboardPage = () => {
     }
   }
 
-const addressObj =
-  Array.isArray(distributor?.address) && distributor.address.length > 0
-    ? distributor.address[0]
-    : null;
+  const addressObj =
+    Array.isArray(distributor?.address) && distributor.address.length > 0
+      ? distributor.address[0]
+      : null;
 
-const fullAddress = addressObj
-  ? `${addressObj.complectAddress || ""}, ${addressObj.city || ""}, ${
-      addressObj.stateName || ""
-    } - ${addressObj.pincode || ""}`
-  : "N/A";
+  const fullAddress = addressObj
+    ? `${addressObj.complectAddress || ""}, ${addressObj.city || ""}, ${
+        addressObj.stateName || ""
+      } - ${addressObj.pincode || ""}`
+    : "N/A";
 
   // ---------------- FETCH ORDERS ----------------
   useEffect(() => {
@@ -75,7 +76,7 @@ const fullAddress = addressObj
     const fetchData = async () => {
       try {
         const result = await dispatch(
-          asyncfetchretailer({ page: currentPage, limit: pageSize })
+          asyncfetchretailer({ page: currentPage, limit: pageSize }),
         );
         // console.log({ resultss: result });
 
@@ -106,7 +107,13 @@ const fullAddress = addressObj
             }
           >
             {row.shopImage ? (
-              <img src={row.shopImage} alt="Shop" className="w-8 h-8 rounded" />
+              <div className="w-8 h-8 rounded overflow-hidden">
+                <S3Image
+                  s3Key={row.shopImage}
+                  alt="Shop"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             ) : (
               <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs text-gray-500">
                 N/A
@@ -149,13 +156,12 @@ const fullAddress = addressObj
         {/* Distributor Info Card */}
         <div className="w-full h-auto px-5 py-4 bg-white flex flex-col sm:flex-row items-center sm:items-start rounded-[10px] gap-4 shadow">
           {/* Avatar */}
-          <div className="w-[70px] h-[70px] rounded-full flex-shrink-0">
-            <img
-              className="h-full w-full rounded-full object-cover"
-              src={distributor?.profileImage}
-              alt={distributor?.firmName || "N/A"}
-              width={70}
-              height={70}
+          <div className="w-[70px] h-[70px] rounded-full overflow-hidden">
+            <S3Image
+              s3Key={distributor?.profileImage}
+              alt={distributor?.firmName || "Distributor"}
+              className="w-full h-full object-cover rounded-full"
+              fallback="/default-user.png"
             />
           </div>
 

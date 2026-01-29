@@ -12,7 +12,11 @@ const poppins = Poppins({
 export const metadata = {
   title: "Dingwani Connect",
   description: "Together With Every Trade Partner",
-  
+  manifest: "/manifest.json",
+};
+
+export const viewport = {
+  themeColor: "#273389",
 };
 
 export default function RootLayout({ children }) {
