@@ -11,38 +11,9 @@ import { asyncfetchproduct } from "@/app/store/Actions/productAction";
 import { fetchAttendanceAction } from "@/app/store/Actions/attendanceAction";
 import { asyncfetchOrders } from "@/app/store/Actions/orderAction";
 import { useDispatch } from "react-redux";
+import { LeaderBoradofDistributor } from "@/app/store/Actions/distributorAction";
 
 const columnHelper = createColumnHelper();
-
-const data2 = [
-  {
-    id: 1,
-    employename: "John",
-    image1: "https://cdn-icons-png.flaticon.com/512/1247/1247730.png",
-    employeID: "#123451",
-    login: "10:00 AM",
-    logout: "06:00 AM",
-    orders: "20",
-  },
-  {
-    id: 2,
-    employename: "John",
-    image1: "https://cdn-icons-png.flaticon.com/512/1247/1247730.png",
-    employeID: "#123451",
-    login: "10:00 AM",
-    logout: "06:00 AM",
-    orders: "20",
-  },
-  {
-    id: 3,
-    employename: "John",
-    image1: "https://cdn-icons-png.flaticon.com/512/1247/1247730.png",
-    employeID: "#123451",
-    login: "10:00 AM",
-    logout: "06:00 AM",
-    orders: "20",
-  },
-];
 
 const DashboardHalf = ({ lable, link }) => {
   const [product, setProducts] = useState("");
@@ -50,26 +21,38 @@ const DashboardHalf = ({ lable, link }) => {
   const [orders, setOrders] = useState("");
   const dispatch = useDispatch();
   const [attendaceDate, setAttendaceDate] = useState("");
+  const [distributorLeader, setDistributorLeader] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 3;
 
-  // Set today's date on mount
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0]; // format: YYYY-MM-DD
-    setAttendaceDate(today);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const result = await dispatch(LeaderBoradofDistributor());
+
+        if (result) {
+          setDistributorLeader(result.data.distributors);
+        }
+      } catch (error) {
+        console.error("Error fetching order data:", error);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
+
+  console.log({ distributorLeader });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await dispatch(
-          asyncfetchOrders({ page: currentPage, limit: pageSize })
+          asyncfetchOrders({ page: currentPage, limit: pageSize }),
         );
         if (result) {
           setOrders(result.data);
           setTotalPages(result.totalPages);
-          setTotalCount(result.totalOrders);
+          // setTotalCount(result.totalOrders);
         }
       } catch (error) {
         console.error("Error fetching order data:", error);
@@ -89,7 +72,7 @@ const DashboardHalf = ({ lable, link }) => {
             date: attendaceDate,
             page: currentPage + 1, // backend expects 1-based
             limit: pageSize,
-          })
+          }),
         );
 
         if (result?.data) {
@@ -176,36 +159,21 @@ const DashboardHalf = ({ lable, link }) => {
   ];
 
   const columns2 = [
-    columnHelper.accessor("employename", {
-      header: "Employee Name",
-      cell: (info) => {
-        const row = info.row.original;
-        return (
-          <div className="flex items-center gap-2">
-            <img
-              src={row.image1}
-              alt="employeImage"
-              className="w-8 h-8 rounded"
-            />
-            <span>{row.employename}</span>
-          </div>
-        );
-      },
-    }),
-    columnHelper.accessor("employeID", {
-      header: "Employee ID",
+
+      columnHelper.accessor("distributor.email", {
+      header: "Email",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("login", {
-      header: "Login Time",
+    columnHelper.accessor("distributor.firmName", {
+      header: "Name",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("logout", {
-      header: "Logout Time",
+    columnHelper.accessor("totalOrderValue", {
+      header: "Total Value",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("orders", {
-      header: "Orders",
+    columnHelper.accessor("totalOrders", {
+      header: "Total Orders",
       cell: (info) => info.getValue(),
     }),
   ];
@@ -310,7 +278,9 @@ const DashboardHalf = ({ lable, link }) => {
     "Top Selling Products": (
       <Table columns={columns1} data={product.slice(0, 3)} />
     ),
-    Attendance: <Table columns={columns2} data={data2.slice(0, 3)} />,
+    Attendance: (
+      <Table columns={columns2} data={distributorLeader.slice(0, 3)} />
+    ),
     "Order Status": <Table columns={columns3} data={orders.slice(0, 3)} />,
   };
 

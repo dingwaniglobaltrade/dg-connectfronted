@@ -4,6 +4,9 @@ import {
   createnewOrders,
   updateOrderStatus,
   fetchOrdersbyid,
+  monthlydistributorOrder,
+  fydistributorOrder,
+  monthlyRetailerOrder,
   iserror,
 } from "../Reducers/orderReducer";
 
@@ -84,7 +87,7 @@ export const createOrder = (orderData) => async (dispatch, getState) => {
     return { success: true, data };
   } catch (error) {
     dispatch(
-      iserror(error?.response?.data?.message || "Failed to create Order")
+      iserror(error?.response?.data?.message || "Failed to create Order"),
     );
     return {
       success: false,
@@ -112,7 +115,7 @@ export const createCustomerOrder =
       const { data } = await axios.post(
         `/order/order-create/${id}`,
         orderData,
-        config
+        config,
       );
       dispatch(createnewOrders(data));
       // console.log({ data });
@@ -120,7 +123,7 @@ export const createCustomerOrder =
       return { success: true, data };
     } catch (error) {
       dispatch(
-        iserror(error?.response?.data?.message || "Failed to create Order")
+        iserror(error?.response?.data?.message || "Failed to create Order"),
       );
       return {
         success: false,
@@ -144,7 +147,7 @@ export const UpdateOrderStatus =
       const { data } = await axios.patch(
         `/order/updateOrder/${id}/status`,
         orderStatus,
-        config
+        config,
       );
       dispatch(updateOrderStatus(data));
       // console.log({ data });
@@ -152,7 +155,7 @@ export const UpdateOrderStatus =
       return { success: true, data };
     } catch (error) {
       dispatch(
-        iserror(error?.response?.data?.message || "Failed to create Order")
+        iserror(error?.response?.data?.message || "Failed to create Order"),
       );
       return {
         success: false,
@@ -176,9 +179,9 @@ export const createRazorpayOrder =
       const { data } = await axios.post(
         "/payment/create-order",
         { orderID, orderAmount },
-        config
+        config,
       );
-      console.log({ data });
+      // console.log({ data });
 
       return { success: true, payload: data };
     } catch (error) {
@@ -201,7 +204,7 @@ export const verifyPayment = (paymentData) => async (dispatch) => {
     const { data } = await axios.post(
       "/payment/verify-payment",
       paymentData,
-      config
+      config,
     );
 
     return { success: true, payload: data };
@@ -223,10 +226,9 @@ export const FetchOrderDetailesByID = (id) => async (dispatch) => {
         Authorization: `Bearer ${token}`, // attach token in headers
       },
     };
-    console.log(token);
 
     const { data } = await axios.get(`/order/orders/${id}`, config);
-    console.log({ data });
+
 
     dispatch(fetchOrdersbyid(data));
     return data;
@@ -235,3 +237,66 @@ export const FetchOrderDetailesByID = (id) => async (dispatch) => {
     dispatch(iserror(error.message));
   }
 };
+
+export const FYofDistributorOrder = () => async (dispatch) => {
+  try {
+    const token = getToken();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/order/fy-report`, config);
+
+    dispatch(fydistributorOrder(data));
+    return data;
+  } catch (error) {
+    console.error("Error fetching Order details:", error.message);
+    dispatch(iserror(error.message));
+  }
+};
+
+export const MonthlySalesofDistributorOrder = () => async (dispatch) => {
+  try {
+    const token = getToken();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/order/monthly-report-distributor`, config);
+
+    dispatch(monthlydistributorOrder(data));
+    return data;
+  } catch (error) {
+    console.error("Error fetching Order details:", error.message);
+    dispatch(iserror(error.message));
+  }
+};
+
+
+export const MonthlySalesofRetailerOrder = () => async (dispatch) => {
+  try {
+    const token = getToken();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/order/monthly-report-retailer`, config);
+    
+    dispatch(monthlyRetailerOrder(data));
+    return data;
+  } catch (error) {
+    console.error("Error fetching Order details:", error.message);
+    dispatch(iserror(error.message));
+  }
+};
+
+

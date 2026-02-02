@@ -175,8 +175,8 @@ const Main = () => {
       },
     }),
     columnHelper.accessor("email", { header: "Email" }),
+    columnHelper.accessor("password", { header: "Password" }),
     columnHelper.accessor("mobile", { header: "Mobile" }),
-    columnHelper.accessor("gstn", { header: "GSTN" }),
     columnHelper.accessor("name", { header: "Concern Person" }),
     columnHelper.accessor("address", {
       header: "Address",

@@ -4,6 +4,7 @@ import {
   createnewDistributor,
   editDistributor,
   assignSalesperson,
+  distributorLeaderBoard,
   removeDistributor,
   iserror,
 } from "../Reducers/distributorReducers";
@@ -179,3 +180,24 @@ export const AssignSalespersonToDistributor =
       };
     }
   };
+
+export const LeaderBoradofDistributor = () => async (dispatch) => {
+  try {
+    const token = getToken();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/distributor/leader-board`, config);
+    console.log({data});
+    
+    dispatch(distributorLeaderBoard(data));
+    return data;
+  } catch (error) {
+    console.error("Error fetching Order details:", error.message);
+    dispatch(iserror(error.message));
+  }
+};  

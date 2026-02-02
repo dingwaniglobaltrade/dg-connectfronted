@@ -5,7 +5,9 @@ import {
   createnewRetailer,
   editRetailer,
   deleteRetailer,
+  totalretailercount,
 } from "../Reducers/retailerReducers";
+import { data } from "autoprefixer";
 
 const getToken = () => {
   if (typeof window !== "undefined") {
@@ -37,6 +39,30 @@ export const asyncfetchretailer =
     }
   };
 
+//fetch the retailer count
+// fetch the retailer count
+export const retailersCount = () => async (dispatch) => {
+  try {
+    const token = getToken();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const { data } = await axios.get("/retailer/stats", config);
+
+    dispatch(totalretailercount(data));
+
+    return { success: true, payload: data };
+  } catch (error) {
+    console.error("Error in retailersCount:", error.message);
+    dispatch(iserror(error.message));
+    return { success: false };
+  }
+};
+
 //create Retailer
 export const createRetailer =
   (retailerFormData) => async (dispatch, getState) => {
@@ -52,14 +78,14 @@ export const createRetailer =
       const { data } = await axios.post(
         "/retailer/create",
         retailerFormData,
-        config
+        config,
       );
 
       dispatch(createnewRetailer(data));
       return { success: true, payload: data };
     } catch (error) {
       dispatch(
-        iserror(error?.response?.data?.message || "Failed to create retailer")
+        iserror(error?.response?.data?.message || "Failed to create retailer"),
       );
       return {
         success: false,
@@ -81,7 +107,7 @@ export const fetchRetailerbyID = (id) => async (dispatch, getState) => {
 
     const { data } = await axios.get(
       `/retailer/reatiler-details/${id}`,
-      config
+      config,
     );
 
     dispatch(fetchRetailer(data.retailers));
@@ -106,14 +132,14 @@ export const editRetailerdetailes =
       const data = await axios.put(
         `/retailer/update-detailes/${id}`,
         updatedFields,
-        config
+        config,
       );
 
       dispatch(editRetailer(data.data));
       return { success: true, payload: data.data };
     } catch (error) {
       dispatch(
-        iserror(error?.response?.data?.message || "Failed to update retailer")
+        iserror(error?.response?.data?.message || "Failed to update retailer"),
       );
       return {
         success: false,
@@ -138,7 +164,7 @@ export const deleteRetailerAction = (id) => async (dispatch, getState) => {
     return { success: true, payload: data };
   } catch (error) {
     dispatch(
-      iserror(error?.response?.data?.message || "Failed to delete retailer")
+      iserror(error?.response?.data?.message || "Failed to delete retailer"),
     );
     return {
       success: false,

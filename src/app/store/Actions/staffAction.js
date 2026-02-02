@@ -81,7 +81,7 @@ export const createNewStaff =
     }
   };
 
-//Edit the Staff
+
 // Edit the staff data
 export const editStaff =
   (row, editedStaffData) => async (dispatch, getState) => {
@@ -157,7 +157,7 @@ export const deleteStaffData = (row) => async (dispatch, getState) => {
 
     if (data?.success) {
       dispatch(deletestaff(data.data));
-      toast.success("User registered successfully");
+      toast.success("Salesperson Deleted successfully");
       return { success: true, payload: data };
     } else {
       toast.error(data?.message || "Something went wrong");

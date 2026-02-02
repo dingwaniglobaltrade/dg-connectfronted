@@ -30,6 +30,10 @@ export const distributorReducer = createSlice({
       state.staff = action.payload;
       state.isAuthenticated = true;
     },
+    distributorLeaderBoard: (state, action) => {
+      state.order = action.payload;
+      state.isAuthenticated = true;
+    },
     iserror: (state, action) => {
       state.error.push(action.payload);
     },
@@ -43,6 +47,7 @@ export const {
   editDistributor,
   assignSalesperson,
   removeDistributor,
+  distributorLeaderBoard,
   iserror,
 } = distributorReducer.actions;
 

@@ -26,6 +26,10 @@ export const retailerReducer = createSlice({
       state.retailer = action.payload;
       state.isAuthenticated = true;
     },
+    totalretailercount:(state, action)=>{
+      state.retailer = action.payload;
+      state.isAuthenticated = true;
+    },
     iserror: (state, action) => {
       state.error.push(action.payload);
     },
@@ -34,6 +38,6 @@ export const retailerReducer = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { fetchRetailer ,createnewRetailer,editRetailer, deleteRetailer,  iserror} = retailerReducer.actions;
+export const { fetchRetailer ,createnewRetailer,editRetailer, deleteRetailer, totalretailercount, iserror} = retailerReducer.actions;
 
 export default retailerReducer.reducer;

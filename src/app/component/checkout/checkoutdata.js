@@ -1,18 +1,16 @@
-"use client"
+"use client";
 import React from "react";
 import CheckoutForm from "@/app/component/checkout/formdata";
 import CartProduct from "@/app/component/checkout/cartProduct";
 import { useState } from "react";
 
-
 const checkoutdata = () => {
- const [complecteAddress, setcomplecteAddress] = useState({
-  complectAddress: "",
-  city: "",
-  stateName: "",
-  pincode: "",
-});
-
+  const [complecteAddress, setcomplecteAddress] = useState({
+    complectAddress: "",
+    city: "",
+    stateName: "",
+    pincode: "",
+  });
 
   return (
     <div className="lg:h-[90%] md:h-[90%] h-full w-full bg-[#f8f9fa] lg:px-5 md:px-5 px-2 py-4">
@@ -20,7 +18,7 @@ const checkoutdata = () => {
         <h1 className="font-semibold text-[16px]">Cart / Checkout</h1>
         <div className="lg:flex md:flex sm:hidden hidden flex-row">
           <div className="w-[50%] h-full">
-            <CheckoutForm setcomplecteAddress ={setcomplecteAddress} />
+            <CheckoutForm setcomplecteAddress={setcomplecteAddress} />
           </div>
           <div className="w-[50%] h-full">
             <CartProduct complecteAddress={complecteAddress} />
@@ -29,7 +27,7 @@ const checkoutdata = () => {
 
         <div className="lg:hidden md:hidden flex flex-col">
           <div className="w-fill h-auto">
-            <CheckoutForm  setcomplecteAddress ={setcomplecteAddress} />
+            <CheckoutForm setcomplecteAddress={setcomplecteAddress} />
           </div>
           <div className="w-full h-auto mt-3">
             <CartProduct complecteAddress={complecteAddress} />
