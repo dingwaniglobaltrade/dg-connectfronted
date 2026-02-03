@@ -159,8 +159,7 @@ const DashboardHalf = ({ lable, link }) => {
   ];
 
   const columns2 = [
-
-      columnHelper.accessor("distributor.email", {
+    columnHelper.accessor("distributor.email", {
       header: "Email",
       cell: (info) => info.getValue(),
     }),
@@ -278,7 +277,7 @@ const DashboardHalf = ({ lable, link }) => {
     "Top Selling Products": (
       <Table columns={columns1} data={product.slice(0, 3)} />
     ),
-    Attendance: (
+    "Distributor Leader Board": (
       <Table columns={columns2} data={distributorLeader.slice(0, 3)} />
     ),
     "Order Status": <Table columns={columns3} data={orders.slice(0, 3)} />,

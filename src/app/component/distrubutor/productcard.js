@@ -152,27 +152,30 @@ const ProductCard = () => {
                       : product.RetailerPrice}
                   </h1>
 
-                  {/* ACTION BUTTON */}
-                  <div className="flex justify-end border-t pt-2">
-                    {isInCart ? (
-                      <button
-                        onClick={() => router.push("/viewpages/cart")}
-                        className="bg-green-500 px-5 py-1 text-white rounded-md"
-                      >
-                        View Cart
-                      </button>
-                    ) : (
-                      <button
-                        disabled={loadingProductId === product.id}
-                        onClick={() => handleAddToCart(product)}
-                        className="bg-primary px-5 py-1 text-white rounded-md disabled:opacity-50"
-                      >
-                        {loadingProductId === product.id
-                          ? "Adding..."
-                          : "Add to Cart"}
-                      </button>
-                    )}
-                  </div>
+           {/* ACTION BUTTON */}
+<div className="flex justify-end border-t pt-2">
+  {UserType !== "salesperson" && (
+    isInCart ? (
+      <button
+        onClick={() => router.push("/viewpages/cart")}
+        className="bg-green-500 px-5 py-1 text-white rounded-md"
+      >
+        View Cart
+      </button>
+    ) : (
+      <button
+        disabled={loadingProductId === product.id}
+        onClick={() => handleAddToCart(product)}
+        className="bg-primary px-5 py-1 text-white rounded-md disabled:opacity-50"
+      >
+        {loadingProductId === product.id
+          ? "Adding..."
+          : "Add to Cart"}
+      </button>
+    )
+  )}
+</div>
+
                 </div>
               </div>
             );

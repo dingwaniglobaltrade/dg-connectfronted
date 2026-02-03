@@ -6,6 +6,7 @@ import {
   asyncfetchExpenses,
   CreateExpense,
   updatetheExpenseStatus,
+  updateExpenseStatusBySalesperson,
 } from "@/app/store/Actions/expenseAction";
 import { toast } from "react-toastify";
 
@@ -28,7 +29,7 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   useEffect(() => {
     if (initialData) {
       const sanitized = Object.fromEntries(
-        Object.entries(initialData).map(([key, val]) => [key, val ?? ""])
+        Object.entries(initialData).map(([key, val]) => [key, val ?? ""]),
       );
       setAddExpenseData((prev) => ({ ...prev, ...sanitized }));
     }
@@ -90,13 +91,13 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
         console.log("Updating Expense with FormData:");
         result = await dispatch(
-          updatetheExpenseStatus(initialData.id, formData)
+          updateExpenseStatusBySalesperson(initialData.id, formData),
         );
       }
 
       if (result?.success) {
         toast.success(
-          `Expense ${initialData ? "updated" : "created"} successfully!`
+          `Expense ${initialData ? "updated" : "created"} successfully!`,
         );
         if (onSubmit) onSubmit();
         if (!initialData) {
@@ -164,7 +165,6 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
             <input
               type="file"
               name="EndImage"
-              required
               onChange={(e) =>
                 setAddExpenseData((prev) => ({
                   ...prev,
@@ -204,8 +204,8 @@ const AddExpenseForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
               ? "Updating..."
               : "Creating..."
             : initialData
-            ? "Update Expense"
-            : "Create Expense"}
+              ? "Update Expense"
+              : "Create Expense"}
         </button>
       </div>
     </form>

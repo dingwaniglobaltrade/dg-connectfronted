@@ -27,6 +27,8 @@ const main = () => {
   useEffect(() => {
     const fetchyearlysale = async () => {
       const result = await dispatch(FYofDistributorOrder());
+      console.log({result});
+      
       if (result?.data?.totalSales) {
         setYearlySales(result.data.totalSales);
       }

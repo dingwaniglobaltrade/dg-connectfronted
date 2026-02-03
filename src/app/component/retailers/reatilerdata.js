@@ -148,13 +148,20 @@ const Main = () => {
       cell: (info) => {
         const row = info.row.original;
         const imageKey = row.shopImage;
+   const canOpen =
+        userRole === "admin" || userRole === "subadmin";
 
+      const handleClick = () => {
+        if (!canOpen) return;
+        window.open(
+          `/portalpages/detailes/retailer/${row.id}`,
+          "_blank"
+        );
+      };
         return (
           <div
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() =>
-              window.open(`/portalpages/detailes/retailer/${row.id}`, "_blank")
-            }
+            onClick={handleClick}
           >
             {imageKey ? (
               <div className="w-8 h-8 relative">
@@ -175,7 +182,9 @@ const Main = () => {
       },
     }),
     columnHelper.accessor("email", { header: "Email" }),
-    columnHelper.accessor("password", { header: "Password" }),
+    ...(userRole === "admin" || userRole === "subadmin"
+      ? [columnHelper.accessor("password", { header: "Password" })]
+      : []),
     columnHelper.accessor("mobile", { header: "Mobile" }),
     columnHelper.accessor("name", { header: "Concern Person" }),
     columnHelper.accessor("address", {

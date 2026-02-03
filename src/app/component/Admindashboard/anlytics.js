@@ -10,7 +10,7 @@ const anlytics = () => {
           link={"/portalpages/allproduct"}
           lable={"Top Selling Products"}
         />
-        <DashboardHalf link={"/portalpages/attendance"} lable={"Distributor Leader Board"} />
+        <DashboardHalf link={"/portalpages/distributor"} lable={"Distributor Leader Board"} />
         <DashboardHalf link={"/portalpages/orders"} lable={"Order Status"} />
       </div>
     </div>

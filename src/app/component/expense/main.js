@@ -37,11 +37,11 @@ const Main = () => {
   const dropdownRefs = useRef({});
   const userRole = useSelector((state) => state.login.admin?.userType);
   const [selectedFilter, setSelectedFilter] = useState("all"); // default
-
+  const [openEditModal, setOpenEditModal] = useState(true);
   //show the updaloded image
   const [modalImage, setModalImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+   const [selectedExpense, setSelectedExpense] = useState(null);
   // ---------------- FETCH DATA ----------------
 
   useEffect(() => {
@@ -173,6 +173,11 @@ const Main = () => {
     } catch (err) {
       toast.error("Failed to approve expense");
     }
+  };
+
+  const handleEdit = (row) => {
+    setSelectedExpense(row);
+    setOpenEditModal(true);
   };
 
   // ---------------- TABLE COLUMNS ----------------
@@ -314,10 +319,7 @@ const Main = () => {
             return <span className="text-gray-400 italic">N/A</span>;
           }
           const options = [
-            {
-              label: "Edit",
-              action: () => {},
-            },
+            { label: "Edit", action: () => handleEdit(row.original) },
           ];
 
           return (
@@ -408,6 +410,8 @@ const Main = () => {
                   <Searchbtn
                     display={"hidden"}
                     btntext={"Add Expense"}
+                    initialData={openEditModal ? selectedExpense : null}
+                    isEditMode={openEditModal}
                     onSuccess={refreshExpenses}
                   />
                   <Searchbtn

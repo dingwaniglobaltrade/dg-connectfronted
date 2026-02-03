@@ -89,6 +89,7 @@ export const CreateExpense = (addExpenseData) => async (dispatch, getState) => {
   }
 };
 
+
 //update the expense
 export const updatetheExpenseStatus =
   (id, expenseUpdatedData) => async (dispatch, getState) => {
@@ -118,3 +119,34 @@ export const updatetheExpenseStatus =
       };
     }
   };
+
+
+//update the expense
+export const updateExpenseStatusBySalesperson =
+  (id, expenseUpdatedData) => async (dispatch, getState) => {
+    try {
+      const token = getToken(); // get token from localStorage
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // attach token in headers
+        },
+      };
+
+      const data = await axios.put(
+        `/expense/update-expense/${id}/salesperson`,
+        expenseUpdatedData,
+        config
+      );
+
+      dispatch(editExistingExpenses(data.data));
+      return { success: true, payload: data };
+    } catch (error) {
+      dispatch(
+        iserror(error?.response?.data?.message || "Failed to create product")
+      );
+      return {
+        success: false,
+        message: error?.response?.data?.message || "Error",
+      };
+    }
+  };  
