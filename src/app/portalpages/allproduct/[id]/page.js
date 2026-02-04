@@ -46,13 +46,11 @@ const Page = ({ params }) => {
   const media = productData?.media || [];
   const modelFile = media.find((m) => m.type === "GLB");
   const imageFiles = media.filter((m) => m.type === "IMAGE");
-
-  console.log({modelFile});
-  
+ console.log({modelFile});
+ 
   // ✅ Use the SAME hook for model signing
-  const signedModelUrl = useSignedImage(modelFile?.url);
-  console.log({useSignedImage});
-  
+  const signedModelUrl = useSignedImage(modelFile?.fileName);
+console.log({signedModelUrl});
 
   return (
     <ProtectedRoute>
