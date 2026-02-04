@@ -22,7 +22,7 @@ const Midcom = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
+    mobile: "",
     userType: "",
     password: "",
   });
@@ -156,10 +156,10 @@ const Midcom = () => {
                       <Image src={ProfileIcon} alt="icon" className="h-7 w-7" />
                     </span>
                     <input
-                      name="email"
-                      value={formData.email}
+                      name="mobile"
+                      value={formData.mobile}
                       onChange={handleChange}
-                      placeholder="Email"
+                      placeholder="Mobile Number"
                       required
                       className="w-[350px] px-2 py-2 bg-[#F1F0FE] rounded-r"
                     />
@@ -329,10 +329,10 @@ const Midcom = () => {
                         />
                       </span>
                       <input
-                        name="email"
-                        value={formData.email}
+                        name="mobile"
+                        value={formData.mobile}
                         onChange={handleChange}
-                        placeholder="Email"
+                        placeholder="Mobile Number"
                         required
                         className="w-full px-2 py-2 bg-[#F1F0FE] rounded-r"
                       />

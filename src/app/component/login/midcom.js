@@ -21,7 +21,7 @@ const Midcom = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
+    mobile: "",
     userType: "",
     password: "",
   });
@@ -58,7 +58,7 @@ const Midcom = () => {
         if (role === "distributor") redirectPath = "/viewpages/productpages";
         else if (role === "salesperson") redirectPath = "/salespersonpages";
         else if (role === "retailer") redirectPath = "/viewpages/productpages";
-
+             
         setTimeout(() => {
           router.push(redirectPath);
         }, 1500);
@@ -112,9 +112,9 @@ const Midcom = () => {
                   <input
                     className="placeholder-[#000] text-[#1C1C1C] w-[370px] py-3 rounded-r-[6px] px-2 text-black bg-[#F1F0FE] outline-none"
                     type="text"
-                    placeholder="Email"
-                    name="email"
-                    value={formData.email}
+                    placeholder="Mobile Number"
+                    name="mobile"
+                    value={formData.mobile}
                     onChange={handleChange}
                     required
                   />
@@ -138,9 +138,9 @@ const Midcom = () => {
                     <option value="">Select User Role</option>
                     <option value="admin">Admin</option>
                     <option value="subadmin">Sub-admin</option>
-                    <option value="distributor">Distributor</option>
+                    {/* <option value="distributor">Distributor</option>
                     <option value="retailer">Retailer</option>
-                    <option value="salesperson">Salesperson</option>
+                    <option value="salesperson">Salesperson</option> */}
                   </select>
                 </div>
 
@@ -230,7 +230,6 @@ const Midcom = () => {
           </div>
         ) : (
           /* LOGIN FORM */
-
           <div className="w-screen h-screen px-5 flex flex-col justify-center">
             <Image
               src={LogoImage}
@@ -245,9 +244,9 @@ const Midcom = () => {
               <h2 className="text-[22px] font-bold text-primary mb-6">Login</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
+                  name="mobile"
+                  placeholder="Mobile Number"
+                  value={formData.mobile}
                   onChange={handleChange}
                   className="w-full py-2 px-3 rounded-md bg-gray-100"
                   required
@@ -263,9 +262,9 @@ const Midcom = () => {
                     <option value="">Select User Role</option>
                     <option value="admin">Admin</option>
                     <option value="subadmin">Sub-admin</option>
-                    <option value="distributor">Distributor</option>
+                    {/* <option value="distributor">Distributor</option>
                     <option value="retailer">Retailer</option>
-                    <option value="salesperson">Salesperson</option>
+                    <option value="salesperson">Salesperson</option> */}
                   </select>
                 </div>
                 <input

@@ -24,7 +24,6 @@ const sidenavitems = [
     altLinks: {
       salesperson: "/salespersonpages",
       distributor: "/viewpages/productpages",
-      salesperson: "/viewpages/productpages",
     },
     iconKey: "dashboard",
     roles: ["admin", "subadmin", "salesperson"],

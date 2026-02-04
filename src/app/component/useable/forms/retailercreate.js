@@ -10,6 +10,7 @@ import {
 import { fetchAllDistributor } from "@/app/store/Actions/distributorAction";
 import { toast } from "react-toastify";
 import LocationFetcher from "@/app/component/salesperson/LocationFetcher";
+import CameraCapture from "@/app/component/salesperson/CameraCapture";
 
 const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   const dispatch = useDispatch();
@@ -66,7 +67,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
     setLoadingDist(true);
     try {
       const result = await dispatch(
-        fetchAllDistributor({ page: pageNum, limit })
+        fetchAllDistributor({ page: pageNum, limit }),
       );
 
       if (result?.distributors?.length > 0) {
@@ -74,7 +75,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
           const combined = [...prev, ...result.distributors];
           const unique = combined.filter(
             (dist, index, self) =>
-              index === self.findIndex((d) => d.id === dist.id)
+              index === self.findIndex((d) => d.id === dist.id),
           );
           return unique;
         });
@@ -102,7 +103,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
           // Deduplicate by id
           const unique = combined.filter(
             (route, index, self) =>
-              index === self.findIndex((r) => r.id === route.id)
+              index === self.findIndex((r) => r.id === route.id),
           );
           return unique;
         });
@@ -132,7 +133,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   useEffect(() => {
     if (initialData) {
       const sanitized = Object.fromEntries(
-        Object.entries(initialData).map(([key, val]) => [key, val ?? ""])
+        Object.entries(initialData).map(([key, val]) => [key, val ?? ""]),
       );
       setRetailerFormData((prev) => ({ ...prev, ...sanitized }));
     } else if (userRole === "salesperson") {
@@ -172,14 +173,14 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
         result = await dispatch(createRetailer(formData));
       } else {
         result = await dispatch(
-          editRetailerdetailes(retailerFormData.id, formData)
+          editRetailerdetailes(retailerFormData.id, formData),
         );
       }
 
       if (result?.success) {
         if (onSubmit) onSubmit();
         toast.success(
-          `Retailer ${initialData ? "updated" : "created"} successfully!`
+          `Retailer ${initialData ? "updated" : "created"} successfully!`,
         );
       } else {
         toast.warn(result?.message || "Something went wrong");
@@ -193,14 +194,7 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
   };
 
   return (
-    <div>
-      {/* Show location fetcher only for salesperson */}
-      {/* {userRole === "salesperson" && (
-        <LocationFetcher
-          onLocation={handleLocation}
-          onAddress={handleAddress}
-        />
-      )} */}
+    <div> 
 
       <form onSubmit={handleSubmit}>
         <div className="grid gap-1 grid-cols-1">
@@ -222,17 +216,35 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
 
             <div>
               <label className="text-texthearder font-semibold">Image</label>
-              <input
-                type="file"
-                name="shopImage"
-                onChange={(e) =>
-                  setRetailerFormData((prev) => ({
-                    ...prev,
-                    shopImage: e.target.files[0],
-                  }))
-                }
-                className="w-full py-1 rounded px-2 mt-1 text-black border border-grey-200"
-              />
+              {user?.userType === "salesperson" ? (
+                <CameraCapture
+                  onCapture={async (file) => {
+                    console.log("Received file from camera:", file);
+
+                    // Upload directly
+                    // const imageUrl = await uploadImageToBackend(file);
+
+                    // console.log("Uploaded Image URL:", imageUrl);
+
+                    setRetailerFormData((prev) => ({
+                      ...prev,
+                      shopImage: file,
+                    }));
+                  }}
+                />
+              ) : (
+                <input
+                  type="file"
+                  name="shopImage"
+                  onChange={(e) =>
+                    setRetailerFormData((prev) => ({
+                      ...prev,
+                      shopImage: e.target.files[0],
+                    }))
+                  }
+                  className="w-full py-1 rounded px-2 mt-1 text-black border border-grey-200"
+                />
+              )}
             </div>
 
             <div>
@@ -435,8 +447,8 @@ const RetailerForm = ({ initialData = {}, isEditMode = false, onSubmit }) => {
                 ? "Updating..."
                 : "Creating..."
               : initialData
-              ? "Update Retailer"
-              : "Create Retailer"}
+                ? "Update Retailer"
+                : "Create Retailer"}
           </button>
         </div>
       </form>
