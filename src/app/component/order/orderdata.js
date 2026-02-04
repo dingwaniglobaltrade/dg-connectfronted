@@ -38,6 +38,7 @@ const Main = () => {
   const pageSize = 7;
   const [totalOrderAmount, setTotalOrderAmount] = useState(0);
   const [pendingOrderAmount, setPendingOrderAmount] = useState(0);
+  const [pendingOrderCount, setPendingOrderCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
 
   const [isFiltering, setIsFiltering] = useState(false);
@@ -56,13 +57,24 @@ const Main = () => {
       const fetchData = async () => {
         try {
           const result = await dispatch(
-            asyncfetchOrders({ page: currentPage, limit: pageSize })
+            asyncfetchOrders({
+              page: currentPage,
+              limit: pageSize,
+              status:
+                activeFilter !== "all" &&
+                activeFilter !== "retailerOrders" &&
+                activeFilter !== "distributorOrders"
+                  ? activeFilter
+                  : undefined,
+            }),
           );
+
           if (result) {
             setTableData(result.data);
             setTotalPages(result.totalPages);
             setTotalCount(result.totalOrders);
             setPendingOrderAmount(result.pendingOrderAmount);
+            setPendingOrderCount(result.pendingOrderCount);
             setTotalOrderAmount(result.totalOrderAmount);
           }
         } catch (error) {
@@ -71,7 +83,7 @@ const Main = () => {
       };
       fetchData();
     }
-  }, [dispatch, currentPage, pageSize, isFiltering]);
+  }, [dispatch, currentPage, pageSize, isFiltering, activeFilter]);
 
   const refreshOrders = async () => {
     try {
@@ -79,7 +91,8 @@ const Main = () => {
         asyncfetchOrders({
           page: currentPage,
           limit: pageSize,
-        })
+          status: activeFilter !== "all" ? activeFilter : undefined,
+        }),
       );
       console.log({ result });
 
@@ -218,8 +231,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Accepted" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Accepted" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to update order status.");
@@ -233,8 +246,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Shipped" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Shipped" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to update order status.");
@@ -248,8 +261,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Track" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Track" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to update order status.");
@@ -263,8 +276,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Delivered" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Delivered" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to update order status.");
@@ -278,8 +291,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Cancelled" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Cancelled" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to update order status.");
@@ -293,8 +306,8 @@ const Main = () => {
       toast.success("Order status updated.");
       setTableData((prev) =>
         prev.map((exp) =>
-          exp.id === row.id ? { ...exp, orderStatus: "Return" } : exp
-        )
+          exp.id === row.id ? { ...exp, orderStatus: "Return" } : exp,
+        ),
       );
     } catch {
       toast.error("Failed to return order");
@@ -523,7 +536,7 @@ const Main = () => {
         <Block
           icon={Products}
           lable={"New Orders"}
-          value={tableData.filter((o) => o.orderStatus === "Pending").length}
+          value={pendingOrderCount}
           text={"New Orders"}
           bgColor="bg-[#DCFCE7]"
           width="w-[270px]"
@@ -611,9 +624,9 @@ const Main = () => {
                             }`}
                           >
                             <span>{btn.label}</span>
-                            <span className="ml-2 text-xs text-gray-500">
+                            {/* <span className="ml-2 text-xs text-gray-500">
                               ({btn.count})
-                            </span>
+                            </span> */}
                           </button>
                         </li>
                       ))}
@@ -672,14 +685,14 @@ const Main = () => {
                 activeFilter === "all"
                   ? tableData
                   : activeFilter === "retailerOrders"
-                  ? tableData.filter((item) => item.RetailerCustomer !== null)
-                  : activeFilter === "distributorOrders"
-                  ? tableData.filter(
-                      (item) => item.DistributorCustomer !== null
-                    )
-                  : tableData.filter(
-                      (item) => item.orderStatus === activeFilter
-                    )
+                    ? tableData.filter((item) => item.RetailerCustomer !== null)
+                    : activeFilter === "distributorOrders"
+                      ? tableData.filter(
+                          (item) => item.DistributorCustomer !== null,
+                        )
+                      : tableData.filter(
+                          (item) => item.orderStatus === activeFilter,
+                        )
               }
               pageIndex={currentPage - 1}
               pageSize={pageSize}

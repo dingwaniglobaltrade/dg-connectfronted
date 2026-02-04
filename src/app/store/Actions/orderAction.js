@@ -19,7 +19,7 @@ const getToken = () => {
 
 //fetch all the orders
 export const asyncfetchOrders =
-  ({ page, limit }) =>
+  ({ page, limit , status}) =>
   async (dispatch, getState) => {
     try {
       // console.log("Dispatching with page:", page, "limit:", limit);
@@ -29,7 +29,7 @@ export const asyncfetchOrders =
         headers: {
           Authorization: `Bearer ${token}`, // attach token in headers
         },
-        params: { page, limit },
+        params: { page, limit , status},
       };
       // console.log(token);
 
