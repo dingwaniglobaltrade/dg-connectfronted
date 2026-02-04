@@ -8,14 +8,12 @@ import { useDispatch } from "react-redux";
 import { use } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import Image from "next/image";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import S3Image from "@/app/component/useable/S3Image";
 import useSignedImage from "@/app/customhooks/useSignedImage"; // ✅ FIX
-
 
 import { fetchProductbyID } from "@/app/store/Actions/productAction";
 
@@ -45,12 +43,16 @@ const Page = ({ params }) => {
     fetchData();
   }, [dispatch, id]);
 
-    const media = productData?.media || [];
+  const media = productData?.media || [];
   const modelFile = media.find((m) => m.type === "GLB");
   const imageFiles = media.filter((m) => m.type === "IMAGE");
 
+  console.log({modelFile});
+  
   // ✅ Use the SAME hook for model signing
-  const signedModelUrl = useSignedImage(modelFile?.fileName);
+  const signedModelUrl = useSignedImage(modelFile?.url);
+  console.log({useSignedImage});
+  
 
   return (
     <ProtectedRoute>
